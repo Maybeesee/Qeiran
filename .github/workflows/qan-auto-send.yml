@@ -1,0 +1,107 @@
+name: QAN Code Auto-Send
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  send-qan-codes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check pending books and send QAN codes
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        run: |
+          python3 - << 'PYEOF'
+          import os, json, urllib.request, datetime
+
+          SUPABASE_URL = os.environ['SUPABASE_URL']
+          SUPABASE_KEY = os.environ['SUPABASE_KEY']
+          RESEND_KEY   = os.environ['RESEND_API_KEY']
+
+          H = {
+              'apikey': SUPABASE_KEY,
+              'Authorization': 'Bearer ' + SUPABASE_KEY,
+              'Content-Type': 'application/json',
+          }
+
+          def sb_get(path):
+              req = urllib.request.Request(SUPABASE_URL+'/rest/v1/'+path, headers=H)
+              with urllib.request.urlopen(req) as r: return json.loads(r.read())
+
+          def sb_patch(path, data):
+              h = {**H, 'Prefer':'return=minimal'}
+              req = urllib.request.Request(SUPABASE_URL+'/rest/v1/'+path,
+                data=json.dumps(data).encode(), headers=h, method='PATCH')
+              urllib.request.urlopen(req)
+
+          # Check Stop Press from Supabase
+          try:
+              s = sb_get('settings?key=eq.stop_press&select=value')
+              if s and s[0].get('value') == 'true':
+                  print("STOP PRESS ON — skipping."); exit(0)
+          except: pass
+
+          # Fetch books pending 24+ hours
+          cutoff = (datetime.datetime.utcnow()-datetime.timedelta(hours=24)).isoformat()+'Z'
+          books = sb_get(f'books?approved=eq.false&registered=lt.{cutoff}&select=*')
+          print(f"Pending: {len(books)}")
+          if not books: exit(0)
+
+          for b in books:
+              qcode,title,author = b.get('qcode',''),b.get('title',''),b.get('author','')
+              email,bid = b.get('email',''),b.get('id','')
+              if not email or not qcode: continue
+
+              html = f"""<div style="font-family:Georgia,serif;max-width:520px;margin:0 auto;background:#f6f1e9;border-radius:10px;overflow:hidden;">
+<div style="background:#1A0800;padding:28px 32px;text-align:center;">
+<div style="font-size:32px;font-weight:900;color:#F5EDE0;">Qeiran</div>
+<div style="font-size:11px;color:#A09080;letter-spacing:.2em;text-transform:uppercase;margin-top:4px;">Independent Author Register</div>
+</div>
+<div style="padding:32px;">
+<p style="font-size:15px;color:#1A0800;">Dear {author},</p>
+<p style="font-size:13px;color:#444;line-height:1.7;">Your title has been reviewed and accepted into the <strong>Qeiran Independent Author Register</strong>.</p>
+<div style="background:#fff;border:1px solid #d0c8b8;border-radius:8px;padding:20px;margin:20px 0;text-align:center;">
+<div style="font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#888;margin-bottom:8px;">Your registered title</div>
+<div style="font-size:17px;font-weight:700;color:#1A0800;margin-bottom:16px;">{title}</div>
+<div style="font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#888;margin-bottom:6px;">Your QAN Code</div>
+<div style="font-size:20px;font-weight:900;color:#1A0800;font-family:monospace;background:#f0ebe2;padding:10px 18px;border-radius:6px;display:inline-block;">{qcode}</div>
+</div>
+<div style="text-align:center;margin-bottom:20px;">
+<a href="https://www.qeiran.com" style="display:inline-block;background:#5BA89A;color:#fff;font-size:12px;font-weight:600;padding:10px 24px;border-radius:6px;text-decoration:none;">View Your Listing at Qeiran.com</a>
+</div>
+<div style="background:rgba(91,168,154,.1);border-left:3px solid #5BA89A;padding:12px 16px;border-radius:0 6px 6px 0;margin-bottom:20px;">
+<div style="font-size:11px;font-weight:700;color:#1A0800;margin-bottom:4px;">Q Stamp placement</div>
+<div style="font-size:11px;color:#555;line-height:1.65;">Bottom-left corner of your back cover. Size: <strong>18x18mm</strong>. 6mm clear margin from edge.</div>
+</div>
+<p style="font-size:11px;color:#888;line-height:1.7;">12% platform commission applies. Invoice QRIB at maat@qrib.co.uk monthly.</p>
+</div>
+<div style="background:#1A0800;padding:16px 32px;text-align:center;">
+<div style="font-size:10px;color:#706050;">&copy; QRIB &middot; qeiran.com &middot; maat@qrib.co.uk</div>
+</div></div>"""
+
+              payload = json.dumps({
+                "from": "Qeiran <noreply@qeiran.com>",
+                "to": [email], "bcc": ["maat@qrib.co.uk"],
+                "subject": f"Your QAN Code is confirmed — {title}",
+                "html": html
+              }).encode()
+
+              req = urllib.request.Request('https://api.resend.com/emails',
+                data=payload, headers={'Authorization':'Bearer '+RESEND_KEY,
+                'Content-Type':'application/json'}, method='POST')
+              try:
+                  with urllib.request.urlopen(req) as r:
+                      res = json.loads(r.read())
+                      print(f"Sent to {email} — {res.get('id','?')}")
+              except Exception as e:
+                  print(f"Email failed {email}: {e}"); continue
+
+              try: sb_patch(f'books?id=eq.{bid}', {"approved": True})
+              except Exception as e: print(f"Supabase patch failed {bid}: {e}")
+
+          print("Done.")
+          PYEOF
