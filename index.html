@@ -4995,11 +4995,11 @@ function approveBook(id) {
 }
 
 /* == Admin QAN Generator == */
-(function(){
+document.addEventListener('DOMContentLoaded', function(){
   if(new URLSearchParams(window.location.search).get('admin')==='1'){
     document.getElementById('admin-pw-modal').style.display='flex';
   }
-})();
+});
 function adminCheckPW(){
   var pw=document.getElementById('admin-pw-input').value;
   if(pw==='qrib2026'){
