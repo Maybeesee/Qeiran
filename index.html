@@ -19,6 +19,45 @@
   src: local('Impact'), local('Haettenschweiler'), local('Arial Narrow Bold');
   font-weight: 900;
 }
+
+/* ── Global mobile fixes ───────────────────────────────── */
+@media(max-width:700px){
+  #nav{padding:0 14px;gap:8px}
+  .nav-mid{display:none}
+  .nav-reg,.nav-authors{font-size:9px;padding:5px 10px;letter-spacing:.06em}
+  .brand{font-size:26px}
+  .brand-q-mark{width:28px;height:28px}
+}
+@media(max-width:400px){
+  .nav-reg,.nav-authors{font-size:8px;padding:4px 8px}
+  .brand{font-size:22px}
+  .brand-q-mark{width:24px;height:24px}
+}
+@media(max-width:520px){
+  .cat-head{padding:40px 18px 24px}
+  .cat-body{padding:28px 18px}
+  .search-wrap{max-width:100%}
+  .search-wrap input{font-size:13px;padding:11px 14px}
+  .search-wrap button{padding:11px 16px;font-size:9px;min-width:66px;white-space:nowrap;flex-shrink:0}
+  #hero{padding:60px 18px 40px}
+  .hero-ctas{gap:10px}
+  .cta-p,.cta-g{width:100%;text-align:center;padding:12px 20px}
+  .stat-bar{grid-template-columns:1fr 1fr}
+  .stat{padding:16px 8px}
+  .stat-n{font-size:18px}
+  .fgrid{grid-template-columns:1fr !important}
+  .reg-wrap{padding:28px 18px}
+  .book-wrap{padding:20px 16px}
+  .b-price-bar{flex-direction:column;align-items:flex-start;gap:10px}
+  .scard{padding:24px 18px 20px}
+  .s-acts{flex-direction:column}
+  .sbn{width:100%}
+  .ocard{padding:24px 18px}
+  .filters{gap:6px}
+  .fb{font-size:13px;padding:4px 10px}
+  .qr-scan-block{flex-direction:column;align-items:center;gap:16px}
+  .qr-scan-info{text-align:center}
+}
 </style>
 <style>
 /* ─────────────────────────────────────────────────────────
@@ -89,12 +128,12 @@ body::after{
   border-bottom:1px solid rgba(26,24,20,.09);
 }
 .brand{
-  font-family:var(--sans);font-weight:800;font-size:22px;
+  font-family:var(--sans);font-weight:800;font-size:34px;
   letter-spacing:-.02em;display:flex;align-items:baseline;gap:0;
   cursor:pointer;
 }
 .brand-b{color:var(--fg)}
-.brand-q-mark{width:24px;height:24px;vertical-align:middle;margin-right:1px;position:relative;top:-1px}
+.brand-q-mark{width:36px;height:36px;vertical-align:middle;margin-right:2px;position:relative;top:-2px}
 .brand-q{color:var(--fg)}
 .nav-mid{display:flex;gap:32px}
 .nav-mid a{
@@ -1125,7 +1164,7 @@ body::after{
 <div id="register-page" class="page">
   <div class="reg-wrap">
     <h1 class="reg-h">Register Your Book</h1>
-    <p class="reg-sub">Complete the form below. Your unique QAN Code and print-ready QR code are generated automatically on submission. Upload the back of your book cover — Q stamp placed in the bottom-left corner.</p>
+    <p class="reg-sub">Complete the form below. Your unique QAN Code and print-ready QR code are generated automatically on submission. Keep the bottom-centre 15% of your cover clear — the QR will be placed there.</p>
 
     <div class="fsec">
       <div class="fsec-title">About You</div>
@@ -1214,12 +1253,44 @@ body::after{
     </div>
 
     <div class="fsec">
+      <div class="fsec-title" style="margin-bottom:10px;">Q Stamp Placement Guide</div>
+      <div style="background:rgba(26,8,0,.03);border:1px solid rgba(26,8,0,.1);border-radius:8px;padding:16px;margin-bottom:18px;display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;">
+        <!-- Back cover diagram -->
+        <div style="flex:0 0 auto;">
+          <div style="width:120px;height:160px;border:2px solid #1A0800;border-radius:3px;position:relative;background:#fff;font-size:9px;color:#aaa;">
+            <div style="padding:8px 6px 0;font-size:8px;color:#bbb;line-height:1.4;">Back cover artwork area</div>
+            <!-- Stamp indicator -->
+            <div style="position:absolute;bottom:8px;left:8px;width:24px;height:24px;border-radius:50%;background:#1A0800;display:flex;align-items:center;justify-content:center;"><span style="color:#F5EDE0;font-size:9px;font-weight:700;">Q</span></div>
+            <!-- dimension arrows -->
+            <div style="position:absolute;bottom:4px;left:34px;font-size:7px;color:#5BA89A;white-space:nowrap;">&#8592; 6mm from edge</div>
+            <div style="position:absolute;bottom:33px;left:8px;font-size:7px;color:#5BA89A;writing-mode:vertical-rl;transform:rotate(180deg);">6mm</div>
+          </div>
+          <div style="font-size:9px;color:#888;margin-top:6px;text-align:center;width:120px;">Back cover (actual proportions)</div>
+        </div>
+        <!-- Specs -->
+        <div style="flex:1;min-width:180px;">
+          <div style="font-size:11px;font-weight:700;color:#1A0800;margin-bottom:8px;">Q Stamp dimensions on your printed book:</div>
+          <div style="font-size:11px;line-height:2;color:#444;">
+            <strong>Size:</strong> 18&times;18 mm &nbsp;(minimum 15mm, maximum 22mm)<br>
+            <strong>Position:</strong> Bottom-left corner, back cover<br>
+            <strong>Clear margin from edge:</strong> 6mm on both sides<br>
+            <strong>Clear zone above stamp:</strong> 5mm (no text in this area)<br>
+            <strong>Print format:</strong> PNG, 300 dpi, transparent background<br>
+            <strong>Digital format:</strong> PNG, 700px &times; 700px<br>
+          </div>
+          <div style="margin-top:8px;padding:8px 10px;background:rgba(91,168,154,.1);border-left:3px solid #5BA89A;border-radius:0 4px 4px 0;font-size:10px;line-height:1.6;color:#444;">
+            <strong>Important:</strong> Keep the bottom-left 30&times;30mm of your back cover free of important text or barcodes. The Q Stamp will be placed in this zone. ISBN barcodes should sit on the bottom-right corner instead.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fsec">
       <div class="fsec-title">Back Cover Upload</div>
-      <div class="cover-drop" id="cdrop">
+      <div class="cover-drop" id="cdrop" onclick="document.getElementById('rcov').click()">
         <input type="file" id="rcov" accept="image/*" onchange="onCover(this)">
         <div id="cdrop-content">
           <div class="drop-ico">📖</div>
-          <div class="drop-txt"><strong>Upload the back of your book cover</strong><br>JPG or PNG · Minimum 1400px wide<br><span style="font-size:11px;opacity:.5">Q stamp placed in the bottom-left corner</span></div>
+          <div class="drop-txt"><strong>Click to upload your book cover</strong><br>JPG or PNG · Minimum 1400px wide<br><span style="font-size:11px;opacity:.5">Keep bottom-centre 15% clear — QR code will be placed there automatically</span></div>
         </div>
         <div class="cover-prev" id="cprev"><img id="cprev-img" src="" alt=""></div>
       </div>
@@ -1255,21 +1326,21 @@ body::after{
       </div>
     </div>
 
-    <!-- QRIB Terms scrollbox -->
+<!-- QRIB Terms scrollbox -->
     <div style="background:rgba(26,8,0,.04);border:1px solid rgba(26,8,0,.12);border-radius:6px;padding:14px 16px;margin-bottom:12px;font-size:11px;line-height:1.75;color:var(--dim);max-height:155px;overflow-y:auto;">
       <strong style="font-size:12px;color:var(--fg);display:block;margin-bottom:6px">QRIB Registration Terms &amp; Conditions</strong>
-      <strong>1. Review.</strong> All titles are subject to a 24–48 hour review. Submission does not guarantee registration. QRIB may decline any title not meeting qualifying criteria.<br><br>
-      <strong>2. Criteria.</strong> Your work must be: original and solely owned by you; professionally proofread and edited to publishable standard; free from plagiarism or unlicensed content; a complete work.<br><br>
-      <strong>3. Refund.</strong> If declined, a full refund of the &#163;49 registration fee is issued within 5 working days. No refund once a QAN Code has been issued.<br><br>
-      <strong>4. Commission.</strong> QRIB charges 12% on all catalogue sales. Authors receive 88% and agree to invoice QRIB monthly for commission balance.<br><br>
-      <strong>5. Ownership.</strong> You retain full copyright. QRIB receives a non-exclusive licence to display your title and synopsis in the Qeiran catalogue for sale.<br><br>
-      <strong>6. Conduct.</strong> You agree not to register works you do not own or misrepresent authorship in any way.
+      <strong>1. Review.</strong> All titles are subject to a 24&ndash;48 hour review. Submission does not guarantee registration.<br><br>
+      <strong>2. Criteria.</strong> Original work, solely owned, professionally edited, complete.<br><br>
+      <strong>3. Refund.</strong> If declined, full &pound;49 refund within 5 working days. No refund once QAN Code issued.<br><br>
+      <strong>4. Commission.</strong> QRIB charges 12%. Authors receive 88% and invoice QRIB monthly.<br><br>
+      <strong>5. Ownership.</strong> You retain copyright. QRIB gets non-exclusive licence to display in catalogue.<br><br>
+      <strong>6. Conduct.</strong> Do not register works you do not own.
     </div>
     <!-- Original content declaration + duplicate warning -->
     <div class="orig-decl" id="orig-decl-wrap">
       <label class="orig-label">
         <input type="checkbox" id="orig-check" onchange="checkOriginal()">
-        <span class="orig-text">I have read and agree to the QRIB Registration Terms above. I declare this is an original, complete work and I hold all rights to publish it. I understand that QAN Code issuance is subject to a 24–48 hour review and is not guaranteed.</span>
+        <span class="orig-text">I have read and agree to the QRIB Registration Terms above. I declare this is an original, complete work and I hold all rights to publish it. Registering content that infringes copyright is a breach of Qeiran terms.</span>
       </label>
       <div class="dup-warning hide" id="dup-warning">
         <span class="dup-ico">⚠</span>
@@ -1277,7 +1348,13 @@ body::after{
         <button class="dup-view-btn" onclick="viewDuplicate()">View existing listing →</button>
       </div>
     </div>
-    <button class="reg-btn" id="reg-btn" onclick="doRegister()" disabled>Book Registered</button>
+    <div id="paypal-fee-block" style="display:none;background:rgba(0,25,168,.04);border:1px solid rgba(0,25,168,.15);border-radius:8px;padding:16px 18px;margin-bottom:14px;text-align:center;">
+      <div style="font-size:12px;font-weight:700;color:var(--fg);margin-bottom:6px;">Step 1 &mdash; Pay the &pound;49 Registration Fee</div>
+      <div style="font-size:11px;color:var(--dim);margin-bottom:12px;line-height:1.6;">Click below to pay via PayPal, then return here and click Submit to complete your registration.</div>
+      <a href="https://paypal.me/Qeiran/49GBP" target="_blank" onclick="setTimeout(function(){document.getElementById('payment-done').style.display='block';},2000)" style="display:inline-block;background:#003087;color:#fff;font-size:12px;font-weight:600;padding:10px 24px;border-radius:6px;text-decoration:none;">Pay &pound;49 via PayPal</a>
+      <div id="payment-done" style="display:none;margin-top:10px;font-size:11px;color:var(--teal);font-weight:600;">&#10003; Payment sent &mdash; click Submit below to complete your registration.</div>
+    </div>
+    <button class="reg-btn" id="reg-btn" onclick="doRegister()" disabled>Submit for Review &mdash; &pound;49</button>
   </div>
 </div>
 
@@ -1302,7 +1379,7 @@ body::after{
       <div class="s-header-text">
         <div class="s-ico">📗</div>
         <h2 class="s-h">Submitted for review.</h2>
-        <p class="s-sub">Confirmation email on its way — allow 2–3 working days for verification. Your QAN Code and Q stamp are ready now.</p>
+        <p class="s-sub">Your title has been submitted to the Qeiran Independent Author Register. Your QAN Code will be emailed within 24&ndash;48 hours once reviewed and approved by QRIB.</p>
       </div>
     </div>
 
@@ -1319,18 +1396,18 @@ body::after{
     </div>
 
     <!-- QAN Code -->
-    <div style="background:rgba(91,168,154,.1);border:1px solid rgba(91,168,154,.3);border-radius:6px;padding:14px 18px;margin:14px 0;font-size:12px;line-height:1.7;color:var(--fg);text-align:center;"><strong>Submission received &#10003;</strong><br>Your QAN Code will be emailed within <strong>24&#8211;48 hours</strong> once reviewed and approved by the QRIB team.</div><div class="s-qcode hide" id="s-qcode-text"></div>
+    <div style="background:rgba(91,168,154,.1);border:1px solid rgba(91,168,154,.3);border-radius:6px;padding:14px 18px;margin:14px 0;font-size:12px;line-height:1.7;color:var(--fg);text-align:center;"><strong>Submission received &#10003;</strong><br>QAN Code will be emailed within <strong>24&ndash;48 hours</strong> once approved by QRIB.</div><div class="s-qcode hide" id="s-qcode-text"></div>
     <div class="s-qcode-label">Your unique QAN Code — keep this</div>
 
     <!-- Stamp placement section -->
     <div class="s-stamp-section">
       <div class="s-stamp-left">
         <div class="s-stamp-title">Your Q Stamp</div>
-        <p class="s-stamp-note">Place in the <strong style="color:var(--teal)">bottom-left corner of the back cover</strong> — small, unobtrusive, away from the spine. Let the cover breathe around it.</p>
+        <p class="s-stamp-note">Place in the <strong style="color:var(--teal)">bottom-left corner of the front cover</strong> — small, unobtrusive, away from the spine. Let the cover breathe around it.</p>
         <div class="s-placement-diagram">
           <strong>Recommended size: 18 × 18mm</strong>
           Minimum: 15mm · Maximum: 22mm<br>
-          Position: bottom-left, back cover<br>
+          Position: bottom-left, front cover<br>
           Clear margin from edge: 6mm<br>
           Format: PNG at 300dpi — print-ready
         </div>
@@ -1343,7 +1420,7 @@ body::after{
     </div>
 
     <div class="s-acts">
-      <!-- Download hidden until QAN approved by QRIB -->
+      <button class="sbn p" onclick="dlQR()">↓ Download Q Stamp</button>
       <button class="sbn o" onclick="viewLastBook()">View My Listing</button>
       <button class="sbn o" onclick="closeSuccess()">Done</button>
     </div>
@@ -1380,6 +1457,17 @@ body::after{
 
 
 <script>
+const QEIRAN_CONFIG = {
+  SUPABASE_URL:        'https://hdujymavzjucsufpwekf.supabase.co',
+  SUPABASE_KEY:        'sb_publishable_1NBHdCiQWEZPfIiqgGoIFg_sTJJABro-',
+  FORMSPREE_REGISTER:  'xgoldryy',
+  FORMSPREE_ORDER:     'mjgeljll',
+  FORMSPREE_WHOLESALE: 'mqednwnv',
+  PLATFORM_EMAIL:      'maat@qrib.co.uk',
+  PLATFORM_PAYPAL:     'maat@qrib.co.uk',
+  REGISTRATION_FEE:    49.00,
+};
+
 (() => {
   var __getOwnPropNames = Object.getOwnPropertyNames;
   var __commonJS = (cb, mod) => function __require() {
@@ -3483,20 +3571,6 @@ body::after{
 </script>
 
 <script>
-/* ── PLATFORM CONFIG — edit these values before going live ───────────────
-   Replace each placeholder with your real credentials.
-─────────────────────────────────────────────────────────────────────── */
-const QEIRAN_CONFIG = {
-  SUPABASE_URL:        'https://hdujymavzjucsufpwekf.supabase.co',
-  SUPABASE_KEY:        'sb_publishable_1NBHdCiQWEZPfIiqgGoIFg_sTJJABro-',
-  FORMSPREE_REGISTER:  'xgoldryy',
-  FORMSPREE_ORDER:     'mjgeljll',
-  FORMSPREE_WHOLESALE: 'mqednwnv',
-  PLATFORM_EMAIL:      'maat@qrib.co.uk',
-  PLATFORM_PAYPAL:     'maat@qrib.co.uk',
-  REGISTRATION_FEE:    49.00,
-};
-
 /* ── QR Canvas Renderer ────────────────────────────────────
    Renders matrix to canvas with rounded modules, exactly
    matching the reference: clean, pure black/white.
@@ -3750,9 +3824,11 @@ function viewDuplicate() {
 // Enable/disable submit based on checkbox + dup state
 function checkOriginal() {
   const checked = document.getElementById('orig-check').checked;
-  const btn     = document.getElementById('reg-btn');
-  btn.disabled  = !checked;
-  if (checked) liveDupCheck();  // rerun check when they tick
+  const btn = document.getElementById('reg-btn');
+  btn.disabled = !checked;
+  const pb = document.getElementById('paypal-fee-block');
+  if (pb) pb.style.display = checked ? 'block' : 'none';
+  if (checked) liveDupCheck();
 }
 
 function doRegister() {
@@ -3806,7 +3882,7 @@ function doRegister() {
     price, qeiranCut: +(price * 0.12).toFixed(2),
     authorGets: +(price * 0.88).toFixed(2),
     synopsis, coverUrl, paypal, wallet, currency,
-    bio: v('rb'), registered: new Date().toISOString(), scans: 0, orders: 0,
+    bio: v('rb'), registered: new Date().toISOString(), scans: 0, orders: 0, approved: false,
   };
 
   S.books.push(book);
@@ -3897,21 +3973,6 @@ function openSuccess(book) {
    Draws the circular QEIRAN stamp: Q body · turquoise dots ·
    gold highlight · arc text · scannable at 300dpi.
 ────────────────────────────────────────────────────────────── */
-function generateQSeal(containerId, url, displayPx) {
-  const el = document.getElementById(containerId);
-  if (!el) return;
-  el.innerHTML = '';
-  try {
-    // Use the proven npm qrcode encoder — same as qlogo.html
-    const { matrix, size, version } = window.QRMatrix(url, 'H');
-    const cv = drawQSeal(matrix, size, version, displayPx || 220);
-    el.appendChild(cv);
-    return cv;
-  } catch(e) {
-    console.warn('Q Seal error:', e);
-  }
-}
-
 /* ── getSuppressed — cosmetic finder corner removal ──────────
    Removes outer corners & inner corners of each finder square.
    Core finder structure remains intact — stamp is fully scannable.
@@ -3930,102 +3991,106 @@ function getSuppressed(sz) {
    Renders at 700px internally. Blue dots, red accent, dummy fill.
    Unique per book — encodes the book's qeiran.com URL.
 ────────────────────────────────────────────────────────────── */
+/* ── Q Seal generator ──────────────────────────────────────── */
+// Q logo PNG — the sun
+
+function generateQSeal(containerId, url, displayPx) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = '';
+  try {
+    const { matrix, size, version } = window.QRMatrix(url, 'H');
+    const cv = drawQSeal(matrix, size, version, displayPx || 220);
+    el.appendChild(cv);
+    return cv;
+  } catch(e) { console.warn('Q Seal error:', e); }
+}
+
 function drawQSeal(matrix, size, version, displayPx) {
-  const px = 1400;
-  const cv = document.createElement('canvas');
-  cv.width = cv.height = px;
+  const px  = 700;
+  const cv  = document.createElement('canvas');
+  cv.width  = cv.height = px;
   const ctx = cv.getContext('2d');
-  // transparent background
+  // No fillRect — transparent outside the Q shape
 
-  const CX=px/2, CY=px/2;
-  // R_STAMP reduced (0.38 vs 0.455) — tighter outer ring, less intrusive
-  const R_STAMP=px*0.352, R_OUT=px*0.322, R_IN=px*0.213;
-  const INK='#1A0800';
+  const CX = px/2, CY = px/2;
+  const R_STAMP = px*0.352, R_OUT = px*0.330, R_IN = px*0.213;
+  const INK = '#08080E';
 
-  // Outer ring — sits just outside the Q body, touching the tail tip
+  // Outer ring
+  ctx.strokeStyle = INK; ctx.lineWidth = px*0.006;
+  ctx.beginPath(); ctx.arc(CX,CY,R_STAMP,0,Math.PI*2); ctx.stroke();
 
-  // Q body
-  ctx.fillStyle=INK;
+  // Q body (dark ring)
+  ctx.fillStyle = INK;
   ctx.beginPath(); ctx.arc(CX,CY,R_OUT,0,Math.PI*2); ctx.fill();
-  ctx.fillStyle='#F6F1E9';
-  ctx.beginPath(); ctx.arc(CX,CY,R_IN,0,Math.PI*2); ctx.fill();
 
-  // Tail — exact from original
-  const TW=R_OUT*.295,TL=R_OUT*.820,TA=43*Math.PI/180,PA=(43-90)*Math.PI/180,AA=122*Math.PI/180;
-  const ax=CX+R_OUT*.79*Math.cos(AA),ay=CY+R_OUT*.79*Math.sin(AA);
-  const ex=ax+TL*Math.cos(TA),ey=ay+TL*Math.sin(TA),hw=TW/2;
-  ctx.fillStyle=INK; ctx.beginPath();
-  ctx.moveTo(ax+hw*Math.cos(PA),ay+hw*Math.sin(PA));
-  ctx.lineTo(ax-hw*Math.cos(PA),ay-hw*Math.sin(PA));
-  ctx.lineTo(ex-hw*.52*Math.cos(PA),ey-hw*.52*Math.sin(PA));
-  ctx.lineTo(ex+hw*.52*Math.cos(PA),ey+hw*.52*Math.sin(PA));
+  // Tail
+  const TW=R_OUT*.295, TL=R_OUT*.820, TA=43*Math.PI/180, PA=(43-90)*Math.PI/180, AA=122*Math.PI/180;
+  const ax=CX+R_OUT*.79*Math.cos(AA), ay=CY+R_OUT*.79*Math.sin(AA);
+  const ex=ax+TL*Math.cos(TA), ey=ay+TL*Math.sin(TA), hw=TW/2;
+  ctx.fillStyle = INK; ctx.beginPath();
+  ctx.moveTo(ax+hw*Math.cos(PA), ay+hw*Math.sin(PA));
+  ctx.lineTo(ax-hw*Math.cos(PA), ay-hw*Math.sin(PA));
+  ctx.lineTo(ex-hw*.52*Math.cos(PA), ey-hw*.52*Math.sin(PA));
+  ctx.lineTo(ex+hw*.52*Math.cos(PA), ey+hw*.52*Math.sin(PA));
   ctx.closePath(); ctx.fill();
-  ctx.fillStyle='#F6F1E9';
-  ctx.beginPath(); ctx.arc(CX,CY,R_IN,0,Math.PI*2); ctx.fill();
 
-  // Dot colours — navy blue + red accent, exactly as original
-  const dotC = {r:0, g:25, b:168};   // #0019A8 — navy
-  const redC  = {r:204, g:17, b:0};  // #CC1100 — red accent dot
-  const rgb   = c => `rgb(${c.r},${c.g},${c.b})`;
+  // Moon — cream circle shifted right, 2px from east inner wall
+  // R_IN=149px, R_MOON=142px, max_shift=7px, east_gap=2px → factor=0.73
+  const R_MOON  = R_IN * 0.95;
+  const MOON_CX = CX + (R_IN - R_MOON) * 0.77;
+  const MOON_CY = CY;
+  ctx.fillStyle = '#F6F1E9';
+  ctx.beginPath(); ctx.arc(MOON_CX, MOON_CY, R_MOON, 0, Math.PI*2); ctx.fill();
 
-  // Dots — unified grid, QR centred, dummy dots fill outer area
-  // This is the exact working logic from qlogo.html
+  // QR dots — grid and clip both centred on MOON_CX/MOON_CY
+  const dotC={r:0,g:25,b:168}, redC={r:204,g:17,b:0};
+  const rgb = c => `rgb(${c.r},${c.g},${c.b})`;
   const suppressed = getSuppressed(size);
-  const QD=R_IN*1.25, mod=QD/size, cr=mod*0.42;
-  const x0=CX-QD/2, y0=CY-QD/2;
+  const QD=R_MOON*1.88, mod=QD/size, cr=mod*0.42;
+  const x0=MOON_CX-QD/2, y0=MOON_CY-QD/2;
   const density=matrix.flat().filter(v=>v).length/(size*size);
   let rng=42; const rand=()=>{rng=(rng*1664525+1013904223)&0xFFFFFFFF;return(rng>>>0)/0xFFFFFFFF;};
-  const pad=Math.ceil(R_IN/mod)+3;
+  const pad=Math.ceil(R_MOON/mod)+3;
 
-  // Red dot = last alignment point (version passed from window.QRMatrix)
   const alignTbl=[null,[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42]];
-  const ap = alignTbl[version] || [];
-  let red = null;
+  const ap=alignTbl[version]||[];
+  let red=null;
   if(ap.length){
     const pts=[];
     for(let i=0;i<ap.length;i++) for(let j=0;j<ap.length;j++){
-      if(i===0&&j===0) continue;
-      if(i===0&&j===ap.length-1) continue;
-      if(i===ap.length-1&&j===0) continue;
+      if(i===0&&j===0||i===0&&j===ap.length-1||i===ap.length-1&&j===0) continue;
       pts.push({r:ap[i],c:ap[j]});
     }
-    red = pts.length ? pts[pts.length-1] : null;
+    red=pts.length?pts[pts.length-1]:null;
   }
 
-  for(let ri=-pad; ri<size+pad; ri++){
-    for(let ci=-pad; ci<size+pad; ci++){
+  for(let ri=-pad;ri<size+pad;ri++){
+    for(let ci=-pad;ci<size+pad;ci++){
       const px2=x0+(ci+0.5)*mod, py2=y0+(ri+0.5)*mod;
-      if((px2-CX)**2+(py2-CY)**2>R_IN**2) continue;
+      if((px2-MOON_CX)**2+(py2-MOON_CY)**2 > R_MOON**2) continue;
       const inQR=(ri>=0&&ri<size&&ci>=0&&ci<size);
       let dark=false;
-      if(inQR){
-        if(suppressed.has(`${ri},${ci}`)) continue;
-        dark=matrix[ri][ci]===1;
-      } else {
-        dark=rand()<density;
-      }
+      if(inQR){if(suppressed.has(`${ri},${ci}`)) continue; dark=matrix[ri][ci]===1;}
+      else{dark=rand()<density;}
       if(!dark) continue;
       const isRed=inQR&&red&&ri===red.r&&ci===red.c;
-      const col=isRed?rgb(redC):rgb(dotC);
-      const rcr=isRed?cr*1.6:cr;
-      ctx.beginPath(); ctx.arc(px2,py2,rcr,0,Math.PI*2);
-      ctx.fillStyle=col; ctx.fill();
+      ctx.beginPath(); ctx.arc(px2,py2,isRed?cr*1.6:cr,0,Math.PI*2);
+      ctx.fillStyle=isRed?rgb(redC):rgb(dotC); ctx.fill();
     }
   }
 
-  // Arc text — Qeiran branding, same drawSealText logic
+  // Arc text
   ctx.fillStyle=INK;
-  drawSealText(ctx,'Q E I R A N',CX,CY,px*0.338,280,px*.018*0.7,false);
-  drawSealText(ctx,'INDEPENDENT AUTHOR REGISTER',CX,CY,px*0.338,180,px*.018*0.7,true);
+  drawSealText(ctx,'Q E I R A N',CX,CY,R_STAMP*.87,280,px*.034*0.7,false);
+  drawSealText(ctx,'INDEPENDENT AUTHOR REGISTER',CX,CY,R_STAMP*.87,180,px*.020*0.7,true);
 
-  // Scale canvas for display
-  const dp = displayPx || 220;
-  cv.style.width  = dp + 'px';
-  cv.style.height = dp + 'px';
+  const dp=displayPx||220;
+  cv.style.width=dp+'px'; cv.style.height=dp+'px';
   return cv;
 }
 
-/* ── drawSealText — exact from qlogo.html ────────────────── */
 function drawSealText(ctx,text,cx,cy,radius,centreDeg,fontSize,bottom){
   const chars=bottom?[...text].reverse():[...text];
   ctx.font=`${fontSize}px system-ui,sans-serif`;
@@ -4044,6 +4109,7 @@ function drawSealText(ctx,text,cx,cy,radius,centreDeg,fontSize,bottom){
     angle+=(cw+gap)/radius*(180/Math.PI);
   });
 }
+
 function closeSuccess() {
   document.getElementById('success-modal').classList.remove('open');
   go('catalogue');
@@ -4056,17 +4122,14 @@ function dlQR() {
   const c = document.querySelector('#s-qr canvas');
   if (!c) { toast('Q stamp not ready'); return; }
 
-  // Render at 700px — circular with transparent background
-  const OUT = 1400;
+  const OUT = 700;
   const out = document.createElement('canvas');
   out.width = out.height = OUT;
   const octx = out.getContext('2d');
-
-  // Clip to circle — everything outside is transparent
   octx.clearRect(0, 0, OUT, OUT);
   octx.save();
   octx.beginPath();
-  octx.arc(OUT / 2, OUT / 2, OUT / 2, 0, Math.PI * 2);
+  octx.arc(OUT/2, OUT/2, OUT/2, 0, Math.PI*2);
   octx.clip();
   octx.drawImage(c, 0, 0, OUT, OUT);
   octx.restore();
@@ -4151,6 +4214,7 @@ function openBook(id) {
         <div class="b-price-bar">
           <div><div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:4px">Per Copy</div><div class="b-price">£${b.price.toFixed(2)}</div></div>
           <button class="b-order-btn" onclick="openOrder('${b.id}')">Order Now</button>
+          ${b.approved===false?'<button onclick="approveBook(\''+b.id+'\')" style="padding:8px 16px;background:var(--teal);color:#fff;border:none;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;margin-right:8px;">Approve &amp; Issue QAN</button>':''}
           <button class="b-delete-btn" onclick="showDeleteConfirm('${b.id}')">Remove this book…</button>
           <div class="del-confirm" id="del-confirm-${b.id}">
             <strong>Remove "${esc(b.title)}"?</strong><br>
@@ -4171,17 +4235,23 @@ function openBook(id) {
     <p class="b-synopsis">${esc(b.synopsis)}</p>
     <div class="b-sec-label">Scan to Purchase</div>
     <div class="qr-scan-block">
-      <div id="bqrl-${b.id}" style="display:inline-block"></div>
+      <div style="position:relative;display:inline-block;">
+        <div id="bqrl-${b.id}" style="display:inline-block;${b.approved===false?'filter:blur(3px);opacity:0.45;':''}"></div>
+        ${b.approved===false?'<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;"><div style="background:rgba(139,69,19,.88);color:#fff;font-size:11px;font-weight:700;letter-spacing:.14em;padding:6px 14px;border-radius:4px;transform:rotate(-15deg);">SAMPLE</div></div>':''}
+      </div>
       <div class="qr-scan-info">
-        <p>Scan with any smartphone camera to open this book's order page directly. Print it, share it, post it.</p>
+        ${b.approved===false
+          ?'<p style="color:var(--warm-brown);font-size:12px;font-weight:600;line-height:1.6;">&#9888; Pending QRIB review. Live QAN Code issued within 24&ndash;48 hours of approval.</p>'
+          :'<p>Scan with any smartphone camera to open this book order page. Print it, share it, post it.</p>'}
         <div class="qr-url">${url}</div>
       </div>
+    </div>
     </div>
   `;
 
   setTimeout(() => {
     generateQSeal('bqrs-' + b.id, url, 56);   // cover stamp — small
-    generateQSeal('bqrl-' + b.id, url, 220);  // scan block — full size
+    generateQSeal('bqrl-' + b.id, url, 320);  // scan block — full size
   }, 80);
 
   go('book');
@@ -4853,148 +4923,7 @@ document.addEventListener('change',e=>{
 
 <!-- ═══════════════════════════════════════════════════════
      AUTHORS PORTAL
-═══════════════════════════════════════════════════════════ -->
-<div id="authors-page" class="page">
-  <div style="max-width:860px;margin:0 auto;padding:72px 36px 80px;">
-
-    <!-- Header -->
-    <div style="margin-bottom:52px;">
-      <div style="font-size:9px;font-weight:600;letter-spacing:.26em;text-transform:uppercase;
-                  color:var(--warm-brown);margin-bottom:12px;font-family:var(--mono);">
-        Qeiran Authors
-      </div>
-      <h1 style="font-family:var(--narrow);font-size:clamp(32px,5vw,58px);
-                 font-weight:200;letter-spacing:-.02em;color:var(--fg);margin-bottom:14px;">
-        Your books.<br>Your terms.
-      </h1>
-      <p style="font-size:14px;color:var(--dim);line-height:1.8;max-width:480px;font-weight:300;">
-        Everything in one place. Register, upload, price, track and get paid —
-        without a publisher between you and your reader.
-      </p>
-    </div>
-
-    <!-- Flow steps -->
-    <div style="display:grid;gap:2px;margin-bottom:56px;">
-
-      <!-- Step 1 -->
-      <div class="author-step">
-        <div class="step-num">01</div>
-        <div class="step-body">
-          <div class="step-title">Register your book</div>
-          <div class="step-desc">
-            Fill in your title, author details, genre and price. Your permanent
-            <strong>QAN Code</strong> is assigned instantly — a unique address
-            for your book that never changes or expires. You receive a
-            print-ready <strong>Q stamp</strong> to place on your cover.
-          </div>
-          <button class="step-action" onclick="go('register')">Register a book →</button>
-        </div>
-      </div>
-
-      <!-- Step 2 -->
-      <div class="author-step">
-        <div class="step-num">02</div>
-        <div class="step-body">
-          <div class="step-title">Upload your files</div>
-          <div class="step-desc">
-            Upload a PDF for digital sales — readers buy and receive a
-            secure download link. Optionally upload your cover image.
-            Files are stored securely; the PDF is only released on confirmed payment.
-          </div>
-          <div class="step-upload-row">
-            <label class="upload-pill">
-              <input type="file" accept=".pdf" style="display:none" onchange="handleAuthorPdf(this)">
-              📄 Upload PDF
-            </label>
-            <label class="upload-pill">
-              <input type="file" accept="image/*" style="display:none" onchange="handleAuthorCover(this)">
-              🖼 Upload Cover
-            </label>
-            <span id="author-file-status" style="font-size:11px;color:var(--dim);font-family:var(--mono);"></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Step 3 -->
-      <div class="author-step">
-        <div class="step-num">03</div>
-        <div class="step-body">
-          <div class="step-title">Set your price &amp; go live</div>
-          <div class="step-desc">
-            You set the price. Qeiran retains 12% on digital sales and
-            12% on any physical orders routed through the platform.
-            The rest goes directly to your PayPal or bank within 48 hours of each sale.
-            Your book appears in the catalogue immediately.
-          </div>
-          <div style="display:flex;gap:24px;margin-top:14px;flex-wrap:wrap;">
-            <div class="author-stat-box">
-              <div class="asb-n">88%</div>
-              <div class="asb-l">To you, per sale</div>
-            </div>
-            <div class="author-stat-box">
-              <div class="asb-n">48h</div>
-              <div class="asb-l">Payout window</div>
-            </div>
-            <div class="author-stat-box">
-              <div class="asb-n">0</div>
-              <div class="asb-l">Gatekeepers</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Step 4 -->
-      <div class="author-step">
-        <div class="step-num">04</div>
-        <div class="step-body">
-          <div class="step-title">Physical copies &amp; fulfilment</div>
-          <div class="step-desc">
-            Buyers can enquire about physical copies through the catalogue.
-            For now, wholesale and individual print enquiries are routed to you
-            directly — you fulfil through your printer of choice.
-            When we launch print-on-demand partnerships, you will be notified
-            and can opt in without re-registering.
-          </div>
-          <label style="display:flex;align-items:center;gap:10px;margin-top:14px;
-                        font-size:12px;color:var(--dim);cursor:pointer;">
-            <input type="checkbox" id="author-print-interest"
-                   style="width:14px;height:14px;accent-color:var(--teal);">
-            Notify me when print fulfilment launches
-          </label>
-        </div>
-      </div>
-
-      <!-- Step 5 -->
-      <div class="author-step">
-        <div class="step-num">05</div>
-        <div class="step-body">
-          <div class="step-title">Track your sales</div>
-          <div class="step-desc">
-            Every scan of your Q stamp is logged. See how many times your
-            QAN Code has been scanned, how many orders placed, and your
-            running total. Your catalogue page is live 24/7 globally.
-          </div>
-          <div style="margin-top:16px;padding:16px 20px;
-                      background:var(--bg2);border-radius:4px;
-                      border:1px solid var(--border);
-                      font-family:var(--mono);font-size:11px;color:var(--dim);">
-            Author dashboard — coming in next release.
-            Registered authors will be first to access.
-          </div>
-        </div>
-      </div>
-
-    </div><!-- /steps -->
-
-    <!-- CTA row -->
-    <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;
-                padding-top:32px;border-top:1px solid var(--border);">
-      <button class="cta-p" onclick="go('register')">Register your first book</button>
-      <button class="cta-ghost" onclick="go('catalogue')">Browse the catalogue</button>
-    </div>
-
-  </div>
-</div><!-- /authors-page -->
+══════════════════════════════════
 
 <script>
 /* ── CUSTOMISER ─────────────────────────────────────────── */
@@ -5054,16 +4983,36 @@ document.addEventListener('click',e=>{
     p.classList.remove('open');
 });
 
+/* == Approve book == */
+function approveBook(id) {
+  var b = S.books.find(function(x){return x.id===id;});
+  if (!b) { toast('Book not found'); return; }
+  b.approved = true;
+  persist();
+  if (typeof saveToCloud === 'function') saveToCloud(b);
+  toast('Approved. QAN Code is now live. Email the Q Stamp to the author.');
+  openBook(id);
+}
+
 /* == Admin QAN Generator == */
 (function(){
-  if(new URLSearchParams(window.location.search).get('admin')==='qrib'){
-    var m=document.getElementById('admin-modal');
-    if(m){m.style.display='flex';}
+  if(new URLSearchParams(window.location.search).get('admin')==='1'){
+    document.getElementById('admin-pw-modal').style.display='flex';
   }
 })();
+function adminCheckPW(){
+  var pw=document.getElementById('admin-pw-input').value;
+  if(pw==='qrib2026'){
+    document.getElementById('admin-pw-modal').style.display='none';
+    document.getElementById('admin-modal').style.display='flex';
+  } else {
+    document.getElementById('admin-pw-error').style.display='block';
+    document.getElementById('admin-pw-input').value='';
+  }
+}
 
 function adminIssueQAN(){
-  var gv=function(id){return document.getElementById(id).value.trim();};
+  var gv=function(id){return document.getElementById(id)?document.getElementById(id).value.trim():'';};
   var name=gv('a-name'),email=gv('a-email'),title=gv('a-title');
   var country=gv('a-country')||'GB',year=gv('a-year')||new Date().getFullYear();
   var genre=gv('a-genre')||'General',price=parseFloat(gv('a-price'))||0;
@@ -5076,43 +5025,174 @@ function adminIssueQAN(){
     pages:null,price:price,qeiranCut:0,authorGets:price,
     synopsis:synopsis||'Complimentary registration.',coverUrl:'',
     paypal:paypal,wallet:'',currency:'',bio:'',
-    registered:new Date().toISOString(),scans:0,orders:0,complimentary:true};
+    registered:new Date().toISOString(),scans:0,orders:0,approved:true,complimentary:true};
   S.books.push(book);S.lastBook=book;persist();
   if(typeof saveToCloud==='function')saveToCloud(book);
   var res=document.getElementById('admin-result');
-  res.style.display='block';
-  res.innerHTML='<strong>QAN Code issued:</strong> '+qcode
-    +'<br><strong>Author:</strong> '+name
-    +'<br><strong>Email:</strong> '+email
-    +'<br><br><em>Book is now live in catalogue.</em>'
-    +'<br><br><button onclick="dlQR()" style="padding:8px 16px;background:var(--teal);color:#fff;border:none;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;">↓ Download Q Stamp for this author</button>';
-  ['a-name','a-email','a-title','a-country','a-year','a-genre','a-price','a-synopsis','a-paypal']
-    .forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  if(res){
+    res.style.display='block';
+    res.innerHTML='<strong>QAN Code issued:</strong> '+qcode+'<br><strong>Author:</strong> '+name
+      +'<br><strong>Email:</strong> '+email
+      +'<br><br><em>Book is live in catalogue.</em>'
+      +'<br><br><button onclick="dlQR()" style="padding:8px 16px;background:var(--teal);color:#fff;'
+      +'border:none;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;">Download Q Stamp for this author</button>';
+    ['a-name','a-email','a-title','a-country','a-year','a-genre','a-price','a-synopsis','a-paypal']
+      .forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  }
 }
+
+/* == Admin tabs == */
+function adminTab(name) {
+  ['pending','issue','stoppress'].forEach(function(t){
+    var panel = document.getElementById('admin-tab-'+t);
+    var tab   = document.getElementById('atab-'+t);
+    if(panel) panel.style.display = t===name ? 'block' : 'none';
+    if(tab){
+      tab.style.borderBottomColor = t===name ? '#1A0800' : 'transparent';
+      tab.style.color = t===name ? '#1A0800' : '#888';
+      tab.style.fontWeight = t===name ? '700' : '600';
+    }
+  });
+  if(name==='pending') adminLoadPending();
+  if(name==='stoppress') adminLoadStopPress();
+}
+
+function adminLoadPending() {
+  var list = document.getElementById('admin-pending-list');
+  if(!list) return;
+  var pending = S.books.filter(function(b){ return b.approved===false; });
+  if(pending.length===0){
+    list.innerHTML='<div style="font-size:11px;color:#aaa;text-align:center;padding:20px;">No titles pending review.</div>';
+    return;
+  }
+  list.innerHTML = pending.map(function(b){
+    var ago = Math.round((Date.now()-new Date(b.registered))/(1000*60*60));
+    return '<div style="background:rgba(26,8,0,.03);border:1px solid rgba(26,8,0,.1);'
+      +'border-radius:6px;padding:12px;display:flex;justify-content:space-between;align-items:center;gap:10px;">'
+      +'<div><div style="font-size:12px;font-weight:700;">'+b.title+'</div>'
+      +'<div style="font-size:10px;color:#888;">'+b.author+' &mdash; '+b.email+'</div>'
+      +'<div style="font-size:10px;color:#aaa;">Submitted '+ago+' hrs ago</div></div>'
+      +'<button onclick="adminApproveSingle(''+b.id+'')" '
+      +'style="padding:7px 14px;background:#5BA89A;color:#fff;border:none;border-radius:5px;'
+      +'font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">Approve</button>'
+      +'</div>';
+  }).join('');
+}
+
+function adminApproveSingle(id) {
+  var b = S.books.find(function(x){return x.id===id;});
+  if(!b) return;
+  b.approved = true;
+  persist();
+  if(typeof saveToCloud==='function') saveToCloud(b);
+  adminLoadPending();
+  toast('Approved: '+b.title);
+}
+
+function adminApproveAll() {
+  var pending = S.books.filter(function(b){ return b.approved===false; });
+  if(pending.length===0){ toast('No pending titles.'); return; }
+  pending.forEach(function(b){
+    b.approved=true;
+    if(typeof saveToCloud==='function') saveToCloud(b);
+  });
+  persist();
+  adminLoadPending();
+  toast('All '+pending.length+' titles approved.');
+}
+
+/* == Stop Press — stored in localStorage == */
+function adminLoadStopPress() {
+  var stopped = localStorage.getItem('qeiran_stop_press')==='1';
+  var statusEl = document.getElementById('sp-status');
+  var btnEl = document.getElementById('sp-btn');
+  if(statusEl) statusEl.innerHTML = stopped
+    ? '<span style="color:#c0392b;">&#9632; STOP PRESS IS ON &mdash; automatic emails paused</span>'
+    : '<span style="color:#27ae60;">&#9654; System running normally &mdash; 24hr auto-send active</span>';
+  if(btnEl){
+    btnEl.textContent = stopped ? 'Resume (release queue)' : 'Stop Press';
+    btnEl.style.background = stopped ? '#27ae60' : '#c0392b';
+    btnEl.style.color = '#fff';
+  }
+}
+
+function adminToggleStopPress() {
+  var stopped = localStorage.getItem('qeiran_stop_press')==='1';
+  localStorage.setItem('qeiran_stop_press', stopped ? '0' : '1');
+  adminLoadStopPress();
+  toast(stopped ? 'System resumed. Queue will process on next cycle.' : 'Stop Press activated. No automatic emails will send.');
+}
+
+/* Open admin panel on load if needed */
+(function(){
+  if(document.getElementById('admin-tab-pending')) adminLoadPending();
+})();
 </script>
 
 
-<!-- ADMIN QAN GENERATOR access via ?admin=qrib -->
+<!-- PASSWORD MODAL -->
+<div id="admin-pw-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:10000;align-items:center;justify-content:center;">
+  <div style="background:#f6f1e9;border-radius:10px;padding:32px;width:min(320px,90vw);text-align:center;">
+    <div style="font-size:28px;margin-bottom:10px;">&#128274;</div>
+    <h3 style="font-size:15px;font-weight:700;margin-bottom:6px;">QRIB Admin</h3>
+    <p style="font-size:11px;color:#888;margin-bottom:14px;">Enter your admin password.</p>
+    <input id="admin-pw-input" type="password" placeholder="Password"
+      onkeydown="if(event.key==='Enter')adminCheckPW()"
+      style="width:100%;padding:10px 12px;border:1px solid #ccc;border-radius:6px;font-size:14px;box-sizing:border-box;margin-bottom:8px;">
+    <div id="admin-pw-error" style="display:none;font-size:11px;color:#c0392b;margin-bottom:8px;">Incorrect password.</div>
+    <button onclick="adminCheckPW()" style="width:100%;padding:11px;background:#1A0800;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;">Enter</button>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
 <div id="admin-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;align-items:center;justify-content:center;">
-  <div style="background:var(--paper);border-radius:12px;padding:32px;width:min(500px,92vw);max-height:88vh;overflow-y:auto;position:relative;">
-    <button onclick="document.getElementById('admin-modal').style.display='none'" style="position:absolute;top:16px;right:16px;font-size:20px;color:var(--dim);background:none;border:none;cursor:pointer;">×</button>
-    <h2 style="font-size:17px;font-weight:700;margin-bottom:6px;">QRIB Admin — Issue QAN Code</h2>
-    <p style="font-size:11px;color:var(--dim);margin-bottom:20px;">Complimentary registration. No payment. Book goes live immediately.</p>
-    <div style="display:flex;flex-direction:column;gap:11px;">
-      <div><label style="font-size:11px;font-weight:600;color:var(--dim);display:block;margin-bottom:3px">Author Full Name *</label><input id="a-name" type="text" placeholder="First Last" style="width:100%;padding:9px 11px;border:1px solid var(--rule);border-radius:5px;font-size:13px;background:var(--cream);box-sizing:border-box;"></div>
-      <div><label style="font-size:11px;font-weight:600;color:var(--dim);display:block;margin-bottom:3px">Author Email *</label><input id="a-email" type="email" placeholder="author@email.com" style="width:100%;padding:9px 11px;border:1px solid var(--rule);border-radius:5px;font-size:13px;background:var(--cream);box-sizing:border-box;"></div>
-      <div><label style="font-size:11px;font-weight:600;color:var(--dim);display:block;margin-bottom:3px">Book Title *</label><input id="a-title" type="text" placeholder="Full title" style="width:100%;padding:9px 11px;border:1px solid var(--rule);border-radius:5px;font-size:13px;background:var(--cream);box-sizing:border-box;"></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;">
-        <div><label style="font-size:11px;font-weight:600;color:var(--dim);display:block;margin-bottom:3px">Country</label><input id="a-country" type="text" placeholder="GB" style="width:100%;padding:9px 11px;border:1px solid var(--rule);border-radius:5px;font-size:13px;background:var(--cream);box-sizing:border-box;"></div>
-        <div><label style="font-size:11px;font-weight:600;color:var(--dim);display:block;margin-bottom:3px">Year</label><input id="a-year" type="number" placeholder="2025" style="width:100%;padding:9px 11px;border:1px solid var(--rule);border-radius:5px;font-size:13px;background:var(--cream);box-sizing:border-box;"></div>
-        <div><label style="font-size:11px;font-weight:600;color:var(--dim);display:block;margin-bottom:3px">Price (£)</label><input id="a-price" type="number" placeholder="9.99" style="width:100%;padding:9px 11px;border:1px solid var(--rule);border-radius:5px;font-size:13px;background:var(--cream);box-sizing:border-box;"></div>
-      </div>
-      <div><label style="font-size:11px;font-weight:600;color:var(--dim);display:block;margin-bottom:3px">Genre</label><input id="a-genre" type="text" placeholder="Fiction" style="width:100%;padding:9px 11px;border:1px solid var(--rule);border-radius:5px;font-size:13px;background:var(--cream);box-sizing:border-box;"></div>
-      <div><label style="font-size:11px;font-weight:600;color:var(--dim);display:block;margin-bottom:3px">Synopsis</label><textarea id="a-synopsis" rows="3" placeholder="Brief description…" style="width:100%;padding:9px 11px;border:1px solid var(--rule);border-radius:5px;font-size:13px;background:var(--cream);box-sizing:border-box;resize:vertical;"></textarea></div>
-      <div><label style="font-size:11px;font-weight:600;color:var(--dim);display:block;margin-bottom:3px">Author PayPal Email</label><input id="a-paypal" type="email" placeholder="paypal@email.com" style="width:100%;padding:9px 11px;border:1px solid var(--rule);border-radius:5px;font-size:13px;background:var(--cream);box-sizing:border-box;"></div>
+  <div style="background:#f6f1e9;border-radius:12px;padding:28px;width:min(540px,94vw);max-height:88vh;overflow-y:auto;position:relative;">
+    <button onclick="document.getElementById('admin-modal').style.display='none'" style="position:absolute;top:14px;right:14px;font-size:22px;background:none;border:none;cursor:pointer;color:#888;">&times;</button>
+    <h2 style="font-size:17px;font-weight:700;margin-bottom:14px;">QRIB Admin</h2>
+
+    <!-- TABS -->
+    <div style="display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid #e0d6c8;">
+      <button onclick="adminTab('pending')" id="atab-pending" style="padding:8px 14px;background:none;border:none;border-bottom:3px solid #1A0800;margin-bottom:-2px;font-size:12px;font-weight:700;cursor:pointer;color:#1A0800;">Pending Review</button>
+      <button onclick="adminTab('issue')" id="atab-issue" style="padding:8px 14px;background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-2px;font-size:12px;font-weight:600;cursor:pointer;color:#888;">Issue Free Code</button>
+      <button onclick="adminTab('stoppress')" id="atab-stoppress" style="padding:8px 14px;background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-2px;font-size:12px;font-weight:600;cursor:pointer;color:#c0392b;">&#9632; Stop Press</button>
     </div>
-    <div id="admin-result" style="display:none;margin-top:14px;background:rgba(91,168,154,.1);border:1px solid rgba(91,168,154,.35);border-radius:7px;padding:13px;font-size:12px;line-height:1.7;"></div>
-    <button onclick="adminIssueQAN()" style="margin-top:18px;width:100%;padding:13px;background:var(--teal);color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;">Issue QAN Code (Complimentary)</button>
+
+    <!-- PENDING TAB -->
+    <div id="admin-tab-pending">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div style="font-size:11px;color:#888;">Books awaiting your approval</div>
+        <button onclick="adminApproveAll()" style="padding:6px 14px;background:#5BA89A;color:#fff;border:none;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;">Approve All</button>
+      </div>
+      <div id="admin-pending-list"><div style="font-size:11px;color:#aaa;text-align:center;padding:20px;">Loading...</div></div>
+    </div>
+
+    <!-- ISSUE FREE CODE TAB -->
+    <div id="admin-tab-issue" style="display:none;">
+      <p style="font-size:11px;color:#888;margin-bottom:14px;">Complimentary registration. No payment. Book goes live immediately with approved status.</p>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <input id="a-name" type="text" placeholder="Author Full Name *" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:100%;box-sizing:border-box;">
+        <input id="a-email" type="email" placeholder="Author Email *" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:100%;box-sizing:border-box;">
+        <input id="a-title" type="text" placeholder="Book Title *" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:100%;box-sizing:border-box;">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <input id="a-country" type="text" placeholder="Country (GB)" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;">
+          <input id="a-year" type="number" placeholder="Year" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;">
+          <input id="a-price" type="number" placeholder="Price (£)" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;">
+        </div>
+        <input id="a-genre" type="text" placeholder="Genre" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:100%;box-sizing:border-box;">
+        <textarea id="a-synopsis" rows="3" placeholder="Synopsis" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:100%;box-sizing:border-box;resize:vertical;"></textarea>
+        <input id="a-paypal" type="email" placeholder="Author PayPal Email" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:100%;box-sizing:border-box;">
+      </div>
+      <div id="admin-result" style="display:none;margin-top:14px;background:rgba(91,168,154,.1);border:1px solid rgba(91,168,154,.35);border-radius:7px;padding:13px;font-size:12px;line-height:1.7;"></div>
+      <button onclick="adminIssueQAN()" style="margin-top:14px;width:100%;padding:13px;background:#5BA89A;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;">Issue QAN Code (Complimentary)</button>
+    </div>
+
+    <!-- STOP PRESS TAB -->
+    <div id="admin-tab-stoppress" style="display:none;text-align:center;padding:16px 0;">
+      <div style="font-size:40px;margin-bottom:12px;">&#128750;</div>
+      <div id="sp-status" style="font-size:14px;font-weight:700;margin-bottom:8px;"></div>
+      <div style="font-size:11px;color:#888;margin-bottom:20px;line-height:1.6;max-width:320px;margin-left:auto;margin-right:auto;">When Stop Press is ON, automatic 24hr QAN Code emails are paused. Books queue. Press Resume to release all queued approvals.</div>
+      <button id="sp-btn" onclick="adminToggleStopPress()" style="padding:12px 28px;font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;">Loading...</button>
+    </div>
   </div>
 </div>
 </body>
