@@ -1002,13 +1002,6 @@ body::after{
   var pw = document.getElementById('admin-pw-modal');
   if(!isAdmin && pw){ pw.style.display='none'; }
 })();
-function adminCheckPW(){
-  var pw=document.getElementById('admin-pw-modal');
-  var adm=document.getElementById('admin-modal');
-  if(pw) pw.style.display='none';
-  if(adm) adm.style.display='flex';
-  if(typeof adminLoadPending==='function') adminLoadPending();
-}
 </script>
 
 
@@ -1022,8 +1015,8 @@ function adminCheckPW(){
     <a id="nl-catalogue" href="#" onclick="go('catalogue');return false">Search &amp; Buy</a>
     <a id="nl-home"      href="#" onclick="go('home');return false"     >About</a>
   </div>
-  <button class="nav-authors" onclick="go('authors')">Qeiran Authors</button>
   <button class="nav-reg" onclick="go('register')">Register a Book</button>
+  <button class="nav-authors" onclick="go('authors')">For Authors</button>
 </nav>
 
 <!-- ═══════════════════════════════════════════════════════
@@ -1053,9 +1046,9 @@ function adminCheckPW(){
 
   <section id="features">
     <p class="sec-eyebrow">Why Qeiran</p>
-    <h2 class="sec-h">The ISBN took weeks.<br>The Q&#8209;Code takes four minutes.</h2>
+    <h2 class="sec-h"><s style="opacity:.35;font-weight:200">ISBN — £89. Six weeks.</s><br>QAN Code — £49. Under 48 hours.</h2>
     <div class="feat-grid">
-      <div class="feat"><div class="feat-ico">⚡</div><div class="feat-t">Instant Registration</div><div class="feat-b">Your QAN Code is generated the moment you submit. Your QR is print-ready in seconds. Your book is live in the catalogue before you've put the kettle on.</div></div>
+      <div class="feat"><div class="feat-ico">⚡</div><div class="feat-t">Register in Minutes</div><div class="feat-b">Submit your details, upload your cover, and you're done. Within 48 hours your QAN Code and FabriQ™ stamp arrive by email — personally reviewed, not rubber-stamped by a machine.</div></div>
       <div class="feat"><div class="feat-ico">🌍</div><div class="feat-t">Globally Reachable</div><div class="feat-b">Any author. Any country. The QAN Code carries an ISO country prefix so your origin is always encoded — and buyers worldwide can find and order your title.</div></div>
       <div class="feat"><div class="feat-ico">💰</div><div class="feat-t">Direct Payment</div><div class="feat-b">Buyers pay you — not a publisher, not a distributor. Straight to your PayPal or crypto wallet. Qeiran takes its percentage automatically. No delay.</div></div>
       <div class="feat"><div class="feat-ico">📦</div><div class="feat-t">Print on Demand</div><div class="feat-b">No warehouse. No minimum run. One copy or one thousand — printed and shipped only when someone buys. Zero stock risk. Zero waste.</div></div>
@@ -4682,7 +4675,7 @@ init();
             Fill in your title, author details, genre and price. Your permanent
             <strong>QAN Code</strong> is assigned upon approval — a unique address
             for your book that never changes or expires. You receive a
-            print-ready <strong>Q stamp</strong> to place on your cover.
+            print-ready <strong>FabriQ™ stamp</strong> to place on your cover.
           </div>
           <button class="step-action" onclick="go('register')">Register a book →</button>
         </div>
@@ -4721,7 +4714,7 @@ init();
             You set the price. Qeiran retains 12% on digital sales and
             12% on any physical orders routed through the platform.
             The rest goes directly to your PayPal or bank within 48 hours of each sale.
-            Your book appears in the catalogue immediately.
+            Your book appears in the catalogue once approved.
           </div>
           <div style="display:flex;gap:24px;margin-top:14px;flex-wrap:wrap;">
             <div class="author-stat-box">
