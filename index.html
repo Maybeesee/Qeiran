@@ -1002,6 +1002,22 @@ body::after{
   var pw = document.getElementById('admin-pw-modal');
   if(!isAdmin && pw){ pw.style.display='none'; }
 })();
+window._adminUnlocked = false;
+function adminCheckPW(){
+  var inp=document.getElementById('admin-pw-input').value;
+  if(inp==='qrib2026'){
+    document.getElementById('admin-pw-modal').style.display='none';
+    window._adminUnlocked = true;
+    var adm=document.getElementById('admin-modal');
+    if(adm){ adm.style.display='flex'; }
+    else { window.addEventListener('DOMContentLoaded', function(){ 
+      var a=document.getElementById('admin-modal'); if(a) a.style.display='flex'; 
+    }); }
+  } else {
+    document.getElementById('admin-pw-error').style.display='block';
+    document.getElementById('admin-pw-input').value='';
+  }
+}
 </script>
 
 
@@ -5043,19 +5059,13 @@ function approveBook(id) {
 /* == Admin QAN Generator == */
 (function(){
   if(new URLSearchParams(window.location.search).get('admin')==='1'){
-    document.getElementById('admin-pw-modal').style.display='flex';
+    if(window._adminUnlocked){
+      document.getElementById('admin-modal').style.display='flex';
+    } else {
+      document.getElementById('admin-pw-modal').style.display='flex';
+    }
   }
 })();
-function adminCheckPW(){
-  var pw=document.getElementById('admin-pw-input').value;
-  if(pw==='qrib2026'){
-    document.getElementById('admin-pw-modal').style.display='none';
-    document.getElementById('admin-modal').style.display='flex';
-  } else {
-    document.getElementById('admin-pw-error').style.display='block';
-    document.getElementById('admin-pw-input').value='';
-  }
-}
 
 function adminIssueQAN(){
   var gv=function(id){return document.getElementById(id)?document.getElementById(id).value.trim():'';};
