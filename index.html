@@ -126,8 +126,12 @@ body::after{
 }
 .nav-authors:hover{background:rgba(139,99,85,.08);border-color:var(--warm-brown);}
 @media(max-width:700px){
-  #nav{padding:0 18px}
+  #nav{padding:8px 18px;height:auto;flex-wrap:wrap;justify-content:flex-end}
+  .brand{order:2;width:100%;padding-left:4px;margin-top:2px}
+  .brand-q-mark{width:40px;height:40px;top:8px;margin-right:-11px}
   .nav-mid{display:none}
+  .nav-reg,.nav-authors{order:1;font-size:9px;padding:5px 10px}
+  .page{padding-top:80px}
 }
 
 /* ─────────────────────────────────────────────────────────
@@ -310,27 +314,29 @@ body::after{
 .cat-head{
   background:var(--bg);
   color:var(--fg);
-  padding:52px 36px 36px;
+  padding:60px 36px 44px;
   border-bottom:1px solid var(--border);
 }
 .cat-head-in{max-width:1080px;margin:0 auto}
 .cat-h{
-  font-family:var(--narrow);font-size:clamp(26px,5vw,46px);
-  margin-bottom:24px;font-weight:300;
+  font-family:var(--narrow);font-size:clamp(36px,7vw,64px);
+  margin-bottom:12px;font-weight:300;
 }
+.cat-sub{font-size:clamp(14px,2.5vw,18px);color:var(--dim);margin-bottom:28px}
 .search-wrap{
-  display:flex;max-width:520px;
-  border:1.5px solid var(--border);border-radius:4px;overflow:hidden;
+  display:flex;max-width:680px;
+  border:2px solid var(--border);border-radius:6px;overflow:hidden;
   background:var(--surface);
+  box-shadow:0 2px 12px rgba(0,0,0,.04);
 }
 .search-wrap input{
-  flex:1;padding:13px 18px;background:transparent;color:var(--fg);
-  font-family:var(--narrow);font-size:14px;border:none;
+  flex:1;padding:18px 24px;background:transparent;color:var(--fg);
+  font-family:var(--narrow);font-size:18px;border:none;
 }
-.search-wrap input::placeholder{color:var(--dim);font-size:14px}
+.search-wrap input::placeholder{color:var(--dim);font-size:16px}
 .search-wrap button{
-  padding:13px 20px;background:rgba(91,143,160,.18);color:var(--teal);
-  font-family:var(--narrow);font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;
+  padding:18px 28px;background:rgba(91,143,160,.18);color:var(--teal);
+  font-family:var(--narrow);font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
   transition:all .18s;border-left:1px solid var(--border);
 }
 .search-wrap button:hover{background:rgba(91,143,160,.28);color:var(--fg);}
@@ -1120,7 +1126,6 @@ function adminCheckPW(){
   </div>
   <div class="wholesale-bar">
     <div class="ws-inner">
-      <span class="ws-tag">📦 Wholesale</span>
       <span class="ws-text">Buying in volume? Libraries, bookshops and distributors — speak to us about volume pricing.</span>
       <button class="ws-btn" onclick="document.getElementById('ws-form').classList.toggle('hide')">Wholesale Enquiry</button>
     </div>
