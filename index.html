@@ -101,7 +101,7 @@ body::after{
   cursor:pointer;
 }
 .brand-b{color:var(--fg)}
-.brand-q-mark{width:36px;height:36px;vertical-align:middle;margin-right:-2px;position:relative;top:-2px}
+.brand-q-mark{width:46px;height:46px;vertical-align:baseline;margin-right:-13px;position:relative;top:10px;overflow:visible}
 .brand-q{color:var(--fg)}
 .nav-mid{display:flex;gap:32px}
 .nav-mid a{
@@ -1012,7 +1012,7 @@ function adminCheckPW(){
 <!-- ═══ NAV ═══════════════════════════════════════════════ -->
 <nav id="nav">
   <div class="brand" onclick="go('catalogue')">
-    <span class="brand-b"><svg class="brand-q-mark" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><text x="2" y="28" font-family="NovaSolid" font-size="36" fill="#A07810">Q</text></svg><span style="font-weight:200;color:#2A2420">eiran</span></span>
+    <span class="brand-b"><svg class="brand-q-mark" viewBox="-1 -2 34 38" xmlns="http://www.w3.org/2000/svg"><text x="1" y="29" font-family="NovaSolid" font-size="36" fill="#A07810">Q</text></svg><span style="font-weight:200;color:#2A2420">eiran</span></span>
   </div>
   <!-- brand sub removed from nav, shown in page header instead -->
   <div class="nav-mid">
@@ -1064,7 +1064,7 @@ function adminCheckPW(){
   <section id="how">
     <div class="how-wrap">
       <p class="eyebrow" style="justify-content:flex-start">The Process</p>
-      <h2 style="font-family:var(--narrow);font-size:clamp(28px,5vw,50px);font-weight:300;line-height:1.05;margin-top:12px">Six steps.<br>Fully automated.</h2>
+      <h2 style="font-family:var(--narrow);font-size:clamp(28px,5vw,50px);font-weight:300;line-height:1.05;margin-top:12px">Six steps.<br>Personally verified.</h2>
       <div class="steps-list">
         <div class="step"><div class="step-n">01</div><div><div class="step-t">Create your author account</div><div class="step-b">Name, country, payment details. One form. Takes 90 seconds. Your author token links all your titles permanently.</div></div></div>
         <div class="step"><div class="step-n">02</div><div><div class="step-t">Enter your book details</div><div class="step-b">Title, genre, language, edition, year, synopsis, price. The QAN Code is generated automatically from these fields.</div></div></div>
@@ -1118,6 +1118,24 @@ function adminCheckPW(){
       </div>
     </div>
   </div>
+  <div class="wholesale-bar">
+    <div class="ws-inner">
+      <span class="ws-tag">📦 Wholesale</span>
+      <span class="ws-text">Buying in volume? Libraries, bookshops and distributors — speak to us about volume pricing.</span>
+      <button class="ws-btn" onclick="document.getElementById('ws-form').classList.toggle('hide')">Wholesale Enquiry</button>
+    </div>
+    <div id="ws-form" class="hide" style="padding:18px 24px;border-top:1px solid rgba(0,0,0,.08)">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:12px;align-items:end;max-width:780px">
+        <div><label style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:6px">Organisation</label>
+          <input type="text" id="ws-org" placeholder="Library / Retailer name" style="width:100%;padding:9px 12px;border:1px solid rgba(0,0,0,.15);border-radius:4px;font-size:13px"></div>
+        <div><label style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:6px">Email</label>
+          <input type="email" id="ws-email" placeholder="buyer@organisation.com" style="width:100%;padding:9px 12px;border:1px solid rgba(0,0,0,.15);border-radius:4px;font-size:13px"></div>
+        <div><label style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:6px">Qty (approx)</label>
+          <input type="number" id="ws-qty" placeholder="e.g. 500" style="width:100%;padding:9px 12px;border:1px solid rgba(0,0,0,.15);border-radius:4px;font-size:13px"></div>
+        <button onclick="wsSubmit()" style="padding:7px 16px;background:var(--sage);color:#fff;border:none;border-radius:3px;font-size:10px;font-weight:500;cursor:pointer;letter-spacing:.1em;text-transform:uppercase;font-family:var(--narrow)">Send</button>
+      </div>
+    </div>
+  </div>
   <div class="cat-body">
     <div class="filters" id="filters">
       <button class="fb on" onclick="setFilter('all',this)">All</button>
@@ -1140,7 +1158,7 @@ function adminCheckPW(){
 <div id="register-page" class="page">
   <div class="reg-wrap">
     <h1 class="reg-h">Register Your Book</h1>
-    <p class="reg-sub">Complete the form below. Your unique QAN Code and print-ready QR code are generated automatically on submission. Keep the bottom-centre 15% of your cover clear — the QR will be placed there.</p>
+    <p class="reg-sub">Complete the form below. Your submission will be personally reviewed and your unique QAN Code and FabriQ™ stamp will be sent to you within 48 hours of acceptance. Keep the bottom-centre 15% of your cover clear — the QR will be placed there.</p>
 
     <div class="fsec">
       <div class="fsec-title">About You</div>
@@ -1305,9 +1323,9 @@ function adminCheckPW(){
 <!-- QRIB Terms scrollbox -->
     <div style="background:rgba(26,8,0,.04);border:1px solid rgba(26,8,0,.12);border-radius:6px;padding:14px 16px;margin-bottom:12px;font-size:11px;line-height:1.75;color:var(--dim);max-height:155px;overflow-y:auto;">
       <strong style="font-size:12px;color:var(--fg);display:block;margin-bottom:6px">QRIB Registration Terms &amp; Conditions</strong>
-      <strong>1. Review.</strong> All titles are subject to a 24&ndash;48 hour review. Submission does not guarantee registration.<br><br>
+      <strong>1. Review.</strong> All titles are personally reviewed within 48 hours. Your QAN Code and FabriQ&trade; stamp will be issued upon acceptance. Submission does not guarantee registration.<br><br>
       <strong>2. Criteria.</strong> Original work, solely owned, professionally edited, complete.<br><br>
-      <strong>3. Refund.</strong> If declined, full &pound;49 refund within 5 working days. No refund once QAN Code issued.<br><br>
+      <strong>3. Refund.</strong> A full refund of the registration fee is payable on any title not accepted. Refund processed within 5 working days of decline. No refund once QAN Code has been issued.<br><br>
       <strong>4. Commission.</strong> QRIB charges 12%. Authors receive 88% and invoice QRIB monthly.<br><br>
       <strong>5. Ownership.</strong> You retain copyright. QRIB gets non-exclusive licence to display in catalogue.<br><br>
       <strong>6. Conduct.</strong> Do not register works you do not own.
@@ -4958,165 +4976,6 @@ document.addEventListener('change',e=>{
 </div>
 
 <!-- ── CAVEAT / LEGAL NOTICE ─────────────────────────────────── -->
-<div id="caveat-bar">
-  <strong style="color:var(--gold);letter-spacing:.12em;font-size:10px;text-transform:uppercase;">
-    ⚠ Notice of Private &amp; Proprietary Intellectual Property
-  </strong><br>
-  All creative works, concepts, platform architecture, QAN Code system, FabriQ™ stamp system, QRIBS' Law™, QR trade dress, visual identity, 
-  code and content within this platform are the exclusive intellectual property of QRIB and its agent YH (Angel). 
-  Unauthorised reproduction, reverse engineering, imitation or distribution — in whole or in part — 
-  is strictly prohibited and will be pursued. Registration and observation of this notice constitutes your awareness of QRIB's intellectual property interest in all that appears on this entire website and acceptance of these terms.<br>
-  <span style="opacity:.65;font-size:9px;">
-    © QRIB. All rights reserved. Qeiran is a QRIB platform. FabriQ™ and QRIBS' Law™ are trademarks of QRIB.
-    QAN Codes are unique permanent identifiers — once assigned they cannot be transferred or deleted.
-  </span>
-</div>
-
-
-<!-- ═══════════════════════════════════════════════════════
-     AUTHORS PORTAL
-═══════════════════════════════════════════════════════════ -->
-<div id="authors-page" class="page">
-  <div style="max-width:860px;margin:0 auto;padding:72px 36px 80px;">
-
-    <!-- Header -->
-    <div style="margin-bottom:52px;">
-      <div style="font-size:9px;font-weight:600;letter-spacing:.26em;text-transform:uppercase;
-                  color:var(--warm-brown);margin-bottom:12px;font-family:var(--mono);">
-        Qeiran Authors
-      </div>
-      <h1 style="font-family:var(--narrow);font-size:clamp(32px,5vw,58px);
-                 font-weight:200;letter-spacing:-.02em;color:var(--fg);margin-bottom:14px;">
-        Your books.<br>Your terms.
-      </h1>
-      <p style="font-size:14px;color:var(--dim);line-height:1.8;max-width:480px;font-weight:300;">
-        Everything in one place. Register, upload, price, track and get paid —
-        without a publisher between you and your reader.
-      </p>
-    </div>
-
-    <!-- Flow steps -->
-    <div style="display:grid;gap:2px;margin-bottom:56px;">
-
-      <!-- Step 1 -->
-      <div class="author-step">
-        <div class="step-num">01</div>
-        <div class="step-body">
-          <div class="step-title">Register your book</div>
-          <div class="step-desc">
-            Fill in your title, author details, genre and price. Your permanent
-            <strong>QAN Code</strong> is assigned instantly — a unique address
-            for your book that never changes or expires. You receive a
-            print-ready <strong>Q stamp</strong> to place on your cover.
-          </div>
-          <button class="step-action" onclick="go('register')">Register a book →</button>
-        </div>
-      </div>
-
-      <!-- Step 2 -->
-      <div class="author-step">
-        <div class="step-num">02</div>
-        <div class="step-body">
-          <div class="step-title">Upload your files</div>
-          <div class="step-desc">
-            Upload a PDF for digital sales — readers buy and receive a
-            secure download link. Optionally upload your cover image.
-            Files are stored securely; the PDF is only released on confirmed payment.
-          </div>
-          <div class="step-upload-row">
-            <label class="upload-pill">
-              <input type="file" accept=".pdf" style="display:none" onchange="handleAuthorPdf(this)">
-              📄 Upload PDF
-            </label>
-            <label class="upload-pill">
-              <input type="file" accept="image/*" style="display:none" onchange="handleAuthorCover(this)">
-              🖼 Upload Cover
-            </label>
-            <span id="author-file-status" style="font-size:11px;color:var(--dim);font-family:var(--mono);"></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Step 3 -->
-      <div class="author-step">
-        <div class="step-num">03</div>
-        <div class="step-body">
-          <div class="step-title">Set your price &amp; go live</div>
-          <div class="step-desc">
-            You set the price. Qeiran retains 12% on digital sales and
-            12% on any physical orders routed through the platform.
-            The rest goes directly to your PayPal or bank within 48 hours of each sale.
-            Your book appears in the catalogue immediately.
-          </div>
-          <div style="display:flex;gap:24px;margin-top:14px;flex-wrap:wrap;">
-            <div class="author-stat-box">
-              <div class="asb-n">88%</div>
-              <div class="asb-l">To you, per sale</div>
-            </div>
-            <div class="author-stat-box">
-              <div class="asb-n">48h</div>
-              <div class="asb-l">Payout window</div>
-            </div>
-            <div class="author-stat-box">
-              <div class="asb-n">0</div>
-              <div class="asb-l">Gatekeepers</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Step 4 -->
-      <div class="author-step">
-        <div class="step-num">04</div>
-        <div class="step-body">
-          <div class="step-title">Physical copies &amp; fulfilment</div>
-          <div class="step-desc">
-            Buyers can enquire about physical copies through the catalogue.
-            For now, wholesale and individual print enquiries are routed to you
-            directly — you fulfil through your printer of choice.
-            When we launch print-on-demand partnerships, you will be notified
-            and can opt in without re-registering.
-          </div>
-          <label style="display:flex;align-items:center;gap:10px;margin-top:14px;
-                        font-size:12px;color:var(--dim);cursor:pointer;">
-            <input type="checkbox" id="author-print-interest"
-                   style="width:14px;height:14px;accent-color:var(--teal);">
-            Notify me when print fulfilment launches
-          </label>
-        </div>
-      </div>
-
-      <!-- Step 5 -->
-      <div class="author-step">
-        <div class="step-num">05</div>
-        <div class="step-body">
-          <div class="step-title">Track your sales</div>
-          <div class="step-desc">
-            Every scan of your Q stamp is logged. See how many times your
-            QAN Code has been scanned, how many orders placed, and your
-            running total. Your catalogue page is live 24/7 globally.
-          </div>
-          <div style="margin-top:16px;padding:16px 20px;
-                      background:var(--bg2);border-radius:4px;
-                      border:1px solid var(--border);
-                      font-family:var(--mono);font-size:11px;color:var(--dim);">
-            Author dashboard — coming in next release.
-            Registered authors will be first to access.
-          </div>
-        </div>
-      </div>
-
-    </div><!-- /steps -->
-
-    <!-- CTA row -->
-    <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;
-                padding-top:32px;border-top:1px solid var(--border);">
-      <button class="cta-p" onclick="go('register')">Register your first book</button>
-      <button class="cta-ghost" onclick="go('catalogue')">Browse the catalogue</button>
-    </div>
-
-  </div>
-</div><!-- /authors-page -->
 
 <script>
 /* ── CUSTOMISER ─────────────────────────────────────────── */
