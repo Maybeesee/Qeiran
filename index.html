@@ -126,12 +126,12 @@ body::after{
 }
 .nav-authors:hover{background:rgba(139,99,85,.08);border-color:var(--warm-brown);}
 @media(max-width:700px){
-  #nav{padding:8px 18px;height:auto;flex-wrap:wrap;justify-content:flex-end}
-  .brand{order:2;width:100%;padding-left:4px;margin-top:2px}
-  .brand-q-mark{width:40px;height:40px;top:8px;margin-right:-11px}
+  #nav{padding:12px 18px;height:auto;flex-wrap:wrap}
+  .brand{order:1;width:100%;margin-bottom:6px}
+  .brand-q-mark{width:48px;height:48px;top:9px;margin-right:-12px}
   .nav-mid{display:none}
-  .nav-reg,.nav-authors{order:1;font-size:9px;padding:5px 10px}
-  .page{padding-top:80px}
+  .nav-reg,.nav-authors{order:2}
+  .page{padding-top:100px}
 }
 
 /* ─────────────────────────────────────────────────────────
@@ -911,10 +911,7 @@ body::after{
   padding:14px 24px;
   display:flex;align-items:center;gap:16px;flex-wrap:wrap;
 }
-.ws-tag{
-  font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-  background:var(--sage);color:#fff;padding:3px 9px;border-radius:3px;white-space:nowrap;
-}
+.ws-tag{display:none}
 .ws-text{font-size:13px;color:#555;flex:1;min-width:200px;}
 .ws-btn{
   padding:8px 18px;background:transparent;
@@ -1041,7 +1038,7 @@ function adminCheckPW(){
     <h1 class="hero-h">
       Your book.<br><span class="it">Your address.</span>
     </h1>
-    <p class="hero-lead">Register your book in under five minutes. Get a unique QAN Code, a print-ready QR, and a live global catalogue page — instantly. No agents. No waiting lists.</p>
+    <p class="hero-lead">Register your book in under five minutes. Get a unique QAN Code, a print-ready FabriQ™ stamp, and a live global catalogue page. No agents. No gatekeepers.</p>
     <div class="hero-ctas">
       <button class="cta-p" onclick="go('register')">Register Your Book</button>
       <button class="cta-ghost" onclick="go('catalogue')">Search &amp; Browse ↓</button>
@@ -1073,10 +1070,10 @@ function adminCheckPW(){
       <h2 style="font-family:var(--narrow);font-size:clamp(28px,5vw,50px);font-weight:300;line-height:1.05;margin-top:12px">Six steps.<br>Personally verified.</h2>
       <div class="steps-list">
         <div class="step"><div class="step-n">01</div><div><div class="step-t">Create your author account</div><div class="step-b">Name, country, payment details. One form. Takes 90 seconds. Your author token links all your titles permanently.</div></div></div>
-        <div class="step"><div class="step-n">02</div><div><div class="step-t">Enter your book details</div><div class="step-b">Title, genre, language, edition, year, synopsis, price. The QAN Code is generated automatically from these fields.</div></div></div>
+        <div class="step"><div class="step-n">02</div><div><div class="step-t">Enter your book details</div><div class="step-b">Title, genre, language, edition, year, synopsis, price. Your unique QAN Code is derived from these fields.</div></div></div>
         <div class="step"><div class="step-n">03</div><div><div class="step-t">Upload your cover</div><div class="step-b">An overlay shows you where to keep clear. The QR is composited onto your cover at bottom-centre at print resolution.</div></div></div>
-        <div class="step"><div class="step-n">04</div><div><div class="step-t">Receive your QAN Code and QR</div><div class="step-b">Download your print-ready QR PNG at 300dpi with error correction Level H — 30% damage tolerance. Printer-ready immediately.</div></div></div>
-        <div class="step"><div class="step-n">05</div><div><div class="step-t">Go live in the catalogue</div><div class="step-b">Searchable by title, author, genre, or QAN Code. Buyers anywhere in the world can find and order from this moment.</div></div></div>
+        <div class="step"><div class="step-n">04</div><div><div class="step-t">Receive your QAN Code and FabriQ™ stamp</div><div class="step-b">Within 48 hours of acceptance, your unique QAN Code and print-ready FabriQ™ QR stamp are emailed to you at 300dpi — printer-ready.</div></div></div>
+        <div class="step"><div class="step-n">05</div><div><div class="step-t">Go live in the catalogue</div><div class="step-b">Once approved, your title appears in the catalogue — searchable by title, author, genre, or QAN Code. Buyers anywhere in the world can find and order.</div></div></div>
         <div class="step"><div class="step-n">06</div><div><div class="step-t">Get paid when they do</div><div class="step-b">A buyer orders. Payment confirmed. Qeiran's percentage deducted automatically. Your payout hits your wallet within 48 hours.</div></div></div>
       </div>
     </div>
@@ -1117,7 +1114,6 @@ function adminCheckPW(){
     <div class="cat-head-in">
       <div class="qan-wordmark">Qeiran</div>
       <h1 class="cat-h">Books</h1>
-      <p class="cat-sub">Search by title, author, QAN code, ISBN or genre</p>
       <div class="search-wrap">
         <input type="text" id="cat-q" placeholder="Search title, author, QAN Code, genre…" oninput="renderCat()">
         <button onclick="renderCat()">Search</button>
@@ -1289,7 +1285,7 @@ function adminCheckPW(){
         <input type="file" id="rcov" accept="image/*" onchange="onCover(this)">
         <div id="cdrop-content">
           <div class="drop-ico">📖</div>
-          <div class="drop-txt"><strong>Click to upload your book cover</strong><br>JPG or PNG · Minimum 1400px wide<br><span style="font-size:11px;opacity:.5">Keep bottom-centre 15% clear — QR code will be placed there automatically</span></div>
+          <div class="drop-txt"><strong>Click to upload your book cover</strong><br>JPG or PNG · Minimum 1400px wide<br><span style="font-size:11px;opacity:.5">Keep bottom-centre 15% clear for your FabriQ™ stamp</span></div>
         </div>
         <div class="cover-prev" id="cprev"><img id="cprev-img" src="" alt=""></div>
       </div>
@@ -4684,7 +4680,7 @@ init();
           <div class="step-title">Register your book</div>
           <div class="step-desc">
             Fill in your title, author details, genre and price. Your permanent
-            <strong>QAN Code</strong> is assigned instantly — a unique address
+            <strong>QAN Code</strong> is assigned upon approval — a unique address
             for your book that never changes or expires. You receive a
             print-ready <strong>Q stamp</strong> to place on your cover.
           </div>
