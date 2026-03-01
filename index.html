@@ -1280,7 +1280,7 @@ function adminCheckPW(){
     </div>
     <div class="fsec">
       <div class="fsec-title">Back Cover Upload</div>
-      <div class="cover-drop" id="cdrop" onclick="document.getElementById('rcov').click()">
+      <div class="cover-drop" id="cdrop">
         <input type="file" id="rcov" accept="image/*" onchange="onCover(this)">
         <div id="cdrop-content">
           <div class="drop-ico">📖</div>
@@ -5029,6 +5029,9 @@ function adminIssueQAN(){
   var synopsis=gv('a-synopsis'),paypal=gv('a-paypal');
   if(!name||!email||!title){alert('Name, email and title required.');return;}
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){alert('Valid email required.');return;}
+  // Validate country code format (2-3 uppercase letters)
+  if(!/^[A-Z]{2,3}$/.test(country.toUpperCase())){alert('Country must be a 2 or 3 letter ISO code (e.g. GB, US, NG).');return;}
+  country = country.toUpperCase();
   var qcode=buildQCode(name,country,year,title,1);
   var book={id:'a_'+Date.now(),qcode:qcode,title:title,subtitle:'',author:name,email:email,
     country:country,genre:genre,language:'English',edition:1,year:parseInt(year),
@@ -5038,14 +5041,45 @@ function adminIssueQAN(){
     registered:new Date().toISOString(),scans:0,orders:0,approved:true,complimentary:true};
   S.books.push(book);S.lastBook=book;persist();
   if(typeof saveToCloud==='function')saveToCloud(book);
+
+  // Generate the Q Stamp right here using the same renderer as normal registration
+  var stampUrl = 'https://qeiran.com/?q=' + encodeURIComponent(qcode);
   var res=document.getElementById('admin-result');
   if(res){
     res.style.display='block';
     res.innerHTML='<strong>QAN Code issued:</strong> '+qcode+'<br><strong>Author:</strong> '+name
       +'<br><strong>Email:</strong> '+email
-      +'<br><br><em>Book is live in catalogue.</em>'
-      +'<br><br><button onclick="dlQR()" style="padding:8px 16px;background:var(--teal);color:#fff;'
-      +'border:none;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;">Download Q Stamp for this author</button>';
+      +'<br><br><div id="admin-stamp-preview" style="text-align:center;margin:12px 0;"></div>'
+      +'<br><button id="admin-dl-stamp" style="padding:8px 16px;background:var(--teal);color:#fff;'
+      +'border:none;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;">Download Q Stamp</button>'
+      +'<br><br><em>Book is live in catalogue.</em>';
+
+    // Render the Q Stamp into the preview div
+    try {
+      var qrData = window.QRMatrix(stampUrl, 'H');
+      var cv = drawQSeal(qrData.matrix, qrData.size, qrData.version, 220);
+      document.getElementById('admin-stamp-preview').appendChild(cv);
+      // Wire up the download button
+      document.getElementById('admin-dl-stamp').onclick = function(){
+        var OUT=700, out=document.createElement('canvas');
+        out.width=out.height=OUT;
+        var octx=out.getContext('2d');
+        octx.clearRect(0,0,OUT,OUT);
+        octx.save();
+        octx.beginPath();octx.arc(OUT/2,OUT/2,OUT/2,0,Math.PI*2);octx.clip();
+        octx.drawImage(cv,0,0,OUT,OUT);
+        octx.restore();
+        var a=document.createElement('a');
+        a.download=qcode+'_QSeal.png';
+        a.href=out.toDataURL('image/png');
+        a.click();
+        toast('Q Stamp downloaded for '+name);
+      };
+    } catch(e) {
+      console.error('Q Stamp generation error:', e);
+      document.getElementById('admin-stamp-preview').innerHTML='<em style="color:#c0392b;">Q Stamp generation failed: '+e.message+'</em>';
+    }
+
     ['a-name','a-email','a-title','a-country','a-year','a-genre','a-price','a-synopsis','a-paypal']
       .forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
   }
@@ -5352,7 +5386,37 @@ function adminToggleStopPress() {
         <input id="a-email" type="email" placeholder="Author Email *" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:100%;box-sizing:border-box;">
         <input id="a-title" type="text" placeholder="Book Title *" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:100%;box-sizing:border-box;">
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
-          <input id="a-country" type="text" placeholder="Country (GB)" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;">
+          <select id="a-country" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;background:#fff;">
+            <option value="GB">GB — United Kingdom</option>
+            <option value="US">US — United States</option>
+            <option value="CA">CA — Canada</option>
+            <option value="AU">AU — Australia</option>
+            <option value="NG">NG — Nigeria</option>
+            <option value="ZA">ZA — South Africa</option>
+            <option value="GH">GH — Ghana</option>
+            <option value="KE">KE — Kenya</option>
+            <option value="IN">IN — India</option>
+            <option value="FR">FR — France</option>
+            <option value="DE">DE — Germany</option>
+            <option value="IT">IT — Italy</option>
+            <option value="ES">ES — Spain</option>
+            <option value="BR">BR — Brazil</option>
+            <option value="MX">MX — Mexico</option>
+            <option value="JP">JP — Japan</option>
+            <option value="CN">CN — China</option>
+            <option value="KR">KR — South Korea</option>
+            <option value="NZ">NZ — New Zealand</option>
+            <option value="IE">IE — Ireland</option>
+            <option value="SG">SG — Singapore</option>
+            <option value="JM">JM — Jamaica</option>
+            <option value="TT">TT — Trinidad & Tobago</option>
+            <option value="BB">BB — Barbados</option>
+            <option value="PT">PT — Portugal</option>
+            <option value="NL">NL — Netherlands</option>
+            <option value="SE">SE — Sweden</option>
+            <option value="NO">NO — Norway</option>
+            <option value="PL">PL — Poland</option>
+          </select>
           <input id="a-year" type="number" placeholder="Year" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;">
           <input id="a-price" type="number" placeholder="Price (£)" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;">
         </div>
@@ -5435,17 +5499,16 @@ function adminToggleStopPress() {
 
   </div>
 </div>
-<!-- PayPal SDK — client-side checkout, no server required -->
-<script src="https://www.paypal.com/sdk/js?client-id=AWgaR0lcttqcqzsLi1eM7EskTA39MgGUph_kXACfIxngi2yM_W6fwIIR_D72EqbdK_Y6vMxXwluY-LUw&currency=GBP&intent=capture&commit=true" data-namespace="paypal_sdk"></script>
+<!-- PayPal SDK — card fields primary, PayPal button secondary -->
+<script src="https://www.paypal.com/sdk/js?client-id=AWgaR0lcttqcqzsLi1eM7EskTA39MgGUph_kXACfIxngi2yM_W6fwIIR_D72EqbdK_Y6vMxXwluY-LUw&currency=GBP&intent=capture&commit=true&components=buttons,card-fields" data-namespace="paypal_sdk"></script>
 <script>
-/* ── PayPal Checkout — real payment processing ─────────────── */
+/* ── PayPal Checkout — card first, PayPal second ─────────── */
 var _paypalRendered = false;
 var _paymentConfirmed = false;
 
 function renderPayPalButtons() {
   if (_paypalRendered) return;
   if (typeof paypal_sdk === 'undefined') {
-    // SDK not loaded yet, retry
     setTimeout(renderPayPalButtons, 500);
     return;
   }
@@ -5453,15 +5516,101 @@ function renderPayPalButtons() {
   if (!container) return;
   
   var fee = QEIRAN_CONFIG.REGISTRATION_FEE || 49;
-  
+
+  // Build the payment container: card fields on top, PayPal button below
+  container.innerHTML = '<div id="card-field-container" style="margin-bottom:14px;"></div>'
+    + '<div id="card-name-field" style="margin-bottom:8px;"></div>'
+    + '<div id="card-number-field" style="margin-bottom:8px;"></div>'
+    + '<div style="display:flex;gap:8px;margin-bottom:10px;">'
+    + '<div id="card-expiry-field" style="flex:1;"></div>'
+    + '<div id="card-cvv-field" style="flex:1;"></div></div>'
+    + '<button id="card-pay-btn" style="width:100%;padding:10px;background:#0070ba;color:#fff;border:none;border-radius:5px;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:14px;">Pay £'+fee.toFixed(2)+' by Card</button>'
+    + '<div style="text-align:center;font-size:11px;color:#999;margin-bottom:10px;">— or —</div>'
+    + '<div id="paypal-btn-wrap"></div>';
+
+  function createOrder() {
+    return paypal_sdk.Buttons.driver("wc", {}).createOrder || 
+      fetch("").then(function(){}).catch(function(){});
+  }
+
+  function onPaymentSuccess(details, orderID) {
+    _paymentConfirmed = true;
+    document.getElementById('payment-done').style.display = 'block';
+    container.style.display = 'none';
+    var errEl = document.getElementById('payment-error');
+    if (errEl) errEl.style.display = 'none';
+    window._paypalOrderId = orderID;
+    window._paypalPayerEmail = details && details.payer && details.payer.email_address ? details.payer.email_address : '';
+    toast('Payment of \u00a3' + fee.toFixed(2) + ' confirmed. Now click Submit to complete registration.');
+  }
+
+  function onPaymentError(err) {
+    var errEl = document.getElementById('payment-error');
+    if (errEl) {
+      errEl.textContent = 'Payment error \u2014 please try again or contact support.';
+      errEl.style.display = 'block';
+    }
+    console.error('PayPal error:', err);
+  }
+
+  // Try to render card fields (Advanced Card — requires merchant approval)
+  var cardFieldsAvailable = false;
+  try {
+    if (paypal_sdk.CardFields && typeof paypal_sdk.CardFields === 'function') {
+      var cardFields = paypal_sdk.CardFields({
+        createOrder: function() {
+          return paypal_sdk.Buttons.driver ? null :
+            (function(){
+              // Use the actions-based approach
+              return null;
+            })();
+        }
+      });
+      if (cardFields.isEligible()) {
+        cardFieldsAvailable = true;
+        cardFields.NameField().render('#card-name-field');
+        cardFields.NumberField().render('#card-number-field');
+        cardFields.ExpiryField().render('#card-expiry-field');
+        cardFields.CVVField().render('#card-cvv-field');
+        document.getElementById('card-pay-btn').onclick = function() {
+          this.disabled = true;
+          this.textContent = 'Processing...';
+          cardFields.submit().then(function(result) {
+            onPaymentSuccess(result, result.orderID);
+          }).catch(function(err) {
+            document.getElementById('card-pay-btn').disabled = false;
+            document.getElementById('card-pay-btn').textContent = 'Pay \u00a3' + fee.toFixed(2) + ' by Card';
+            onPaymentError(err);
+          });
+        };
+      }
+    }
+  } catch(e) {
+    console.log('Card fields not available (merchant may need PayPal approval):', e.message);
+  }
+
+  // If card fields aren't available, hide the card UI and just show buttons
+  if (!cardFieldsAvailable) {
+    document.getElementById('card-field-container').style.display = 'none';
+    document.getElementById('card-name-field').style.display = 'none';
+    document.getElementById('card-number-field').style.display = 'none';
+    document.getElementById('card-expiry-field').parentElement.style.display = 'none';
+    document.getElementById('card-pay-btn').style.display = 'none';
+    // Remove the "or" divider
+    var orDiv = container.querySelector('div[style*="— or —"]') || container.children[5];
+    if (orDiv && orDiv.textContent.indexOf('or') > -1) orDiv.style.display = 'none';
+  }
+
+  // Always render PayPal + card buttons as fallback/secondary
   paypal_sdk.Buttons({
     style: {
       layout: 'vertical',
-      color: 'blue',
+      color: cardFieldsAvailable ? 'silver' : 'gold',
       shape: 'rect',
       label: 'pay',
       height: 40
     },
+    fundingSource: cardFieldsAvailable ? undefined : undefined,
     
     createOrder: function(data, actions) {
       return actions.order.create({
@@ -5477,35 +5626,17 @@ function renderPayPalButtons() {
     
     onApprove: function(data, actions) {
       return actions.order.capture().then(function(details) {
-        // Payment confirmed by PayPal
-        _paymentConfirmed = true;
-        document.getElementById('payment-done').style.display = 'block';
-        document.getElementById('paypal-button-container').style.display = 'none';
-        var errEl = document.getElementById('payment-error');
-        if (errEl) errEl.style.display = 'none';
-        
-        // Store payment reference for the registration record
-        window._paypalOrderId = data.orderID;
-        window._paypalPayerEmail = details.payer && details.payer.email_address ? details.payer.email_address : '';
-        
-        toast('Payment of £' + fee.toFixed(2) + ' confirmed. Now click Submit to complete registration.');
+        onPaymentSuccess(details, data.orderID);
       });
     },
     
-    onError: function(err) {
-      var errEl = document.getElementById('payment-error');
-      if (errEl) {
-        errEl.textContent = 'Payment error — please try again or contact support.';
-        errEl.style.display = 'block';
-      }
-      console.error('PayPal error:', err);
-    },
+    onError: onPaymentError,
     
     onCancel: function() {
       toast('Payment cancelled. You can try again when ready.');
     }
     
-  }).render('#paypal-button-container').then(function() {
+  }).render('#paypal-btn-wrap').then(function() {
     _paypalRendered = true;
   });
 }
