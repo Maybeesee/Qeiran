@@ -625,6 +625,12 @@ body::after{
   .book-hero{grid-template-columns:1fr}
   .b-cover{max-width:220px}
 }
+@media(max-width:680px){
+  .cat-head{padding:20px 20px 14px}
+  .cat-h{margin-bottom:6px}
+  .search-wrap input{padding:12px 14px;font-size:15px}
+  .search-wrap button{padding:12px 16px}
+}
 
 /* ─────────────────────────────────────────────────────────
    SUCCESS MODAL
@@ -5370,72 +5376,115 @@ function adminToggleStopPress() {
   }
 }
 
-/* ── Homepage Background Upload ── */
-var _pendingBgData = null;
+/* ── Homepage Background Upload (Supabase Storage) ── */
+var _pendingBgFile = null;
 
 function adminUploadBg(input) {
   if (!input.files || !input.files[0]) return;
-  var file = input.files[0];
+  _pendingBgFile = input.files[0];
   var fname = document.getElementById('hp-bg-filename');
-  if(fname) fname.textContent = 'Selected: ' + file.name;
+  if(fname) fname.textContent = 'Selected: ' + _pendingBgFile.name;
   var reader = new FileReader();
   reader.onload = function(e) {
-    _pendingBgData = e.target.result;
     var preview = document.getElementById('hp-bg-preview');
     var img = document.getElementById('hp-bg-img');
-    if(img) img.src = _pendingBgData;
+    if(img) img.src = e.target.result;
     if(preview) preview.style.display = 'block';
   };
-  reader.readAsDataURL(file);
+  reader.readAsDataURL(_pendingBgFile);
 }
 
-function adminLoadBgPreview() {
-  var holder = document.getElementById('qeiran-bg-data');
-  var saved = holder ? holder.getAttribute('data-bg') : '';
-  var preview = document.getElementById('hp-bg-preview');
-  var img = document.getElementById('hp-bg-img');
-  if(saved) {
-    if(img) img.src = saved;
-    if(preview) preview.style.display = 'block';
-  } else if(!_pendingBgData) {
-    if(preview) preview.style.display = 'none';
-  }
+async function adminLoadBgPreview() {
+  /* Fetch current bg URL from Supabase site_settings */
+  if (QEIRAN_CONFIG.SUPABASE_URL === 'YOUR_SUPABASE_URL') return;
+  try {
+    var r = await sbFetch('site_settings?key=eq.homepage_bg&select=value', { method:'GET' });
+    if (!r.ok) return;
+    var data = await r.json();
+    if (data.length > 0 && data[0].value) {
+      var preview = document.getElementById('hp-bg-preview');
+      var img = document.getElementById('hp-bg-img');
+      if(img) img.src = data[0].value;
+      if(preview) preview.style.display = 'block';
+    }
+  } catch(e) { /* silent */ }
 }
 
-function adminSaveBg() {
-  var data = _pendingBgData;
-  if(!data) {
+async function adminSaveBg() {
+  if (!_pendingBgFile) {
     adminBgStatus('No new image selected.', false);
     return;
   }
-  var holder = document.getElementById('qeiran-bg-data');
-  if(holder) holder.setAttribute('data-bg', data);
-  applyHomepageBg();
-  _pendingBgData = null;
-  adminBgStatus('Background applied! Now click "Download Updated File" and upload it to your server so all visitors see it.', true);
-  var dlBtn = document.getElementById('hp-bg-download');
-  if(dlBtn) dlBtn.style.display = 'block';
+  if (QEIRAN_CONFIG.SUPABASE_URL === 'YOUR_SUPABASE_URL') {
+    adminBgStatus('Supabase not configured.', false);
+    return;
+  }
+  adminBgStatus('Uploading...', true);
+
+  try {
+    /* Upload to Supabase Storage bucket "site-assets" */
+    var ext = _pendingBgFile.name.split('.').pop() || 'jpg';
+    var filename = 'homepage-bg.' + ext;
+    var storageUrl = QEIRAN_CONFIG.SUPABASE_URL + '/storage/v1/object/site-assets/' + filename;
+
+    var uploadR = await fetch(storageUrl, {
+      method: 'POST',
+      headers: {
+        'apikey': QEIRAN_CONFIG.SUPABASE_KEY,
+        'Authorization': 'Bearer ' + QEIRAN_CONFIG.SUPABASE_KEY,
+        'Content-Type': _pendingBgFile.type,
+        'x-upsert': 'true'
+      },
+      body: _pendingBgFile
+    });
+
+    if (!uploadR.ok) {
+      var errText = await uploadR.text();
+      adminBgStatus('Upload failed: ' + (errText || uploadR.status), false);
+      return;
+    }
+
+    /* Public URL for the image */
+    var publicUrl = QEIRAN_CONFIG.SUPABASE_URL + '/storage/v1/object/public/site-assets/' + filename + '?t=' + Date.now();
+
+    /* Save URL to site_settings table (upsert) */
+    var saveR = await fetch(QEIRAN_CONFIG.SUPABASE_URL + '/rest/v1/site_settings', {
+      method: 'POST',
+      headers: {
+        'apikey': QEIRAN_CONFIG.SUPABASE_KEY,
+        'Authorization': 'Bearer ' + QEIRAN_CONFIG.SUPABASE_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'resolution=merge-duplicates,return=representation'
+      },
+      body: JSON.stringify({ key: 'homepage_bg', value: publicUrl })
+    });
+
+    if (saveR.ok) {
+      applyHomepageBg(publicUrl);
+      _pendingBgFile = null;
+      adminBgStatus('Background live for all visitors!', true);
+    } else {
+      adminBgStatus('Saved image but settings update failed. Check site_settings table.', false);
+    }
+  } catch(e) {
+    adminBgStatus('Error: ' + e.message, false);
+  }
 }
 
-function adminDownloadWithBg() {
-  var html = '<!DOCTYPE html>' + document.documentElement.outerHTML;
-  html = html.replace(/id="admin-modal" style="display:flex;/g, 'id="admin-modal" style="display:none;');
-  html = html.replace(/id="admin-pw-modal"[^>]*style="display:flex;/g, function(m){ return m.replace('display:flex','display:none'); });
-  var blob = new Blob([html], {type:'text/html'});
-  var a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'index.html';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(a.href);
-  adminBgStatus('Downloaded! Upload this index.html to your server to replace the old one.', true);
-}
+async function adminRemoveBg() {
+  if (QEIRAN_CONFIG.SUPABASE_URL === 'YOUR_SUPABASE_URL') return;
+  try {
+    /* Delete from site_settings */
+    await fetch(QEIRAN_CONFIG.SUPABASE_URL + '/rest/v1/site_settings?key=eq.homepage_bg', {
+      method: 'DELETE',
+      headers: {
+        'apikey': QEIRAN_CONFIG.SUPABASE_KEY,
+        'Authorization': 'Bearer ' + QEIRAN_CONFIG.SUPABASE_KEY
+      }
+    });
+  } catch(e) {}
 
-function adminRemoveBg() {
-  var holder = document.getElementById('qeiran-bg-data');
-  if(holder) holder.setAttribute('data-bg', '');
-  _pendingBgData = null;
+  _pendingBgFile = null;
   var preview = document.getElementById('hp-bg-preview');
   var fname = document.getElementById('hp-bg-filename');
   if(preview) preview.style.display = 'none';
@@ -5448,9 +5497,7 @@ function adminRemoveBg() {
     hp.style.backgroundPosition = '';
     hp.style.backgroundAttachment = '';
   }
-  var dlBtn = document.getElementById('hp-bg-download');
-  if(dlBtn) dlBtn.style.display = 'block';
-  adminBgStatus('Background removed. Download the updated file to apply for all visitors.', true);
+  adminBgStatus('Background removed for all visitors.', true);
 }
 
 function adminBgStatus(msg, ok) {
@@ -5463,19 +5510,28 @@ function adminBgStatus(msg, ok) {
   setTimeout(function(){ el.style.display='none'; }, 6000);
 }
 
-function applyHomepageBg() {
-  var holder = document.getElementById('qeiran-bg-data');
-  var bg = holder ? holder.getAttribute('data-bg') : '';
+function applyHomepageBg(url) {
   var hp = document.getElementById('home-page');
-  if(bg && hp) {
-    hp.style.backgroundImage = 'url(' + bg + ')';
+  if(url && hp) {
+    hp.style.backgroundImage = 'url(' + url + ')';
     hp.style.backgroundSize = 'cover';
     hp.style.backgroundPosition = 'center';
     hp.style.backgroundAttachment = 'fixed';
   }
 }
 
-document.addEventListener('DOMContentLoaded', function(){ applyHomepageBg(); });
+/* Load homepage bg from Supabase on page load */
+document.addEventListener('DOMContentLoaded', async function(){
+  if (QEIRAN_CONFIG.SUPABASE_URL === 'YOUR_SUPABASE_URL') return;
+  try {
+    var r = await sbFetch('site_settings?key=eq.homepage_bg&select=value', { method:'GET' });
+    if (!r.ok) return;
+    var data = await r.json();
+    if (data.length > 0 && data[0].value) {
+      applyHomepageBg(data[0].value);
+    }
+  } catch(e) { /* silent */ }
+});
 
 /* Open admin panel on load if needed */
 (function(){
@@ -5770,7 +5826,7 @@ document.addEventListener('DOMContentLoaded', function(){ applyHomepageBg(); });
 
     <!-- HOMEPAGE TAB -->
     <div id="admin-tab-homepage" style="display:none;padding:8px 0;">
-      <p style="font-size:11px;color:#888;margin-bottom:16px;line-height:1.6;">Upload a background image for the homepage. It will cover the full page behind the content. Use a large image (1920&times;1080 or bigger) for best quality.</p>
+      <p style="font-size:11px;color:#888;margin-bottom:16px;line-height:1.6;">Upload a background image for the homepage. It saves to Supabase so all visitors see it instantly. Use a large image (1920&times;1080 or bigger) for best quality.</p>
       
       <div id="hp-bg-preview" style="margin-bottom:14px;border-radius:8px;overflow:hidden;border:1px solid #e0d6c8;display:none;">
         <img id="hp-bg-img" style="width:100%;max-height:200px;object-fit:cover;display:block;" alt="Current background">
@@ -5789,8 +5845,6 @@ document.addEventListener('DOMContentLoaded', function(){ applyHomepageBg(); });
         <button onclick="adminRemoveBg()" style="padding:11px 18px;background:rgba(192,57,43,.1);color:#c0392b;border:1px solid rgba(192,57,43,.25);border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;">Remove</button>
       </div>
       <div id="hp-bg-status" style="display:none;margin-top:10px;padding:10px;border-radius:6px;font-size:11px;font-weight:600;text-align:center;"></div>
-      <button id="hp-bg-download" onclick="adminDownloadWithBg()" style="display:none;width:100%;margin-top:10px;padding:12px;background:#1A0800;color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.3px;">&#11015; Download Updated File</button>
-      <p style="font-size:10px;color:#999;margin-top:10px;line-height:1.5;text-align:center;">After downloading, upload the new <b>index.html</b> to your server to replace the old one. Then all visitors will see the background.</p>
     </div>
   </div>
 </div>
@@ -5996,6 +6050,5 @@ window.openOrder = function(id) {
 };
 
 </script>
-<div id="qeiran-bg-data" data-bg="" style="display:none;"></div>
 </body>
 </html>
