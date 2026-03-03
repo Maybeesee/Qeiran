@@ -8,7 +8,6 @@
 -->
 <html lang="en">
 <head>
-<script>if(window.location.hostname==='www.qeiran.com'){window.location.replace('https://qeiran.com'+window.location.pathname+window.location.search+window.location.hash);}</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Qeiran — Instant publishing. Your QAN Code. Your price. Your wallet.">
@@ -97,12 +96,12 @@ body::after{
   border-bottom:1px solid rgba(26,24,20,.09);
 }
 .brand{
-  font-family:-apple-system,'Segoe UI','Helvetica Neue',Arial,sans-serif;font-weight:200;font-size:34px;
-  letter-spacing:.04em;display:flex;align-items:center;gap:0;
-  cursor:pointer;line-height:1;
+  font-family:var(--sans);font-weight:800;font-size:34px;
+  letter-spacing:-.02em;display:flex;align-items:baseline;gap:0;
+  cursor:pointer;
 }
-.brand-b{color:#2A2420;display:flex;align-items:center;}
-.brand-q-mark{width:78px;height:78px;vertical-align:middle;margin-right:-20px;position:relative;top:2px;overflow:visible}
+.brand-b{color:var(--fg)}
+.brand-q-mark{width:46px;height:46px;vertical-align:baseline;margin-right:-13px;position:relative;top:10px;overflow:visible}
 .brand-q{color:var(--fg)}
 .nav-mid{display:flex;gap:32px}
 .nav-mid a{
@@ -129,7 +128,7 @@ body::after{
 @media(max-width:700px){
   #nav{padding:12px 18px;height:auto;flex-wrap:wrap}
   .brand{order:1;width:100%;margin-bottom:6px}
-  .brand-q-mark{width:68px;height:68px;top:2px;margin-right:-22px}
+  .brand-q-mark{width:48px;height:48px;top:9px;margin-right:-12px}
   .nav-mid{display:none}
   .nav-reg,.nav-authors{order:2}
   .page{padding-top:100px}
@@ -985,28 +984,28 @@ body::after{
 </style>
 </head>
 <body>
-<div id="admin-pw-modal" onclick="if(event.target===this){this.style.display='none';}" style="display:none;position:fixed;inset:0;background:#0a0604;z-index:10000;align-items:center;justify-content:center;">
-  <div style="text-align:center;">
-    <svg viewBox="-1 -2 34 38" xmlns="http://www.w3.org/2000/svg" style="width:80px;height:80px;margin-bottom:30px;"><text x="1" y="29" font-family="NovaSolid" font-size="36" fill="#A07810">Q</text></svg>
-    <div>
-      <input id="admin-pw-input" type="password" autocomplete="off"
-        onkeydown="if(event.key==='Enter')adminCheckPW()"
-        style="width:200px;padding:12px 16px;border:none;border-radius:0;font-size:15px;background:transparent;color:#A07810;text-align:center;outline:none;border-bottom:1px solid rgba(160,120,16,.2);letter-spacing:3px;box-sizing:border-box;">
-      <div id="admin-pw-error" style="display:none;height:2px;background:#c0392b;margin-top:-1px;width:200px;"></div>
-    </div>
+<div id="admin-pw-modal" style="display:flex;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:10000;align-items:center;justify-content:center;">
+  <div style="background:#f6f1e9;border-radius:10px;padding:32px;width:min(320px,90vw);text-align:center;">
+    <div style="font-size:28px;margin-bottom:10px;">&#128274;</div>
+    <h3 style="font-size:15px;font-weight:700;margin-bottom:6px;">QRIB Admin</h3>
+    <p style="font-size:11px;color:#888;margin-bottom:14px;">Enter your admin password.</p>
+    <input id="admin-pw-input" type="password" placeholder="Password"
+      onkeydown="if(event.key==='Enter')adminCheckPW()"
+      style="width:100%;padding:10px 12px;border:1px solid #ccc;border-radius:6px;font-size:14px;box-sizing:border-box;margin-bottom:8px;">
+    <div id="admin-pw-error" style="display:none;font-size:11px;color:#c0392b;margin-bottom:8px;">Incorrect password.</div>
+    <button onclick="adminCheckPW()" style="width:100%;padding:11px;background:#1A0800;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;">Enter</button>
   </div>
 </div>
 <script>
 (function(){
   var isAdmin = window.location.href.indexOf('admin=1') !== -1;
   var pw = document.getElementById('admin-pw-modal');
-  if(isAdmin && pw){ pw.style.display='flex'; }
+  if(!isAdmin && pw){ pw.style.display='none'; }
 })();
 window._adminUnlocked = false;
 function adminCheckPW(){
   var inp=document.getElementById('admin-pw-input').value;
-  var storedPW = localStorage.getItem('qeiran_admin_pw') || 'qrib2026';
-  if(inp===storedPW){
+  if(inp==='qrib2026'){
     document.getElementById('admin-pw-modal').style.display='none';
     window._adminUnlocked = true;
     var adm=document.getElementById('admin-modal');
@@ -1020,9 +1019,7 @@ function adminCheckPW(){
       setTimeout(function(){ if(typeof adminLoadPending==='function') adminLoadPending(); }, 100);
     }); }
   } else {
-    var err=document.getElementById('admin-pw-error');
-    err.style.display='block';
-    setTimeout(function(){err.style.display='none';},800);
+    document.getElementById('admin-pw-error').style.display='block';
     document.getElementById('admin-pw-input').value='';
   }
 }
@@ -1032,7 +1029,7 @@ function adminCheckPW(){
 <!-- ═══ NAV ═══════════════════════════════════════════════ -->
 <nav id="nav">
   <div class="brand" onclick="go('catalogue')">
-    <span class="brand-b"><svg class="brand-q-mark" viewBox="-2 -4 40 46" xmlns="http://www.w3.org/2000/svg"><text x="0" y="32" font-family="NovaSolid" font-size="42" fill="#A07810">Q</text></svg><span style="font-weight:200;color:#2A2420;letter-spacing:.04em;">eiran</span><span style="font-size:10px;font-weight:400;color:#888;vertical-align:super;margin-left:2px;">™</span></span>
+    <span class="brand-b"><svg class="brand-q-mark" viewBox="-1 -2 34 38" xmlns="http://www.w3.org/2000/svg"><text x="1" y="29" font-family="NovaSolid" font-size="36" fill="#A07810">Q</text></svg><span style="font-weight:200;color:#2A2420">eiran</span></span>
   </div>
   <!-- brand sub removed from nav, shown in page header instead -->
   <div class="nav-mid">
@@ -1070,7 +1067,7 @@ function adminCheckPW(){
 
   <section id="features">
     <p class="sec-eyebrow">Why Qeiran</p>
-    <h2 class="sec-h"><s style="opacity:.35;font-weight:200">ISBN — £89. Six weeks.</s><br>QAN Code — £29. Under 48 hours.</h2>
+    <h2 class="sec-h"><s style="opacity:.35;font-weight:200">ISBN — £89. Six weeks.</s><br>QAN Code — £49. Under 48 hours.</h2>
     <div class="feat-grid">
       <div class="feat"><div class="feat-ico">⚡</div><div class="feat-t">Register in Minutes</div><div class="feat-b">Submit your details, upload your cover, and you're done. Within 48 hours your QAN Code and FabriQ™ stamp arrive by email — personally reviewed, not rubber-stamped by a machine.</div></div>
       <div class="feat"><div class="feat-ico">🌍</div><div class="feat-t">Globally Reachable</div><div class="feat-b">Any author. Any country. The QAN Code carries an ISO country prefix so your origin is always encoded — and buyers worldwide can find and order your title.</div></div>
@@ -1089,7 +1086,7 @@ function adminCheckPW(){
         <div class="step"><div class="step-n">01</div><div><div class="step-t">Create your author account</div><div class="step-b">Name, country, payment details. One form. Takes 90 seconds. Your author token links all your titles permanently.</div></div></div>
         <div class="step"><div class="step-n">02</div><div><div class="step-t">Enter your book details</div><div class="step-b">Title, genre, language, edition, year, synopsis, price. Your unique QAN Code is derived from these fields.</div></div></div>
         <div class="step"><div class="step-n">03</div><div><div class="step-t">Upload your cover</div><div class="step-b">An overlay shows you where to keep clear. The QR is composited onto your cover at bottom-centre at print resolution.</div></div></div>
-        <div class="step"><div class="step-n">04</div><div><div class="step-t">Receive your QAN Code and FabriQ™ stamp</div><div class="step-b">Within 48 hours, your unique QAN Code and print-ready FabriQ™ Q Stamp are emailed to you at 300dpi. Print at 1 inch square, back cover, bottom corner, 3mm from the edge.</div></div></div>
+        <div class="step"><div class="step-n">04</div><div><div class="step-t">Receive your QAN Code and FabriQ™ stamp</div><div class="step-b">Within 48 hours of acceptance, your unique QAN Code and print-ready FabriQ™ QR stamp are emailed to you at 300dpi — printer-ready.</div></div></div>
         <div class="step"><div class="step-n">05</div><div><div class="step-t">Go live in the catalogue</div><div class="step-b">Once approved, your title appears in the catalogue — searchable by title, author, genre, or QAN Code. Buyers anywhere in the world can find and order.</div></div></div>
         <div class="step"><div class="step-n">06</div><div><div class="step-t">Get paid when they do</div><div class="step-b">A buyer orders. Payment confirmed. Qeiran's percentage deducted automatically. Your payout hits your wallet within 48 hours.</div></div></div>
       </div>
@@ -1132,7 +1129,7 @@ function adminCheckPW(){
       <div class="qan-wordmark">Qeiran</div>
       <h1 class="cat-h">Books</h1>
       <div class="search-wrap">
-        <input type="text" id="cat-q" placeholder="Search title, author, QAN Code, genre…" oninput="renderCat()" onkeydown="if(event.key==='Enter'){this.blur();renderCat();}">
+        <input type="text" id="cat-q" placeholder="Search title, author, QAN Code, genre…" oninput="renderCat()">
         <button onclick="renderCat()">Search</button>
       </div>
     </div>
@@ -1176,7 +1173,7 @@ function adminCheckPW(){
 <div id="register-page" class="page">
   <div class="reg-wrap">
     <h1 class="reg-h">Register Your Book</h1>
-    <p class="reg-sub">Complete the form below. Your submission will be personally reviewed and your unique QAN Code and FabriQ™ stamp will be sent to you within 48 hours of acceptance. The Q Stamp prints at 1 inch square on the back cover, bottom corner, 3mm from the edge.</p>
+    <p class="reg-sub">Complete the form below. Your submission will be personally reviewed and your unique QAN Code and FabriQ™ stamp will be sent to you within 48 hours of acceptance. Keep the bottom-centre 15% of your cover clear — the QR will be placed there.</p>
 
     <div class="fsec">
       <div class="fsec-title">About You</div>
@@ -1297,39 +1294,14 @@ function adminCheckPW(){
       </div>
     </div>
     <div class="fsec">
-      <div class="fsec-title">Front Cover <span style="font-size:10px;opacity:.5">(displays in catalogue)</span></div>
-      <div class="cover-drop" id="cdrop-front" onclick="document.getElementById('rcov-front').click()">
-        <input type="file" id="rcov-front" accept="image/*" onchange="onCoverFront(this)">
-        <div id="cdrop-front-content">
-          <div class="drop-ico">📕</div>
-          <div class="drop-txt"><strong>Upload front cover</strong><br>JPG or PNG · Minimum 1400px wide</div>
-        </div>
-        <div class="cover-prev" id="cprev-front" style="display:none"><img id="cprev-front-img" src="" alt=""></div>
-      </div>
-    </div>
-    <div class="fsec">
-      <div class="fsec-title">Back Cover <span style="font-size:10px;opacity:.5">(for FabriQ™ stamp placement)</span></div>
+      <div class="fsec-title">Back Cover Upload</div>
       <div class="cover-drop" id="cdrop" onclick="document.getElementById('rcov').click()">
         <input type="file" id="rcov" accept="image/*" onchange="onCover(this)">
         <div id="cdrop-content">
           <div class="drop-ico">📖</div>
-          <div class="drop-txt"><strong>Upload back cover</strong><br>JPG or PNG · Minimum 1400px wide<br><span style="font-size:11px;opacity:.5">Keep bottom-centre 15% clear for your FabriQ™ stamp</span></div>
+          <div class="drop-txt"><strong>Click to upload your book cover</strong><br>JPG or PNG · Minimum 1400px wide<br><span style="font-size:11px;opacity:.5">Keep bottom-centre 15% clear for your FabriQ™ stamp</span></div>
         </div>
         <div class="cover-prev" id="cprev"><img id="cprev-img" src="" alt=""></div>
-      </div>
-    </div>
-    <div class="fsec">
-      <div class="fsec-title">Book PDF <span style="font-size:10px;opacity:.5">(delivered to buyers on purchase)</span></div>
-      <div class="cover-drop" id="cdrop-pdf" onclick="document.getElementById('rpdf').click()">
-        <input type="file" id="rpdf" accept="application/pdf" onchange="onPDF(this)">
-        <div id="cdrop-pdf-content">
-          <div class="drop-ico">📄</div>
-          <div class="drop-txt"><strong>Upload your book as PDF</strong><br>Max 15 MB · Delivered automatically to buyers after payment</div>
-        </div>
-        <div id="pdf-preview" style="display:none;padding:14px;text-align:center;">
-          <div style="font-size:28px;">📄</div>
-          <div id="pdf-name" style="font-size:11px;color:var(--teal);font-weight:600;margin-top:6px;"></div>
-        </div>
       </div>
     </div>
 
@@ -1386,13 +1358,12 @@ function adminCheckPW(){
       </div>
     </div>
     <div id="paypal-fee-block" style="display:none;background:rgba(0,25,168,.04);border:1px solid rgba(0,25,168,.15);border-radius:8px;padding:16px 18px;margin-bottom:14px;text-align:center;">
-      <div style="font-size:12px;font-weight:700;color:var(--fg);margin-bottom:6px;">Step 1 &mdash; Pay the &pound;<span id="fee-display">29</span> Registration Fee</div>
-      <div style="font-size:11px;color:var(--dim);margin-bottom:12px;line-height:1.6;">Pay securely by card or PayPal. Your registration will be submitted automatically after payment.</div>
-      <div id="paypal-reg-buttons" style="max-width:340px;margin:0 auto;"></div>
-      <div id="payment-done" style="display:none;margin-top:10px;font-size:11px;color:var(--teal);font-weight:600;">&#10003; Payment confirmed &mdash; submitting your registration&hellip;</div>
-      <div id="payment-error" style="display:none;margin-top:10px;font-size:11px;color:#c0392b;font-weight:600;"></div>
+      <div style="font-size:12px;font-weight:700;color:var(--fg);margin-bottom:6px;">Step 1 &mdash; Pay the &pound;49 Registration Fee</div>
+      <div style="font-size:11px;color:var(--dim);margin-bottom:12px;line-height:1.6;">Click below to pay via PayPal, then return here and click Submit to complete your registration.</div>
+      <a href="https://paypal.me/Qeiran/49GBP" target="_blank" onclick="setTimeout(function(){document.getElementById('payment-done').style.display='block';},2000)" style="display:inline-block;background:#003087;color:#fff;font-size:12px;font-weight:600;padding:10px 24px;border-radius:6px;text-decoration:none;">Pay &pound;49 via PayPal</a>
+      <div id="payment-done" style="display:none;margin-top:10px;font-size:11px;color:var(--teal);font-weight:600;">&#10003; Payment sent &mdash; click Submit below to complete your registration.</div>
     </div>
-    <button class="reg-btn" id="reg-btn" onclick="doRegister()" disabled>Submit Registration</button>
+    <button class="reg-btn" id="reg-btn" onclick="doRegister()" disabled>Submit for Review &mdash; &pound;49</button>
   </div>
 </div>
 
@@ -1434,29 +1405,31 @@ function adminCheckPW(){
     </div>
 
     <!-- QAN Code -->
-    <div style="background:rgba(91,168,154,.1);border:1px solid rgba(91,168,154,.3);border-radius:6px;padding:14px 18px;margin:14px 0;font-size:12px;line-height:1.7;color:var(--fg);text-align:center;"><strong>Submission received &#10003;</strong><br>Your QAN Code and FabriQ&#8482; Q Stamp will be emailed within <strong>24&ndash;48 hours</strong>.</div><div class="s-qcode hide" id="s-qcode-text"></div>
+    <div style="background:rgba(91,168,154,.1);border:1px solid rgba(91,168,154,.3);border-radius:6px;padding:14px 18px;margin:14px 0;font-size:12px;line-height:1.7;color:var(--fg);text-align:center;"><strong>Submission received &#10003;</strong><br>QAN Code will be emailed within <strong>24&ndash;48 hours</strong> once approved by QRIB.</div><div class="s-qcode hide" id="s-qcode-text"></div>
     <div class="s-qcode-label">Your unique QAN Code — keep this</div>
 
     <!-- Stamp placement section -->
     <div class="s-stamp-section">
       <div class="s-stamp-left">
         <div class="s-stamp-title">Your Q Stamp</div>
-        <p class="s-stamp-note">Your FabriQ&#8482; Q Stamp will be emailed to you within 24&ndash;48 hours at <strong style="color:var(--teal)">300dpi, print-ready</strong>. Place it on the <strong>back cover, bottom corner, 3mm from the edge</strong>.</p>
+        <p class="s-stamp-note">Place in the <strong style="color:var(--teal)">bottom-left corner of the front cover</strong> — small, unobtrusive, away from the spine. Let the cover breathe around it.</p>
         <div class="s-placement-diagram">
-          <strong>Print size: 25 &times; 25mm (1 inch square)</strong><br>
-          Position: bottom corner, back cover<br>
-          Clear margin from edge: 3mm<br>
+          <strong>Recommended size: 18 × 18mm</strong>
+          Minimum: 15mm · Maximum: 22mm<br>
+          Position: bottom-left, front cover<br>
+          Clear margin from edge: 6mm<br>
           Format: PNG at 300dpi — print-ready
         </div>
       </div>
-      <!-- The Q stamp preview — as it will appear on the cover -->
+      <!-- The Q stamp — small, right-aligned, as it will appear on the cover -->
       <div class="s-stamp-corner">
         <div id="s-qr"></div>
-        <div class="s-stamp-corner-label">Preview — full resolution<br>sent by email</div>
+        <div class="s-stamp-corner-label">As it appears<br>on your cover</div>
       </div>
     </div>
 
     <div class="s-acts">
+      <button class="sbn p" onclick="dlQR()">↓ Download Q Stamp</button>
       <button class="sbn o" onclick="viewLastBook()">View My Listing</button>
       <button class="sbn o" onclick="closeSuccess()">Done</button>
     </div>
@@ -1469,8 +1442,6 @@ function adminCheckPW(){
   <div class="ocard">
     <h2 class="o-h">Place an Order</h2>
     <p class="o-sub" id="o-bname"></p>
-    <div class="field" style="margin-bottom:10px;"><label style="font-size:11px;">Your Name</label><input id="o-name" type="text" placeholder="Full name" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;background:var(--surface);color:var(--fg);"></div>
-    <div class="field" style="margin-bottom:10px;"><label style="font-size:11px;">Your Email</label><input id="o-email" type="email" placeholder="your@email.com" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;background:var(--surface);color:var(--fg);"></div>
     <div class="qty-row">
       <span class="qty-label">Quantity:</span>
       <input type="number" class="qty-inp" id="o-qty" value="1" min="1" max="1000" oninput="updTotal()">
@@ -1479,8 +1450,11 @@ function adminCheckPW(){
       <span class="o-total-l">Total</span>
       <span class="o-total-v" id="o-total">£0.00</span>
     </div>
-    <div id="paypal-order-buttons" style="max-width:340px;margin:10px auto;"></div>
-    <div id="order-status" style="display:none;margin:10px 0;font-size:11px;color:var(--teal);font-weight:600;text-align:center;"></div>
+    <div class="pmethods">
+      <div class="pm on" id="pm-pp"     onclick="setPM('paypal')"><span class="pm-ico">🅿️</span><span class="pm-l">PayPal</span></div>
+      <div class="pm"    id="pm-crypto" onclick="setPM('crypto')"><span class="pm-ico">₿</span><span class="pm-l">Crypto</span></div>
+    </div>
+    <button class="o-place" onclick="doOrder()">Place Order &amp; Pay</button>
     <button class="o-cancel" onclick="closeOrder()">Cancel</button>
   </div>
 </div>
@@ -1500,7 +1474,7 @@ const QEIRAN_CONFIG = {
   FORMSPREE_WHOLESALE: 'mqednwnv',
   PLATFORM_EMAIL:      'maat@qrib.co.uk',
   PLATFORM_PAYPAL:     'maat@qrib.co.uk',
-  REGISTRATION_FEE:    29.00,
+  REGISTRATION_FEE:    49.00,
 };
 
 (() => {
@@ -3748,15 +3722,6 @@ function go(page) {
   if (nl) nl.classList.add('active-link');
   window.scrollTo(0, 0);
   if (page === 'catalogue') renderCat();
-  if (page === 'register') {
-    window.regPaymentConfirmed = false;
-    window._regPdfData = null;
-    window._regPdfName = null;
-    var pd = document.getElementById('payment-done');
-    if(pd) pd.style.display = 'none';
-    var pe = document.getElementById('payment-error');
-    if(pe) pe.style.display = 'none';
-  }
 }
 
 /* ── Toast ────────────────────────────────────────────── */
@@ -3807,29 +3772,6 @@ function onCover(input) {
     document.getElementById('cprev-img').src = e.target.result;
     document.getElementById('cprev').style.display = 'block';
     document.getElementById('cdrop-content').style.display = 'none';
-  };
-  r.readAsDataURL(file);
-}
-function onCoverFront(input) {
-  const file = input.files[0]; if (!file) return;
-  const r = new FileReader();
-  r.onload = e => {
-    document.getElementById('cprev-front-img').src = e.target.result;
-    document.getElementById('cprev-front').style.display = 'block';
-    document.getElementById('cdrop-front-content').style.display = 'none';
-  };
-  r.readAsDataURL(file);
-}
-function onPDF(input) {
-  const file = input.files[0]; if (!file) return;
-  if (file.size > 15 * 1024 * 1024) { toast('PDF must be under 15 MB.'); input.value = ''; return; }
-  const r = new FileReader();
-  r.onload = e => {
-    window._regPdfData = e.target.result;
-    window._regPdfName = file.name;
-    document.getElementById('pdf-name').textContent = file.name + ' (' + (file.size / 1048576).toFixed(1) + ' MB)';
-    document.getElementById('pdf-preview').style.display = 'block';
-    document.getElementById('cdrop-pdf-content').style.display = 'none';
   };
   r.readAsDataURL(file);
 }
@@ -3899,12 +3841,6 @@ function checkOriginal() {
 }
 
 function doRegister() {
-  /* ── Require payment confirmation from PayPal SDK ───── */
-  if (!window.regPaymentConfirmed) {
-    toast('Please complete payment above before submitting.');
-    return;
-  }
-
   const v = id => document.getElementById(id).value.trim();
   const name    = v('rn'), email = v('re'), country = v('rc');
   const title   = v('rt'), genre = v('rg'), lang = v('rl');
@@ -3944,11 +3880,7 @@ function doRegister() {
   else { paypal = v('rpp2'); wallet = v('rwa2'); currency = v('rcur2'); }
 
   const imgEl = document.getElementById('cprev-img');
-  const backCoverUrl = imgEl.src && imgEl.src.startsWith('data:') ? imgEl.src : '';
-  const frontEl = document.getElementById('cprev-front-img');
-  const frontCoverUrl = frontEl && frontEl.src && frontEl.src.startsWith('data:') ? frontEl.src : '';
-  const pdfUrl = window._regPdfData || '';
-  const pdfName = window._regPdfName || '';
+  const coverUrl = imgEl.src && imgEl.src.startsWith('data:') ? imgEl.src : '';
 
   const book = {
     id:        'b_' + Date.now(),
@@ -3958,8 +3890,7 @@ function doRegister() {
     pages:     parseInt(v('rp')) || null,
     price, qeiranCut: +(price * 0.12).toFixed(2),
     authorGets: +(price * 0.88).toFixed(2),
-    synopsis, coverUrl: frontCoverUrl, backCoverUrl, pdfUrl, pdfName,
-    paypal, wallet, currency,
+    synopsis, coverUrl, paypal, wallet, currency,
     bio: v('rb'), registered: new Date().toISOString(), scans: 0, orders: 0, approved: false,
   };
 
@@ -4086,11 +4017,9 @@ function generateQSeal(containerId, url, displayPx) {
 ────────────────────────────────────────────────────────────── */
 function getSuppressed(sz) {
   const s = new Set();
-  /* 30 dots removed: outer corners + adjacent edge dots per finder.
-     Inner corners (2,2 / 2,4 / 4,2 / 4,4) kept for scanner reliability.
-     10 dots × 3 finders = 30 removed. Still obscured, still scannable. */
   [[0,0],[0,sz-7],[sz-7,0]].forEach(([fr,fc]) => {
-    [[0,0],[0,1],[1,0],[0,6],[0,5],[1,6],[6,0],[5,0],[6,1],[6,6],[5,6],[6,5]
+    [[0,0],[0,1],[1,0],[0,6],[0,5],[1,6],[6,0],[5,0],[6,1],[6,6],[5,6],[6,5],
+     [2,2],[2,4],[4,2],[4,4]
     ].forEach(([dr,dc]) => s.add(`${fr+dr},${fc+dc}`));
   });
   return s;
@@ -4105,7 +4034,7 @@ function getSuppressed(sz) {
    applied (getSuppressed) — scanner unaffected.
 ────────────────────────────────────────────────────────────── */
 function drawQSeal(matrix, size, version, displayPx) {
-  const px = 900;  /* 300dpi × 3 inches = 900px — crisp at 1-inch print */
+  const px = 700;
   const cv = document.createElement('canvas');
   cv.width = cv.height = px;
   const ctx = cv.getContext('2d');
@@ -4142,12 +4071,10 @@ function drawQSeal(matrix, size, version, displayPx) {
   /* ── Step 3: Define dot circle (the "moon") ── */
   /* Positioned to the upper-east, fully within Q boundary.
      Like a moon just about to leave a solar eclipse from the east.
-     DOT_R * 0.78 of Q_R. East edge stays fixed at Q_CX + Q_R*0.98.
-     Centre shifts west to compensate for larger radius.
-     Expands north, south, west — more QR real estate, better scan. */
-  const DOT_R  = Q_R * 0.78;
-  const DOT_CX = Q_CX + Q_R * 0.98 - DOT_R;  /* east edge pinned */
-  const DOT_CY = Q_CY - Q_R * 0.04;  /* slightly less north offset */
+     DOT_R * 0.62 of Q_R, offset 0.36 east and 0.08 north. */
+  const DOT_R  = Q_R * 0.62;
+  const DOT_CX = Q_CX + Q_R * 0.36;
+  const DOT_CY = Q_CY - Q_R * 0.08;
 
   /* ── Step 4: Draw cream circle ON TOP of Q (creates cutout effect) ── */
   ctx.fillStyle = '#F6F1E9';
@@ -4159,12 +4086,12 @@ function drawQSeal(matrix, size, version, displayPx) {
   /* The QR grid is centred in the dot circle, sized so its diagonal
      fits within 70% of the dot circle radius. This ensures all
      finder patterns are in the exposed crescent (NOT under the Q). */
-  const qr_r = DOT_R * 0.82;   /* increased from 0.70 — larger QR modules for reliable 1-inch scanning */
+  const qr_r = DOT_R * 0.70;   /* proven scannable — do not increase */
   const mod = (qr_r * 2) / (size * Math.SQRT2);  /* diagonal fits */
   const gridW = size * mod;
   const x0 = DOT_CX - gridW / 2;
   const y0 = DOT_CY - gridW / 2;
-  const cr = mod * 0.38;  /* smaller dots — cleaner scan at 1-inch print */
+  const cr = mod * 0.40;  /* dot radius — proven optimal, gaps preserved for scanner pickup */
 
   /* Dot colours */
   const dotC = 'rgb(0,25,168)';    /* #0019A8 navy blue */
@@ -4310,7 +4237,6 @@ function setFilter(f, el) {
 function renderCat() {
   const q = (document.getElementById('cat-q').value || '').toLowerCase();
   let books = S.books.filter(b => {
-    if (!window._adminUnlocked && b.approved === false) return false;
     if (S.filter !== 'all' && b.genre !== S.filter) return false;
     if (q && !b.title.toLowerCase().includes(q) &&
         !b.author.toLowerCase().includes(q) &&
@@ -4348,11 +4274,6 @@ function renderCat() {
 function openBook(id) {
   const b = S.books.find(x => x.id === id);
   if (!b) return;
-  if (b.approved === false && !window._adminUnlocked) {
-    toast('This book is pending review.');
-    go('catalogue');
-    return;
-  }
   const url = pageUrl(b.qcode);
   const ordinal = n => n===1?'1st':n===2?'2nd':n===3?'3rd':n+'th';
 
@@ -4378,9 +4299,9 @@ function openBook(id) {
         </div>
         <div class="b-price-bar">
           <div><div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:4px">Per Copy</div><div class="b-price">£${b.price.toFixed(2)}</div></div>
-          ${b.pdfUrl?`<button class="b-order-btn" onclick="openOrder('${b.id}')">Order Now</button>`:''}
-          ${window._adminUnlocked && b.approved===false?'<button onclick="approveBook(\''+b.id+'\')" style="padding:8px 16px;background:var(--teal);color:#fff;border:none;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;margin-right:8px;">Approve &amp; Issue QAN</button>':''}
-          ${window._adminUnlocked?`<button class="b-delete-btn" onclick="showDeleteConfirm('${b.id}')">Remove this book…</button>
+          <button class="b-order-btn" onclick="openOrder('${b.id}')">Order Now</button>
+          ${b.approved===false?'<button onclick="approveBook(\''+b.id+'\')" style="padding:8px 16px;background:var(--teal);color:#fff;border:none;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;margin-right:8px;">Approve &amp; Issue QAN</button>':''}
+          <button class="b-delete-btn" onclick="showDeleteConfirm('${b.id}')">Remove this book…</button>
           <div class="del-confirm" id="del-confirm-${b.id}">
             <strong>Remove "${esc(b.title)}"?</strong><br>
             <span style="font-size:11px;color:var(--dim);display:block;margin:4px 0 10px">
@@ -4388,17 +4309,17 @@ function openBook(id) {
             </span>
             <button class="del-yes" onclick="deleteBook('${b.id}')">Yes, remove it</button>
             <button class="del-no" onclick="hideDeleteConfirm('${b.id}')">Cancel</button>
-          </div>`:''}
+          </div>
         </div>
-        ${window._adminUnlocked?`<div style="font-size:11px;color:var(--dim);margin-top:6px">
+        <div style="font-size:11px;color:var(--dim);margin-top:6px">
           ${b.paypal?'💳 PayPal · ':''} ${b.wallet?'₿ '+b.currency:''}
           <span style="margin-left:8px">Author keeps: £${b.authorGets.toFixed(2)} per copy</span>
-        </div>`:''}
+        </div>
       </div>
     </div>
     <div class="b-sec-label">About this Book</div>
     <p class="b-synopsis">${esc(b.synopsis)}</p>
-    <div class="b-sec-label">${b.pdfUrl?'Scan to Purchase':'FabriQ™ Stamp'}</div>
+    <div class="b-sec-label">Scan to Purchase</div>
     <div class="qr-scan-block">
       <div style="position:relative;display:inline-block;">
         <div id="bqrl-${b.id}" style="display:inline-block;${b.approved===false?'filter:blur(3px);opacity:0.45;':''}"></div>
@@ -4433,23 +4354,20 @@ async function deleteBook(id) {
   const b = S.books.find(x => x.id === id);
   if (!b) return;
 
-  // Remove from Supabase cloud FIRST
-  if (QEIRAN_CONFIG.SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
-    try {
-      var r = await sbFetch('books?id=eq.' + encodeURIComponent(id), {
-        method: 'DELETE',
-        headers: { 'Prefer': 'return=minimal' }
-      });
-      if (!r.ok) {
-        toast('Cloud delete failed (status ' + r.status + '). Book may reappear.');
-      }
-    } catch(e) { console.warn('Cloud delete failed:', e); }
-  }
-
   // Remove from local state
   S.books = S.books.filter(x => x.id !== id);
   persist();
   document.getElementById('stat-count').textContent = S.books.length;
+
+  // Remove from Supabase cloud
+  if (QEIRAN_CONFIG.SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+    try {
+      await sbFetch('books?id=eq.' + encodeURIComponent(id), {
+        method: 'DELETE',
+        headers: { 'Prefer': 'return=minimal' }
+      });
+    } catch(e) { console.warn('Cloud delete failed:', e); }
+  }
 
   toast('"' + b.title + '" removed from the catalogue.');
   go('catalogue');
@@ -4465,25 +4383,44 @@ function openOrder(id) {
   updTotal();
   document.getElementById('order-modal').classList.add('open');
 }
-function closeOrder() {
-  document.getElementById('order-modal').classList.remove('open');
-  var st = document.getElementById('order-status');
-  if(st){ st.style.display = 'none'; st.style.color = 'var(--teal)'; }
-  var ob = document.getElementById('paypal-order-buttons');
-  if(ob) ob.innerHTML = '';
-  ppOrderRendered = false;
-}
+function closeOrder() { document.getElementById('order-modal').classList.remove('open'); }
 function updTotal() {
   if (!S.orderBook) return;
   const qty = parseInt(document.getElementById('o-qty').value) || 1;
   document.getElementById('o-total').textContent = '£' + (S.orderBook.price * qty).toFixed(2);
 }
+function setPM(m) {
+  S.orderPM = m;
+  document.querySelectorAll('.pm').forEach(p => p.classList.remove('on'));
+  document.getElementById('pm-' + (m === 'paypal' ? 'pp' : 'crypto')).classList.add('on');
+}
 function doOrder() {
-  /* Orders are now processed via PayPal SDK buttons in the order modal.
-     This function is kept as a fallback but the SDK onApprove handles
-     payment capture, order emails, and order counting. */
   if (!S.orderBook) return;
-  toast('Please use the card or PayPal button above to pay.');
+  const qty   = parseInt(document.getElementById('o-qty').value) || 1;
+  const name  = document.getElementById('o-name')  ? document.getElementById('o-name').value.trim()  : '';
+  const email = document.getElementById('o-email') ? document.getElementById('o-email').value.trim() : '';
+  const total = (S.orderBook.price * qty).toFixed(2);
+
+  // ── Notify author + platform via Formspree ─────────────────────
+  sendOrderEmail(S.orderBook, qty, name, email, total);
+
+  // ── Redirect buyer to PayPal ───────────────────────────────────
+  if (S.orderBook.paypal) {
+    setTimeout(() => {
+      window.open(
+        'https://www.paypal.com/paypalme/' +
+        encodeURIComponent(S.orderBook.paypal) + '/' + total + 'GBP',
+        '_blank'
+      );
+    }, 400);
+  }
+
+  toast('Order sent — you will be redirected to payment.');
+  closeOrder();
+
+  // Increment order count locally
+  const bk = S.books.find(x => x.id === S.orderBook.id);
+  if (bk) { bk.orders = (bk.orders||0) + 1; persist(); }
 }
 
 async function sendOrderEmail(book, qty, buyerName, buyerEmail, total) {
@@ -4512,10 +4449,12 @@ async function sendOrderEmail(book, qty, buyerName, buyerEmail, total) {
 
 /* ── URL builder ─────────────────────────────────────────── */
 function pageUrl(qcode) {
-  /* Always encode the canonical live URL — never localhost or www variant.
-     This ensures QR stamps always resolve correctly regardless of
-     where the file is opened from. */
-  return 'https://qeiran.com/?q=' + qcode;
+  // Always encode the live qeiran.com URL — keeps QR version low and dots large.
+  // Works correctly whether file is opened locally or on the server.
+  const base = (window.location.hostname === 'localhost' || window.location.protocol === 'file:')
+    ? 'https://qeiran.com/'
+    : (window.location.origin + '/');
+  return base + '?q=' + qcode;
 }
 
 /* ── Persistence — localStorage fallback ─────────────────── */
@@ -4538,18 +4477,13 @@ async function sbFetch(path, opts={}) {
     'Prefer': 'return=minimal',
     ...( opts.headers || {} )
   };
-  const fetchOpts = Object.assign({}, opts, { headers: headers });
-  return fetch(url, fetchOpts);
+  return fetch(url, { ...opts, headers });
 }
 
 async function loadFromCloud() {
   if (QEIRAN_CONFIG.SUPABASE_URL === 'YOUR_SUPABASE_URL') return false;
   try {
-    /* 5-second timeout — if Supabase is slow, page still loads */
-    var controller = new AbortController();
-    var timer = setTimeout(function(){ controller.abort(); }, 5000);
-    var r = await sbFetch('books?select=*&order=registered.desc&limit=200', { signal: controller.signal });
-    clearTimeout(timer);
+    const r = await sbFetch('books?select=*&order=registered.desc&limit=200');
     if (!r.ok) return false;
     const data = await r.json();
     if (Array.isArray(data) && data.length > 0) {
@@ -4560,8 +4494,7 @@ async function loadFromCloud() {
         genre: b.genre, language: b.language, edition: b.edition,
         year: b.year, pages: b.pages, price: b.price,
         qeiranCut: b.qeiran_cut, authorGets: b.author_gets,
-        synopsis: b.synopsis, coverUrl: b.cover_url, backCoverUrl: b.back_cover_url,
-        pdfUrl: b.pdf_url, pdfName: b.pdf_name,
+        synopsis: b.synopsis, coverUrl: b.cover_url, pdfUrl: b.pdf_url,
         paypal: b.paypal, wallet: b.wallet, currency: b.currency,
         bio: b.bio, registered: b.registered, scans: b.scans, orders: b.orders,
         approved: b.approved !== undefined ? b.approved : true,
@@ -4587,8 +4520,6 @@ async function saveToCloud(book) {
       pages: book.pages || null, price: book.price,
       qeiran_cut: book.qeiranCut, author_gets: book.authorGets,
       synopsis: book.synopsis, cover_url: book.coverUrl || null,
-      back_cover_url: book.backCoverUrl || null,
-      pdf_url: book.pdfUrl || null, pdf_name: book.pdfName || null,
       paypal: book.paypal || null, wallet: book.wallet || null,
       currency: book.currency || null, bio: book.bio || null,
       registered: book.registered, scans: book.scans || 0, orders: book.orders || 0,
@@ -4597,6 +4528,9 @@ async function saveToCloud(book) {
     const r = await sbFetch('books', {
       method: 'POST',
       headers: { 'Prefer': 'resolution=merge-duplicates,return=minimal' },
+      body: JSON.stringify(payload),
+    });
+    return r.ok || r.status === 201;
       body: JSON.stringify(payload),
     });
     return r.ok || r.status === 201;
@@ -4610,49 +4544,35 @@ function esc(s) {
 
 /* ── Deep link ───────────────────────────────────────────── */
 function checkDeepLink() {
-  var q = new URLSearchParams(location.search).get("q");
+  const q = new URLSearchParams(location.search).get('q');
   if (q) {
-    var b = S.books.find(function(x){ return x.qcode === q; });
-    if (b) {
-      openBook(b.id);
-      b.scans = (b.scans || 0) + 1;
-      persist();
-      if (typeof saveToCloud === "function") saveToCloud(b);
-      return true;
-    }
+    const b = S.books.find(x => x.qcode === q);
+    if (b) { openBook(b.id); return true; }
   }
   return false;
 }
 
 /* ── Init ────────────────────────────────────────────────── */
-async function init() {
+function init() {
   hydrate();
-  document.getElementById("stat-count").textContent = S.books.length;
+  document.getElementById('stat-count').textContent = S.books.length;
 
-  /* Check deep link against local/cached data first (instant) */
-  var deepLinked = checkDeepLink();
+  // Try loading live catalogue from cloud — falls back to local/demo
+  loadFromCloud();
 
-  /* Load live catalogue from cloud */
-  var cloudLoaded = await loadFromCloud();
-
-  /* If cloud loaded fresh data and deep link did not match local, retry */
-  if (!deepLinked && cloudLoaded) {
-    deepLinked = checkDeepLink();
-  }
-
-  /* Demo books so the catalogue is not empty on first load */
+  // Demo books so the catalogue isn't empty on first load
   if (S.books.length === 0) {
-    var DEMO = [
-      { id:"demo1", qcode:"Q-GB-25-ANQU-BLPU-01-0001-K", title:"The Black Pulpit", subtitle:"A story of fire and conviction", author:"Angel Quinn", email:"angel@qrib.co.uk", country:"GB", genre:"Fiction", language:"English", edition:1, year:2025, pages:312, price:14.99, qeiranCut:1.80, authorGets:13.19, synopsis:"A gripping tale of faith, doubt, and the fires that test both. Set against the backdrop of 1970s Jamaica, The Black Pulpit follows a young preacher wrestling with the God he was raised to serve and the truths no sermon can contain.", coverUrl:"", paypal:"angel@qrib.co.uk", wallet:"", currency:"USDC", bio:"Founder of QRIB", registered:"2025-01-15T12:00:00Z", scans:47, orders:12 },
-      { id:"demo2", qcode:"Q-NG-25-KEMI-WEVW-01-0002-R", title:"We Were Woven", subtitle:"Poetry from the Delta", author:"Kemi Adeyemi", email:"kemi@example.com", country:"NG", genre:"Poetry", language:"English", edition:1, year:2025, pages:88, price:9.99, qeiranCut:1.20, authorGets:8.79, synopsis:"Verses drawn from the rivers of the Niger Delta. We Were Woven is a collection about land, memory, and the persistent beauty of things that refuse to be erased. Selected for the 2025 African Poetry Prize longlist.", coverUrl:"", paypal:"", wallet:"0x4fa...", currency:"ETH", bio:"Lagos-based poet", registered:"2025-02-01T09:00:00Z", scans:33, orders:8 },
-      { id:"demo3", qcode:"Q-IN-24-PRSN-THSF-01-0003-M", title:"The Slow Fire", subtitle:"Notes on a changing climate", author:"Priya Nair Singh", email:"priya@example.com", country:"IN", genre:"Non-Fiction", language:"English", edition:1, year:2024, pages:228, price:12.99, qeiranCut:1.56, authorGets:11.43, synopsis:"A journalist-turned-scientist traces how slow emergencies become visible. Part memoir, part investigation, The Slow Fire is an urgent and beautiful account of what we lose when change outpaces attention.", coverUrl:"", paypal:"priya@example.com", wallet:"", currency:"USDC", bio:"Climate journalist, New Delhi", registered:"2025-01-22T14:00:00Z", scans:61, orders:21 },
+    const DEMO = [
+      { id:'demo1', qcode:'Q-GB-25-ANQU-BLPU-01-0001-K', title:'The Black Pulpit', subtitle:'A story of fire and conviction', author:'Angel Quinn', email:'<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="96f7f8f1f3fad6e7e4fff4b8f5f9b8e3fd">[email&#160;protected]</a>', country:'GB', genre:'Fiction', language:'English', edition:1, year:2025, pages:312, price:14.99, qeiranCut:1.80, authorGets:13.19, synopsis:'A gripping tale of faith, doubt, and the fires that test both. Set against the backdrop of 1970s Jamaica, The Black Pulpit follows a young preacher wrestling with the God he was raised to serve and the truths no sermon can contain.', coverUrl:'', paypal:'<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="23424d44464f6352514a410d404c0d5648">[email&#160;protected]</a>', wallet:'', currency:'USDC', bio:'Founder of QRIB', registered:'2025-01-15T12:00:00Z', scans:47, orders:12 },
+      { id:'demo2', qcode:'Q-NG-25-KEMI-WEVW-01-0002-R', title:'We Were Woven', subtitle:'Poetry from the Delta', author:'Kemi Adeyemi', email:'<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="bcd7d9d1d5fcd9c4ddd1ccd0d992dfd3d1">[email&#160;protected]</a>', country:'NG', genre:'Poetry', language:'English', edition:1, year:2025, pages:88, price:9.99, qeiranCut:1.20, authorGets:8.79, synopsis:'Verses drawn from the rivers of the Niger Delta. We Were Woven is a collection about land, memory, and the persistent beauty of things that refuse to be erased. Selected for the 2025 African Poetry Prize longlist.', coverUrl:'', paypal:'', wallet:'0x4fa...', currency:'ETH', bio:'Lagos-based poet', registered:'2025-02-01T09:00:00Z', scans:33, orders:8 },
+      { id:'demo3', qcode:'Q-IN-24-PRSN-THSF-01-0003-M', title:'The Slow Fire', subtitle:'Notes on a changing climate', author:'Priya Nair Singh', email:'<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="95e5e7fcecf4d5f0edf4f8e5f9f0bbf6faf8">[email&#160;protected]</a>', country:'IN', genre:'Non-Fiction', language:'English', edition:1, year:2024, pages:228, price:12.99, qeiranCut:1.56, authorGets:11.43, synopsis:'A journalist-turned-scientist traces how slow emergencies become visible. Part memoir, part investigation, The Slow Fire is an urgent and beautiful account of what we lose when change outpaces attention.', coverUrl:'', paypal:'<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="bacac8d3c3dbfadfc2dbd7cad6df94d9d5d7">[email&#160;protected]</a>', wallet:'', currency:'USDC', bio:'Climate journalist, New Delhi', registered:'2025-01-22T14:00:00Z', scans:61, orders:21 },
     ];
     S.books = DEMO;
     persist();
-    document.getElementById("stat-count").textContent = S.books.length;
+    document.getElementById('stat-count').textContent = S.books.length;
   }
 
-  if (!deepLinked) go("catalogue");
+  if (!checkDeepLink()) go('catalogue');
 }
 
 init();
@@ -4743,7 +4663,7 @@ init();
   Unauthorised reproduction, reverse engineering, imitation or distribution — in whole or in part — 
   is strictly prohibited and will be pursued. Registration and observation of this notice constitutes your awareness of QRIB's intellectual property interest in all that appears on this entire website and acceptance of these terms.<br>
   <span style="opacity:.65;font-size:9px;">
-    © QRIB<span onclick="if(window._adminUnlocked){document.getElementById('admin-modal').style.display='flex';}else{document.getElementById('admin-pw-modal').style.display='flex';document.getElementById('admin-pw-input').focus();}" style="cursor:default;font-size:9px;padding:4px 2px;vertical-align:super;">®</span>. All rights reserved. Qeiran is a QRIB platform. FabriQ™ and QRIBS' Law™ are trademarks of QRIB.
+    © QRIB. All rights reserved. Qeiran is a QRIB platform. FabriQ™ and QRIBS' Law™ are trademarks of QRIB.
     QAN Codes are unique permanent identifiers — once assigned they cannot be transferred or deleted.
   </span>
 </div>
@@ -4894,7 +4814,7 @@ init();
   </div>
 </div><!-- /authors-page -->
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ── CUSTOMISER ─────────────────────────────────────────── */
 function toggleCust(){
   document.getElementById('cust-panel').classList.toggle('open');
@@ -5001,7 +4921,142 @@ document.addEventListener('change',e=>{
 </script>
 
 
+
+
+<!-- ── CUSTOMISER ──────────────────────────────────────────── -->
+<div id="customiser">
+  <button id="cust-toggle" onclick="toggleCust()" title="Design controls" style="opacity:0;width:8px;height:8px;padding:0;border:none;background:transparent;cursor:default;position:absolute;bottom:0;right:0;"></button>
+  <div id="cust-panel">
+    <div class="cust-h">✦ Studio Controls</div>
+
+    <div class="cust-label" style="margin-bottom:6px">Platform Name</div>
+    <div class="cust-row">
+      <input type="text" id="cust-name" value="Qeiran" placeholder="Platform name">
+      <input type="text" id="cust-suffix" value="" placeholder="Suffix">
+    </div>
+
+    <div class="cust-label" style="margin-bottom:6px">Hero Headline</div>
+    <div class="cust-row">
+      <input type="text" id="cust-line1" value="Your book." placeholder="Line 1">
+    </div>
+    <div class="cust-row">
+      <input type="text" id="cust-line2" value="Registered forever." placeholder="Line 2 (italic)">
+    </div>
+
+    <div class="cust-divider"></div>
+
+    <div class="cust-label" style="margin-bottom:8px">Background</div>
+    <div class="cust-swatch-row" id="bg-swatches">
+      <div class="cust-swatch" style="background:#F5F0E8" data-bg="#F5F0E8" data-fg="#1A1814" onclick="setBg(this)" title="Warm Cream"></div>
+      <div class="cust-swatch active" style="background:#EDE8DE" data-bg="#EDE8DE" data-fg="#1A1814" onclick="setBg(this)" title="Parchment"></div>
+      <div class="cust-swatch" style="background:#E8E2D4" data-bg="#E8E2D4" data-fg="#1A1814" onclick="setBg(this)" title="Linen"></div>
+      <div class="cust-swatch" style="background:#2C2C30" data-bg="#2C2C30" data-fg="#F0EDE6" onclick="setBg(this)" title="Dark Slate"></div>
+      <div class="cust-swatch" style="background:#22262E" data-bg="#22262E" data-fg="#F0EDE6" onclick="setBg(this)" title="Deep Slate"></div>
+      <div class="cust-swatch" style="background:#1E1C18" data-bg="#1E1C18" data-fg="#F0EDE6" onclick="setBg(this)" title="Near Black"></div>
+    </div>
+
+    <div class="cust-label" style="margin-bottom:8px">Accent / Gold</div>
+    <div class="cust-swatch-row" id="acc-swatches">
+      <div class="cust-swatch active" style="background:#B8860B" data-acc="#B8860B" onclick="setAcc(this)" title="Warm Gold"></div>
+      <div class="cust-swatch" style="background:#C4877A" data-acc="#C4877A" onclick="setAcc(this)" title="Dusty Rose"></div>
+      <div class="cust-swatch" style="background:#5B8FA0" data-acc="#5B8FA0" onclick="setAcc(this)" title="Soft Teal"></div>
+      <div class="cust-swatch" style="background:#6B7FA8" data-acc="#6B7FA8" onclick="setAcc(this)" title="Slate Blue"></div>
+      <div class="cust-swatch" style="background:#7A9E8A" data-acc="#7A9E8A" onclick="setAcc(this)" title="Sage"></div>
+      <div class="cust-swatch" style="background:#8B6355" data-acc="#8B6355" onclick="setAcc(this)" title="Warm Umber"></div>
+    </div>
+
+    <div class="cust-label" style="margin-bottom:8px">Button Colour</div>
+    <div class="cust-swatch-row" id="btn-swatches">
+      <div class="cust-swatch active" style="background:#5B8FA0" data-btn="#5B8FA0" onclick="setBtn(this)" title="Soft Teal"></div>
+      <div class="cust-swatch" style="background:#7A9E8A" data-btn="#7A9E8A" onclick="setBtn(this)" title="Sage"></div>
+      <div class="cust-swatch" style="background:#6B7FA8" data-btn="#6B7FA8" onclick="setBtn(this)" title="Periwinkle"></div>
+      <div class="cust-swatch" style="background:#C4877A" data-btn="#C4877A" onclick="setBtn(this)" title="Dusty Rose"></div>
+      <div class="cust-swatch" style="background:#8B6355" data-btn="#8B6355" onclick="setBtn(this)" title="Warm Umber"></div>
+      <div class="cust-swatch" style="background:#9E8B6E" data-btn="#9E8B6E" onclick="setBtn(this)" title="Sand"></div>
+    </div>
+
+    <div class="cust-label" style="margin-bottom:8px">Headline Font</div>
+    <div class="cust-row">
+      <select id="cust-font" onchange="applyFont(this.value)">
+        <option value="Georgia,serif">Georgia (Serif)</option>
+        <option value="'Helvetica Neue',Arial,sans-serif" selected>Helvetica Neue (Narrow)</option>
+        <option value="'Times New Roman',serif">Times New Roman</option>
+        <option value="'Trebuchet MS',sans-serif">Trebuchet (Humanist)</option>
+        <option value="'Palatino Linotype',serif">Palatino (Literary)</option>
+        <option value="'Century Gothic','Futura',sans-serif">Century Gothic (Geometric)</option>
+        <option value="'Courier New',monospace">Courier (Typewriter)</option>
+      </select>
+    </div>
+
+    <div class="cust-apply" onclick="applyAll()">✦ Apply</div>
+
+    <div class="cust-divider"></div>
+    <div class="cust-name-hint">
+      Qeiran · qauthor · Quthora · Lybris · Lybriq · Foliant · Velluma
+    </div>
+  </div>
+</div>
+
+<!-- ── CAVEAT / LEGAL NOTICE ─────────────────────────────────── -->
+
 <script>
+/* ── CUSTOMISER ─────────────────────────────────────────── */
+function toggleCust(){
+  document.getElementById('cust-panel').classList.toggle('open');
+}
+function setBg(el){
+  document.querySelectorAll('#bg-swatches .cust-swatch').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+  const bg=el.dataset.bg, fg=el.dataset.fg;
+  document.documentElement.style.setProperty('--bg',bg);
+  document.documentElement.style.setProperty('--fg',fg);
+  document.documentElement.style.setProperty('--ink',fg);
+  document.documentElement.style.setProperty('--paper',bg);
+  const isDark=parseInt(bg.replace('#',''),16)<0x888888;
+  document.getElementById('nav').style.background=isDark
+    ?`rgba(${hexToRgb(bg)},0.94)`:`rgba(${hexToRgb(bg)},0.97)`;
+  document.documentElement.style.setProperty('--cust-bg',isDark?'#1a1a22':'#e8e5dc');
+}
+function setAcc(el){
+  document.querySelectorAll('#acc-swatches .cust-swatch').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+  document.documentElement.style.setProperty('--goldf',el.dataset.acc);
+  document.documentElement.style.setProperty('--gold',el.dataset.acc);
+}
+function setBtn(el){
+  document.querySelectorAll('#btn-swatches .cust-swatch').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+  document.documentElement.style.setProperty('--brand',el.dataset.btn);
+  document.documentElement.style.setProperty('--brandl',el.dataset.btn);
+}
+function applyFont(val){
+  document.documentElement.style.setProperty('--narrow',val);
+  document.querySelectorAll('.hero-h,.sec-h,.cat-h,.reg-h').forEach(el=>el.style.fontFamily=val);
+}
+function hexToRgb(hex){
+  return `${parseInt(hex.slice(1,3),16)},${parseInt(hex.slice(3,5),16)},${parseInt(hex.slice(5,7),16)}`;
+}
+function applyAll(){
+  const name=document.getElementById('cust-name').value||'Qeiran';
+  const suffix=document.getElementById('cust-suffix').value||'';
+  document.querySelector('.brand-b').textContent=name;
+  const bq=document.querySelector('.brand-q');
+  if(bq) bq.textContent=suffix;
+  document.title=name+' — Independent Author Register';
+  const l1=document.getElementById('cust-line1').value||'Your book.';
+  const l2=document.getElementById('cust-line2').value||'Registered forever.';
+  const h=document.querySelector('.hero-h');
+  if(h) h.innerHTML=l1+'<br><span class="it">'+l2+'</span>';
+  applyFont(document.getElementById('cust-font').value);
+  document.getElementById('cust-panel').classList.remove('open');
+}
+document.addEventListener('click',e=>{
+  const p=document.getElementById('cust-panel');
+  const t=document.getElementById('cust-toggle');
+  if(p&&p.classList.contains('open')&&!p.contains(e.target)&&e.target!==t)
+    p.classList.remove('open');
+});
+
 /* == Approve book == */
 function approveBook(id) {
   var b = S.books.find(function(x){return x.id===id;});
@@ -5041,193 +5096,34 @@ function adminIssueQAN(){
     registered:new Date().toISOString(),scans:0,orders:0,approved:true,complimentary:true};
   S.books.push(book);S.lastBook=book;persist();
   if(typeof saveToCloud==='function')saveToCloud(book);
-  document.getElementById('stat-count').textContent = S.books.length;
-  if(typeof renderCat==='function') renderCat();
   var res=document.getElementById('admin-result');
   if(res){
     res.style.display='block';
     res.innerHTML='<strong>QAN Code issued:</strong> '+qcode+'<br><strong>Author:</strong> '+name
       +'<br><strong>Email:</strong> '+email
       +'<br><br><em>Book is live in catalogue.</em>'
-      +'<div style="margin:10px 0;padding:10px;background:rgba(91,168,154,.08);border-radius:6px;font-size:11px;line-height:1.7;">'
-      +'<strong>Deep link:</strong> <a href="'+pageUrl(book.qcode)+'" target="_blank" style="color:var(--teal);word-break:break-all;">'+pageUrl(book.qcode)+'</a><br>'
-      +'This is the URL encoded in the Q Stamp. Scanning the stamp opens this book\'s page directly.</div>'
-      +'<div id="admin-stamp" style="margin:14px 0;text-align:center;"></div>'
-      +'<button onclick="adminDlStamp()" style="padding:8px 16px;background:var(--teal);color:#fff;'
-      +'border:none;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;margin-right:8px;">↓ Download Q Stamp</button>'
-      +'<button onclick="document.getElementById(\'admin-modal\').style.display=\'none\';openBook(\''+book.id+'\')" style="padding:8px 16px;background:var(--brand);color:#fff;'
-      +'border:none;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;">👁 Preview Book Page</button>';
-    /* Generate the Q stamp into the admin result area */
-    setTimeout(function(){
-      var url = pageUrl(book.qcode);
-      if(typeof generateQSeal==='function') generateQSeal('admin-stamp', url, 220);
-    }, 120);
+      +'<br><br><button onclick="dlQR()" style="padding:8px 16px;background:var(--teal);color:#fff;'
+      +'border:none;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;">Download Q Stamp for this author</button>';
     ['a-name','a-email','a-title','a-country','a-year','a-genre','a-price','a-synopsis','a-paypal']
       .forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
   }
 }
 
-/* Download Q stamp from admin panel */
-function adminDlStamp(){
-  var c = document.querySelector('#admin-stamp canvas');
-  if(!c){ toast('Q stamp not ready — wait a moment and try again.'); return; }
-  var a = document.createElement('a');
-  a.download = (S.lastBook ? S.lastBook.qcode : 'qeiran-stamp') + '_QSeal.png';
-  a.href = c.toDataURL('image/png');
-  a.click();
-  toast('Q stamp downloaded — PNG, print ready');
-}
-
-/* == Admin Add Book (full publish) ======================== */
-var _abCoverData = null;
-var _abPdfData = null;
-var _abPdfName = null;
-
-function adminPreviewCover(input) {
-  var file = input.files[0]; if (!file) return;
-  var r = new FileReader();
-  r.onload = function(e) {
-    var img = document.getElementById('ab-cover-preview');
-    img.src = e.target.result;
-    img.style.display = 'block';
-    _abCoverData = e.target.result;
-    document.getElementById('ab-cover-prompt').textContent = '✅ ' + file.name;
-  };
-  r.readAsDataURL(file);
-}
-
-function adminPreviewPdf(input) {
-  var file = input.files[0]; if (!file) return;
-  if (file.size > 15 * 1024 * 1024) { toast('PDF must be under 15 MB.'); input.value = ''; return; }
-  var r = new FileReader();
-  r.onload = function(e) {
-    _abPdfData = e.target.result;
-    _abPdfName = file.name;
-    var nameEl = document.getElementById('ab-pdf-name');
-    nameEl.textContent = '✅ ' + file.name + ' (' + (file.size / 1048576).toFixed(1) + ' MB)';
-    nameEl.style.display = 'block';
-    document.getElementById('ab-pdf-prompt').textContent = 'PDF attached';
-  };
-  r.readAsDataURL(file);
-}
-
-function adminAddBook() {
-  var title = (document.getElementById('ab-title').value || '').trim();
-  var subtitle = (document.getElementById('ab-subtitle').value || '').trim();
-  var author = (document.getElementById('ab-author').value || '').trim();
-  var email = (document.getElementById('ab-email').value || '').trim();
-  var country = (document.getElementById('ab-country').value || 'GB').trim().toUpperCase();
-  var year = parseInt(document.getElementById('ab-year').value) || new Date().getFullYear();
-  var pages = parseInt(document.getElementById('ab-pages').value) || null;
-  var price = parseFloat(document.getElementById('ab-price').value) || 0;
-  var genre = (document.getElementById('ab-genre').value || 'General').trim();
-  var synopsis = (document.getElementById('ab-synopsis').value || '').trim();
-  var paypal = (document.getElementById('ab-paypal').value || '').trim();
-
-  if (!title || !author || !email) { toast('Title, author and email are required.'); return; }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { toast('Valid email required.'); return; }
-
-  var qcode = buildQCode(author, country, year, title, 1);
-  var cut = Math.round(price * 0.12 * 100) / 100;
-  var gets = Math.round((price - cut) * 100) / 100;
-
-  var book = {
-    id: 'ab_' + Date.now(),
-    qcode: qcode,
-    title: title,
-    subtitle: subtitle,
-    author: author,
-    email: email,
-    country: country,
-    genre: genre,
-    language: 'English',
-    edition: 1,
-    year: year,
-    pages: pages,
-    price: price,
-    qeiranCut: cut,
-    authorGets: gets,
-    synopsis: synopsis || 'Added via admin.',
-    coverUrl: _abCoverData || '',
-    backCoverUrl: '',
-    pdfUrl: _abPdfData || '',
-    pdfName: _abPdfName || '',
-    paypal: paypal,
-    wallet: '',
-    currency: '',
-    bio: '',
-    registered: new Date().toISOString(),
-    scans: 0,
-    orders: 0,
-    approved: true,
-    complimentary: price === 0
-  };
-
-  S.books.push(book);
-  S.lastBook = book;
-  persist();
-  if (typeof saveToCloud === 'function') saveToCloud(book);
-  document.getElementById('stat-count').textContent = S.books.length;
-  if (typeof renderCat === 'function') renderCat();
-
-  var res = document.getElementById('ab-result');
-  if (res) {
-    res.style.display = 'block';
-    res.innerHTML = '<strong>Published!</strong> ' + title + ' by ' + author
-      + '<br><strong>QAN:</strong> ' + qcode
-      + (book.pdfUrl ? '<br>📄 PDF attached — buyers can download after payment.' : '<br>⚠️ No PDF — physical fulfilment only.')
-      + (book.coverUrl ? '<br>📷 Cover image set.' : '')
-      + '<div style="margin:10px 0;padding:10px;background:rgba(91,168,154,.08);border-radius:6px;font-size:11px;line-height:1.7;">'
-      + '<strong>Deep link:</strong> <a href="' + pageUrl(book.qcode) + '" target="_blank" style="color:var(--teal);word-break:break-all;">' + pageUrl(book.qcode) + '</a></div>'
-      + '<div id="ab-stamp" style="margin:14px 0;text-align:center;"></div>'
-      + '<button onclick="adminAbDlStamp()" style="padding:8px 16px;background:var(--teal);color:#fff;border:none;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;margin-right:8px;">↓ Download Q Stamp</button>'
-      + '<button onclick="document.getElementById(\'admin-modal\').style.display=\'none\';openBook(\'' + book.id + '\')" style="padding:8px 16px;background:var(--brand);color:#fff;border:none;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;">👁 Preview</button>';
-    setTimeout(function(){
-      if (typeof generateQSeal === 'function') generateQSeal('ab-stamp', pageUrl(book.qcode), 220);
-    }, 120);
-  }
-
-  /* Reset form */
-  ['ab-title','ab-subtitle','ab-author','ab-email','ab-country','ab-year','ab-pages','ab-price','ab-genre','ab-synopsis','ab-paypal'].forEach(function(id){
-    var el = document.getElementById(id); if (el) el.value = '';
-  });
-  _abCoverData = null; _abPdfData = null; _abPdfName = null;
-  var ci = document.getElementById('ab-cover-preview'); if (ci) { ci.style.display = 'none'; ci.src = ''; }
-  document.getElementById('ab-cover-prompt').textContent = '📷 Click to upload cover image';
-  document.getElementById('ab-pdf-prompt').textContent = '📄 Click to upload PDF (max 15 MB)';
-  var pn = document.getElementById('ab-pdf-name'); if (pn) pn.style.display = 'none';
-  document.getElementById('ab-cover-file').value = '';
-  document.getElementById('ab-pdf-file').value = '';
-
-  toast('Book published — live in catalogue');
-}
-
-function adminAbDlStamp() {
-  var c = document.querySelector('#ab-stamp canvas');
-  if (!c) { toast('Q stamp not ready.'); return; }
-  var a = document.createElement('a');
-  a.download = (S.lastBook ? S.lastBook.qcode : 'qeiran-stamp') + '_QSeal.png';
-  a.href = c.toDataURL('image/png');
-  a.click();
-  toast('Q stamp downloaded');
-}
-
 /* == Admin tabs == */
 function adminTab(name) {
-  ['pending','manage','addbook','issue','settings','stoppress'].forEach(function(t){
+  ['pending','issue','stoppress','homepage'].forEach(function(t){
     var panel = document.getElementById('admin-tab-'+t);
     var tab   = document.getElementById('atab-'+t);
     if(panel) panel.style.display = t===name ? 'block' : 'none';
     if(tab){
       tab.style.borderBottomColor = t===name ? '#1A0800' : 'transparent';
-      tab.style.color = t===name ? '#1A0800' : '#888';
+      tab.style.color = t===name ? (t==='stoppress'?'#c0392b':t==='homepage'?'#5B8FA0':'#1A0800') : (t==='stoppress'?'#c0392b':t==='homepage'?'#5B8FA0':'#888');
       tab.style.fontWeight = t===name ? '700' : '600';
     }
   });
   if(name==='pending') adminLoadPending();
-  if(name==='manage') adminLoadManage();
-  if(name==='settings' && typeof adminLoadSettings==='function') adminLoadSettings();
   if(name==='stoppress') adminLoadStopPress();
+  if(name==='homepage') adminLoadBgPreview();
 }
 
 function adminLoadPending() {
@@ -5245,7 +5141,7 @@ function adminLoadPending() {
       +'<div><div style="font-size:12px;font-weight:700;">'+b.title+'</div>'
       +'<div style="font-size:10px;color:#888;">'+b.author+' &mdash; '+b.email+'</div>'
       +'<div style="font-size:10px;color:#aaa;">Submitted '+ago+' hrs ago</div></div>'
-      +'<button onclick="adminApproveSingle(\''+b.id+'\')" '
+      +'<button onclick="adminApproveSingle(''+b.id+'')" '
       +'style="padding:7px 14px;background:#5BA89A;color:#fff;border:none;border-radius:5px;'
       +'font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">Approve</button>'
       +'</div>';
@@ -5274,73 +5170,6 @@ function adminApproveAll() {
   toast('All '+pending.length+' titles approved.');
 }
 
-function adminLoadManage() {
-  var list = document.getElementById('admin-manage-list');
-  if(!list) return;
-  var books = S.books.slice().sort(function(a,b){ return (b.registered||'')>(a.registered||'')?1:-1; });
-  if(books.length===0){
-    list.innerHTML='<div style="font-size:11px;color:#aaa;text-align:center;padding:20px;">No books in catalogue.</div>';
-    return;
-  }
-  var html = '<div style="max-height:50vh;overflow-y:auto;">';
-  books.forEach(function(b){
-    var status = b.approved===false ? '<span style="color:#e67e22;font-weight:600;">Pending</span>' : '<span style="color:#27ae60;">Live</span>';
-    var hasPdf = b.pdfUrl ? '<span style="color:#27ae60;font-size:9px;">PDF</span>' : '<span style="color:#aaa;font-size:9px;">No PDF</span>';
-    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #e8e0d5;">'
-      + '<div style="flex:1;min-width:0;">'
-      + '<div style="font-size:13px;font-weight:600;color:#1A0800;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" '
-      + 'onclick="document.getElementById(\'admin-modal\').style.display=\'none\';openBook(\''+b.id+'\')" title="View book page">'
-      + (b.title||'Untitled') + '</div>'
-      + '<div style="font-size:10px;color:#888;margin-top:2px;">'
-      + (b.author||'Unknown') + ' &middot; ' + status + ' &middot; ' + hasPdf
-      + (b.qcode ? ' &middot; <span style="font-size:9px;color:#aaa;">'+b.qcode+'</span>' : '')
-      + '</div>'
-      + '</div>'
-      + '<div style="display:flex;gap:6px;margin-left:12px;flex-shrink:0;">'
-      + '<button onclick="adminDeleteBook(\''+b.id+'\')" style="padding:5px 10px;background:none;border:1px solid rgba(160,40,20,.3);color:rgba(160,40,20,.7);border-radius:4px;font-size:10px;cursor:pointer;">Delete</button>'
-      + '</div>'
-      + '</div>';
-  });
-  html += '</div>';
-  html += '<div style="font-size:10px;color:#aaa;margin-top:10px;text-align:center;">'+books.length+' book'+(books.length!==1?'s':'')+' total</div>';
-  list.innerHTML = html;
-}
-
-async function adminDeleteBook(id) {
-  var b = S.books.find(function(x){ return x.id===id; });
-  if(!b) return;
-  var ok = confirm('Delete "' + (b.title||'Untitled') + '" permanently?\n\nThis removes it from the catalogue and Supabase. The QAN code cannot be reused.');
-  if(!ok) return;
-
-  /* Remove from Supabase FIRST — verify it worked before removing locally */
-  if (QEIRAN_CONFIG.SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
-    try {
-      var r = await sbFetch('books?id=eq.' + encodeURIComponent(id), {
-        method: 'DELETE',
-        headers: { 'Prefer': 'return=minimal' }
-      });
-      if (!r.ok) {
-        var errText = await r.text().catch(function(){ return 'Unknown error'; });
-        console.error('Supabase delete failed:', r.status, errText);
-        toast('Cloud delete failed (status ' + r.status + '). Check RLS policies.');
-        return;
-      }
-    } catch(e) {
-      console.error('Cloud delete error:', e);
-      toast('Cloud delete failed — network error.');
-      return;
-    }
-  }
-
-  /* Cloud confirmed — now remove locally */
-  S.books = S.books.filter(function(x){ return x.id!==id; });
-  persist();
-  document.getElementById('stat-count').textContent = S.books.length;
-  toast('"' + (b.title||'Untitled') + '" deleted from catalogue and cloud.');
-  adminLoadManage();
-  if(typeof renderCat==='function') renderCat();
-}
-
 /* == Stop Press — stored in localStorage == */
 function adminLoadStopPress() {
   var stopped = localStorage.getItem('qeiran_stop_press')==='1';
@@ -5360,132 +5189,121 @@ function adminToggleStopPress() {
   var stopped = localStorage.getItem('qeiran_stop_press')==='1';
   localStorage.setItem('qeiran_stop_press', stopped ? '0' : '1');
   adminLoadStopPress();
-  if(stopped) {
-    /* Resuming — flush the queue now */
-    var count = autoApproveCheck();
-    toast('System resumed. ' + (count > 0 ? count + ' queued title(s) approved.' : 'Queue empty.'));
-  } else {
-    toast('Stop Press activated. No automatic approvals will process.');
+  toast(stopped ? 'System resumed. Queue will process on next cycle.' : 'Stop Press activated. No automatic emails will send.');
+}
+
+/* ── Homepage Background Upload ── */
+var _pendingBgData = null;
+
+function adminUploadBg(input) {
+  if (!input.files || !input.files[0]) return;
+  var file = input.files[0];
+  var fname = document.getElementById('hp-bg-filename');
+  if(fname) fname.textContent = 'Selected: ' + file.name;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    _pendingBgData = e.target.result;
+    var preview = document.getElementById('hp-bg-preview');
+    var img = document.getElementById('hp-bg-img');
+    if(img) img.src = _pendingBgData;
+    if(preview) preview.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+function adminLoadBgPreview() {
+  var holder = document.getElementById('qeiran-bg-data');
+  var saved = holder ? holder.getAttribute('data-bg') : '';
+  var preview = document.getElementById('hp-bg-preview');
+  var img = document.getElementById('hp-bg-img');
+  if(saved) {
+    if(img) img.src = saved;
+    if(preview) preview.style.display = 'block';
+  } else if(!_pendingBgData) {
+    if(preview) preview.style.display = 'none';
   }
 }
 
+function adminSaveBg() {
+  var data = _pendingBgData;
+  if(!data) {
+    adminBgStatus('No new image selected.', false);
+    return;
+  }
+  /* Bake the image into the hidden holder element */
+  var holder = document.getElementById('qeiran-bg-data');
+  if(holder) holder.setAttribute('data-bg', data);
+  applyHomepageBg();
+  _pendingBgData = null;
+  adminBgStatus('Background applied! Now click "Download Updated File" and upload it to your server so all visitors see it.', true);
+  /* Show download button */
+  var dlBtn = document.getElementById('hp-bg-download');
+  if(dlBtn) dlBtn.style.display = 'block';
+}
+
+function adminDownloadWithBg() {
+  var html = '<!DOCTYPE html>' + document.documentElement.outerHTML;
+  /* Remove admin display state so it loads normally for visitors */
+  html = html.replace(/id="admin-modal" style="display:flex;/g, 'id="admin-modal" style="display:none;');
+  var blob = new Blob([html], {type:'text/html'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'index.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+  adminBgStatus('Downloaded! Upload this index.html to your server to replace the old one.', true);
+}
+
+function adminRemoveBg() {
+  var holder = document.getElementById('qeiran-bg-data');
+  if(holder) holder.setAttribute('data-bg', '');
+  _pendingBgData = null;
+  var preview = document.getElementById('hp-bg-preview');
+  var fname = document.getElementById('hp-bg-filename');
+  if(preview) preview.style.display = 'none';
+  if(fname) fname.textContent = '';
+  document.getElementById('hp-bg-input').value = '';
+  var hp = document.getElementById('home-page');
+  if(hp) {
+    hp.style.backgroundImage = '';
+    hp.style.backgroundSize = '';
+    hp.style.backgroundPosition = '';
+    hp.style.backgroundAttachment = '';
+  }
+  var dlBtn = document.getElementById('hp-bg-download');
+  if(dlBtn) dlBtn.style.display = 'block';
+  adminBgStatus('Background removed. Download the updated file to apply for all visitors.', true);
+}
+
+function adminBgStatus(msg, ok) {
+  var el = document.getElementById('hp-bg-status');
+  if(!el) return;
+  el.style.display = 'block';
+  el.textContent = msg;
+  el.style.background = ok ? 'rgba(91,168,154,.12)' : 'rgba(192,57,43,.08)';
+  el.style.color = ok ? '#2d7d6e' : '#c0392b';
+  setTimeout(function(){ el.style.display='none'; }, 6000);
+}
+
+function applyHomepageBg() {
+  var holder = document.getElementById('qeiran-bg-data');
+  var bg = holder ? holder.getAttribute('data-bg') : '';
+  var hp = document.getElementById('home-page');
+  if(bg && hp) {
+    hp.style.backgroundImage = 'url(' + bg + ')';
+    hp.style.backgroundSize = 'cover';
+    hp.style.backgroundPosition = 'center';
+    hp.style.backgroundAttachment = 'fixed';
+  }
+}
+
+/* Apply saved background on page load */
+document.addEventListener('DOMContentLoaded', function(){ applyHomepageBg(); });
+
 /* Open admin panel on load if needed */
 (function(){
-
-  /* ── Settings tab functions ────────────────────────────── */
-  window.adminLoadSettings = function() {
-    var feeEl = document.getElementById('set-fee');
-    var curEl = document.getElementById('set-fee-current');
-    var ppEl  = document.getElementById('set-paypal');
-    var emEl  = document.getElementById('set-email');
-    if(feeEl) feeEl.value = QEIRAN_CONFIG.REGISTRATION_FEE;
-    if(curEl) curEl.textContent = QEIRAN_CONFIG.REGISTRATION_FEE.toFixed(2);
-    /* Load PayPal handle from localStorage */
-    var savedPP = localStorage.getItem('qeiran_paypal');
-    if(ppEl && savedPP) ppEl.value = savedPP;
-    else if(ppEl) ppEl.value = 'Qeiran';
-    if(emEl) emEl.value = QEIRAN_CONFIG.PLATFORM_EMAIL;
-
-    /* Stats */
-    var statsEl = document.getElementById('admin-stats');
-    if(statsEl) {
-      var total = S.books.length;
-      var approved = S.books.filter(function(b){return b.approved!==false;}).length;
-      var pending = total - approved;
-      var comp = S.books.filter(function(b){return b.complimentary;}).length;
-      statsEl.innerHTML = 'Total books: <strong>'+total+'</strong><br>'
-        +'Approved: <strong>'+approved+'</strong><br>'
-        +'Pending: <strong>'+pending+'</strong><br>'
-        +'Complimentary: <strong>'+comp+'</strong>';
-    }
-  };
-
-  window.adminSaveFee = function() {
-    var val = parseFloat(document.getElementById('set-fee').value);
-    if(!val || val < 0) { toast('Enter a valid fee.'); return; }
-    QEIRAN_CONFIG.REGISTRATION_FEE = val;
-    /* Update fee display in registration form */
-    var feeDisp = document.getElementById('fee-display');
-    if(feeDisp) feeDisp.textContent = val.toFixed(0);
-    document.getElementById('set-fee-current').textContent = val.toFixed(2);
-    localStorage.setItem('qeiran_fee', val);
-    /* Re-render PayPal buttons with new amount on next show */
-    ppRegRendered = false;
-    var container = document.getElementById('paypal-reg-buttons');
-    if(container) container.innerHTML = '';
-    toast('Registration fee updated to £'+val.toFixed(2));
-  };
-
-  window.adminSavePaypal = function() {
-    var handle = document.getElementById('set-paypal').value.trim();
-    if(!handle) { toast('Enter a PayPal handle.'); return; }
-    localStorage.setItem('qeiran_paypal', handle);
-    toast('PayPal link updated to paypal.me/'+handle);
-  };
-
-  window.adminSaveEmail = function() {
-    var em = document.getElementById('set-email').value.trim();
-    if(!em || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em)) { toast('Valid email required.'); return; }
-    QEIRAN_CONFIG.PLATFORM_EMAIL = em;
-    localStorage.setItem('qeiran_email', em);
-    toast('Platform email updated.');
-  };
-
-  window.adminSavePW = function() {
-    var pw = document.getElementById('set-pw').value;
-    if(!pw || pw.length < 4) { toast('Password must be at least 4 characters.'); return; }
-    localStorage.setItem('qeiran_admin_pw', pw);
-    toast('Password updated. Use new password on next login.');
-    document.getElementById('set-pw').value = '';
-  };
-
-  /* Restore saved settings on load */
-  var savedFee = localStorage.getItem('qeiran_fee');
-  if(savedFee) {
-    QEIRAN_CONFIG.REGISTRATION_FEE = parseFloat(savedFee);
-    var feeDisp = document.getElementById('fee-display');
-    if(feeDisp) feeDisp.textContent = parseFloat(savedFee).toFixed(0);
-  }
-  var savedEmail = localStorage.getItem('qeiran_email');
-  if(savedEmail) QEIRAN_CONFIG.PLATFORM_EMAIL = savedEmail;
-  var savedPaypal = localStorage.getItem('qeiran_paypal');
-  /* PayPal handle stored for reference — SDK uses client ID directly */
-
-  /* ── Auto-approval engine ──────────────────────────────── 
-     Runs on every page load. Any book pending > 24 hours
-     gets auto-approved UNLESS Stop Press is active.
-     This is the "human feel" — 24-48hr delay, automatic
-     unless you intervene via Stop Press.
-  ──────────────────────────────────────────────────────── */
-  window.autoApproveCheck = function() {
-    var stopped = localStorage.getItem('qeiran_stop_press') === '1';
-    if (stopped) return 0;
-    var now = Date.now();
-    var TWENTY_FOUR_HRS = 24 * 60 * 60 * 1000;
-    var count = 0;
-    S.books.forEach(function(b) {
-      if (b.approved === false && b.registered) {
-        var age = now - new Date(b.registered).getTime();
-        if (age >= TWENTY_FOUR_HRS) {
-          b.approved = true;
-          count++;
-          if (typeof saveToCloud === 'function') saveToCloud(b);
-        }
-      }
-    });
-    if (count > 0) {
-      persist();
-      if (typeof renderCat === 'function') renderCat();
-      console.log('[Qeiran] Auto-approved ' + count + ' title(s) past 24hr threshold.');
-    }
-    return count;
-  };
-
-  /* Run auto-approval after cloud data loads (slight delay to let loadFromCloud finish) */
-  setTimeout(function(){ if(typeof autoApproveCheck==='function') autoApproveCheck(); }, 3000);
-
-  /* ── End settings & auto-approval ─────────────────────── */
-
   if(window._adminUnlocked){
     var adm = document.getElementById('admin-modal');
     if(adm) adm.style.display='flex';
@@ -5502,17 +5320,14 @@ function adminToggleStopPress() {
 <div id="admin-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;align-items:center;justify-content:center;">
   <div style="background:#f6f1e9;border-radius:12px;padding:28px;width:min(540px,94vw);max-height:88vh;overflow-y:auto;position:relative;">
     <button onclick="document.getElementById('admin-modal').style.display='none'" style="position:absolute;top:14px;right:14px;font-size:22px;background:none;border:none;cursor:pointer;color:#888;">&times;</button>
-    <span onclick="window._adminUnlocked=false;document.getElementById('admin-modal').style.display='none';" style="position:absolute;top:18px;right:44px;font-size:10px;color:#aaa;cursor:pointer;letter-spacing:.5px;">logout</span>
     <h2 style="font-size:17px;font-weight:700;margin-bottom:14px;">QRIB Admin</h2>
 
     <!-- TABS -->
-    <div style="display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid #e0d6c8;flex-wrap:wrap;">
+    <div style="display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid #e0d6c8;">
       <button onclick="adminTab('pending')" id="atab-pending" style="padding:8px 14px;background:none;border:none;border-bottom:3px solid #1A0800;margin-bottom:-2px;font-size:12px;font-weight:700;cursor:pointer;color:#1A0800;">Pending Review</button>
-      <button onclick="adminTab('manage')" id="atab-manage" style="padding:8px 14px;background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-2px;font-size:12px;font-weight:600;cursor:pointer;color:#888;">Manage Books</button>
-      <button onclick="adminTab('addbook')" id="atab-addbook" style="padding:8px 14px;background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-2px;font-size:12px;font-weight:600;cursor:pointer;color:#888;">+ Add Book</button>
       <button onclick="adminTab('issue')" id="atab-issue" style="padding:8px 14px;background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-2px;font-size:12px;font-weight:600;cursor:pointer;color:#888;">Issue Free Code</button>
-      <button onclick="adminTab('settings')" id="atab-settings" style="padding:8px 14px;background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-2px;font-size:12px;font-weight:600;cursor:pointer;color:#888;">Settings</button>
       <button onclick="adminTab('stoppress')" id="atab-stoppress" style="padding:8px 14px;background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-2px;font-size:12px;font-weight:600;cursor:pointer;color:#c0392b;">&#9632; Stop Press</button>
+      <button onclick="adminTab('homepage')" id="atab-homepage" style="padding:8px 14px;background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-2px;font-size:12px;font-weight:600;cursor:pointer;color:#5B8FA0;">&#127912; Homepage</button>
     </div>
 
     <!-- PENDING TAB -->
@@ -5524,58 +5339,8 @@ function adminToggleStopPress() {
       <div id="admin-pending-list"><div style="font-size:11px;color:#aaa;text-align:center;padding:20px;">Loading...</div></div>
     </div>
 
-    <!-- MANAGE BOOKS TAB -->
-    <div id="admin-tab-manage" style="display:none;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-        <div style="font-size:11px;color:#888;">All books in catalogue — click a title to view, or delete.</div>
-        <button onclick="adminLoadManage()" style="padding:6px 14px;background:#2A2420;color:#fff;border:none;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;">Refresh</button>
-      </div>
-      <div id="admin-manage-list"><div style="font-size:11px;color:#aaa;text-align:center;padding:20px;">Loading...</div></div>
-    </div>
-
     <!-- ISSUE FREE CODE TAB -->
     <div id="admin-tab-issue" style="display:none;">
-
-    <!-- ADD BOOK TAB -->
-    <div id="admin-tab-addbook" style="display:none;">
-      <p style="font-size:11px;color:#888;margin-bottom:14px;">Full book creation — cover, PDF, everything. Goes live immediately.</p>
-      <div style="display:flex;flex-direction:column;gap:10px;">
-        <input id="ab-title" type="text" placeholder="Book Title *" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:100%;box-sizing:border-box;">
-        <input id="ab-subtitle" type="text" placeholder="Subtitle" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:100%;box-sizing:border-box;">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-          <input id="ab-author" type="text" placeholder="Author Name *" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;">
-          <input id="ab-email" type="email" placeholder="Author Email *" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;">
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;">
-          <input id="ab-country" type="text" placeholder="Country (GB)" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;">
-          <input id="ab-year" type="number" placeholder="Year" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;">
-          <input id="ab-pages" type="number" placeholder="Pages" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;">
-          <input id="ab-price" type="number" step="0.01" placeholder="Price (£)" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;">
-        </div>
-        <input id="ab-genre" type="text" placeholder="Genre (Fiction, Poetry, Non-Fiction…)" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:100%;box-sizing:border-box;">
-        <textarea id="ab-synopsis" rows="4" placeholder="Synopsis *" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:100%;box-sizing:border-box;resize:vertical;"></textarea>
-        <input id="ab-paypal" type="email" placeholder="Author PayPal Email (for orders)" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:100%;box-sizing:border-box;">
-
-        <!-- COVER UPLOAD -->
-        <div style="border:2px dashed #ccc;border-radius:8px;padding:16px;text-align:center;position:relative;cursor:pointer;" onclick="document.getElementById('ab-cover-file').click()">
-          <div id="ab-cover-prompt" style="font-size:12px;color:#888;">📷 Click to upload cover image</div>
-          <img id="ab-cover-preview" src="" style="display:none;max-height:160px;border-radius:6px;margin-top:6px;">
-          <input type="file" id="ab-cover-file" accept="image/*" onchange="adminPreviewCover(this)" style="display:none;">
-        </div>
-
-        <!-- PDF UPLOAD -->
-        <div style="border:2px dashed #ccc;border-radius:8px;padding:16px;text-align:center;position:relative;cursor:pointer;" onclick="document.getElementById('ab-pdf-file').click()">
-          <div id="ab-pdf-prompt" style="font-size:12px;color:#888;">📄 Click to upload PDF (max 15 MB)</div>
-          <div id="ab-pdf-name" style="display:none;font-size:12px;color:#5BA89A;font-weight:600;margin-top:6px;"></div>
-          <input type="file" id="ab-pdf-file" accept="application/pdf" onchange="adminPreviewPdf(this)" style="display:none;">
-        </div>
-      </div>
-
-      <div id="ab-result" style="display:none;margin-top:14px;background:rgba(91,168,154,.1);border:1px solid rgba(91,168,154,.35);border-radius:7px;padding:13px;font-size:12px;line-height:1.7;"></div>
-      <button onclick="adminAddBook()" style="margin-top:14px;width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;">Publish Book</button>
-    </div>
-
-    <!-- ISSUE FREE CODE (original) -->
       <p style="font-size:11px;color:#888;margin-bottom:14px;">Complimentary registration. No payment. Book goes live immediately with approved status.</p>
       <div style="display:flex;flex-direction:column;gap:10px;">
         <input id="a-name" type="text" placeholder="Author Full Name *" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:100%;box-sizing:border-box;">
@@ -5594,63 +5359,6 @@ function adminToggleStopPress() {
       <button onclick="adminIssueQAN()" style="margin-top:14px;width:100%;padding:13px;background:#5BA89A;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;">Issue QAN Code (Complimentary)</button>
     </div>
 
-    <!-- SETTINGS TAB -->
-    <div id="admin-tab-settings" style="display:none;">
-      <div style="font-size:11px;color:#888;margin-bottom:14px;">Platform settings. Changes apply immediately.</div>
-
-      <!-- Registration Fee -->
-      <div style="margin-bottom:16px;">
-        <div style="font-size:11px;font-weight:700;margin-bottom:6px;">Registration Fee (£)</div>
-        <div style="display:flex;gap:8px;align-items:center;">
-          <input id="set-fee" type="number" step="0.01" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:120px;box-sizing:border-box;">
-          <button onclick="adminSaveFee()" style="padding:9px 14px;background:#5BA89A;color:#fff;border:none;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;">Update</button>
-          <span style="font-size:10px;color:#aaa;">Currently: £<span id="set-fee-current"></span></span>
-        </div>
-      </div>
-
-      <!-- PayPal.me Link -->
-      <div style="margin-bottom:16px;">
-        <div style="font-size:11px;font-weight:700;margin-bottom:6px;">PayPal.me Link</div>
-        <div style="display:flex;gap:8px;align-items:center;">
-          <span style="font-size:12px;color:#888;">paypal.me/</span>
-          <input id="set-paypal" type="text" placeholder="Qeiran" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:160px;box-sizing:border-box;">
-          <button onclick="adminSavePaypal()" style="padding:9px 14px;background:#5BA89A;color:#fff;border:none;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;">Update</button>
-        </div>
-      </div>
-
-      <!-- Platform Email -->
-      <div style="margin-bottom:16px;">
-        <div style="font-size:11px;font-weight:700;margin-bottom:6px;">Platform Email</div>
-        <div style="display:flex;gap:8px;align-items:center;">
-          <input id="set-email" type="email" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:240px;box-sizing:border-box;">
-          <button onclick="adminSaveEmail()" style="padding:9px 14px;background:#5BA89A;color:#fff;border:none;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;">Update</button>
-        </div>
-      </div>
-
-      <!-- Admin Password -->
-      <div style="margin-bottom:16px;padding-top:12px;border-top:1px solid #e0d6c8;">
-        <div style="font-size:11px;font-weight:700;margin-bottom:6px;">Change Admin Password</div>
-        <div style="display:flex;gap:8px;align-items:center;">
-          <input id="set-pw" type="password" placeholder="New password" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:180px;box-sizing:border-box;">
-          <button onclick="adminSavePW()" style="padding:9px 14px;background:#A07810;color:#fff;border:none;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;">Change</button>
-        </div>
-        <div style="font-size:10px;color:#aaa;margin-top:4px;">Saved to browser. Re-enter next visit.</div>
-      </div>
-
-      <!-- Design Controls Shortcut -->
-      <div style="margin-bottom:16px;padding-top:12px;border-top:1px solid #e0d6c8;">
-        <div style="font-size:11px;font-weight:700;margin-bottom:6px;">Design &amp; Appearance</div>
-        <button onclick="document.getElementById('admin-modal').style.display='none';setTimeout(function(){toggleCust();},100);" style="padding:9px 16px;background:#2A2420;color:#fff;border:none;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;">Open Studio Controls ✦</button>
-        <span style="font-size:10px;color:#aaa;margin-left:8px;">Closes admin. Click ® to return.</span>
-      </div>
-
-      <!-- Catalogue Stats -->
-      <div style="padding-top:12px;border-top:1px solid #e0d6c8;">
-        <div style="font-size:11px;font-weight:700;margin-bottom:8px;">Catalogue Overview</div>
-        <div id="admin-stats" style="font-size:11px;color:#666;line-height:1.8;"></div>
-      </div>
-    </div>
-
     <!-- STOP PRESS TAB -->
     <div id="admin-tab-stoppress" style="display:none;text-align:center;padding:16px 0;">
       <div style="font-size:40px;margin-bottom:12px;">&#128750;</div>
@@ -5658,209 +5366,33 @@ function adminToggleStopPress() {
       <div style="font-size:11px;color:#888;margin-bottom:20px;line-height:1.6;max-width:320px;margin-left:auto;margin-right:auto;">When Stop Press is ON, automatic 24hr QAN Code emails are paused. Books queue. Press Resume to release all queued approvals.</div>
       <button id="sp-btn" onclick="adminToggleStopPress()" style="padding:12px 28px;font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;">Loading...</button>
     </div>
+
+    <!-- HOMEPAGE TAB -->
+    <div id="admin-tab-homepage" style="display:none;padding:8px 0;">
+      <p style="font-size:11px;color:#888;margin-bottom:16px;line-height:1.6;">Upload a background image for the homepage. It will cover the full page behind the content. Use a large image (1920×1080 or bigger) for best quality.</p>
+      
+      <div id="hp-bg-preview" style="margin-bottom:14px;border-radius:8px;overflow:hidden;border:1px solid #e0d6c8;display:none;">
+        <img id="hp-bg-img" style="width:100%;max-height:200px;object-fit:cover;display:block;" alt="Current background">
+      </div>
+      
+      <div onclick="document.getElementById('hp-bg-input').click()" style="border:2px dashed #c0b8a8;border-radius:8px;padding:28px 16px;text-align:center;cursor:pointer;transition:border-color .2s;background:rgba(91,143,160,.04);" onmouseover="this.style.borderColor='#5B8FA0'" onmouseout="this.style.borderColor='#c0b8a8'">
+        <div style="font-size:32px;margin-bottom:6px;">&#128247;</div>
+        <div style="font-size:12px;font-weight:600;color:#1A0800;margin-bottom:4px;">Click to choose background image</div>
+        <div style="font-size:10px;color:#888;">JPG, PNG, WebP — recommended 1920×1080+</div>
+      </div>
+      <input type="file" id="hp-bg-input" accept="image/*" style="display:none;" onchange="adminUploadBg(this)">
+      <div id="hp-bg-filename" style="font-size:11px;color:#5B8FA0;margin-top:8px;font-weight:600;"></div>
+      
+      <div style="display:flex;gap:8px;margin-top:16px;">
+        <button onclick="adminSaveBg()" style="flex:1;padding:11px;background:#5BA89A;color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;">Save Background</button>
+        <button onclick="adminRemoveBg()" style="padding:11px 18px;background:rgba(192,57,43,.1);color:#c0392b;border:1px solid rgba(192,57,43,.25);border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;">Remove</button>
+      </div>
+      <div id="hp-bg-status" style="display:none;margin-top:10px;padding:10px;border-radius:6px;font-size:11px;font-weight:600;text-align:center;"></div>
+      <button id="hp-bg-download" onclick="adminDownloadWithBg()" style="display:none;width:100%;margin-top:10px;padding:12px;background:#1A0800;color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.3px;">&#11015; Download Updated File</button>
+      <p id="hp-bg-note" style="font-size:10px;color:#999;margin-top:10px;line-height:1.5;text-align:center;">After downloading, upload the new <b>index.html</b> to your server to replace the old one. Then all visitors will see the background.</p>
+    </div>
   </div>
 </div>
-<!-- ═══════════════════════════════════════════════════════
-     PAYPAL JS SDK — Card-first, PayPal secondary
-═══════════════════════════════════════════════════════════ -->
-<script src="https://www.paypal.com/sdk/js?client-id=AWgaR0lcttqcqzsLi1eM7EskTA39MgGUph_kXACfIxngi2yM_W6fwIIR_D72EqbdK_Y6vMxXwluY-LUw&currency=GBP&enable-funding=card&disable-funding=paylater,venmo"></script>
-<script>
-/* ── PayPal SDK Integration ─────────────────────────────
-   Card payment primary, PayPal secondary.
-   Used for both author registration (£29) and book purchases.
-──────────────────────────────────────────────────────── */
-
-var ppRegRendered = false;
-var ppOrderRendered = false;
-
-/* Registration payment confirmed flag */
-window.regPaymentConfirmed = false;
-
-/* ── Render registration buttons ─────────────────────── */
-function renderRegButtons() {
-  if (ppRegRendered) return;
-  var container = document.getElementById('paypal-reg-buttons');
-  if (!container || typeof paypal === 'undefined') return;
-  ppRegRendered = true;
-
-  paypal.Buttons({
-    style: {
-      layout: 'vertical',
-      color:  'black',
-      shape:  'rect',
-      label:  'pay',
-      height: 40
-    },
-    fundingSource: paypal.FUNDING.CARD,
-    createOrder: function(data, actions) {
-      var fee = QEIRAN_CONFIG.REGISTRATION_FEE || 29;
-      return actions.order.create({
-        purchase_units: [{
-          amount: { value: fee.toFixed(2), currency_code: 'GBP' },
-          description: 'Qeiran Author Registration Fee'
-        }]
-      });
-    },
-    onApprove: function(data, actions) {
-      return actions.order.capture().then(function(details) {
-        window.regPaymentConfirmed = true;
-        document.getElementById('payment-done').style.display = 'block';
-        document.getElementById('payment-error').style.display = 'none';
-        /* Auto-submit registration after short delay */
-        setTimeout(function(){ doRegister(); }, 800);
-      });
-    },
-    onError: function(err) {
-      var el = document.getElementById('payment-error');
-      el.textContent = 'Payment failed — please try again.';
-      el.style.display = 'block';
-    }
-  }).render('#paypal-reg-buttons');
-
-  /* PayPal button (secondary) */
-  paypal.Buttons({
-    style: {
-      layout: 'vertical',
-      color:  'gold',
-      shape:  'rect',
-      label:  'paypal',
-      height: 40
-    },
-    fundingSource: paypal.FUNDING.PAYPAL,
-    createOrder: function(data, actions) {
-      var fee = QEIRAN_CONFIG.REGISTRATION_FEE || 29;
-      return actions.order.create({
-        purchase_units: [{
-          amount: { value: fee.toFixed(2), currency_code: 'GBP' },
-          description: 'Qeiran Author Registration Fee'
-        }]
-      });
-    },
-    onApprove: function(data, actions) {
-      return actions.order.capture().then(function(details) {
-        window.regPaymentConfirmed = true;
-        document.getElementById('payment-done').style.display = 'block';
-        document.getElementById('payment-error').style.display = 'none';
-        setTimeout(function(){ doRegister(); }, 800);
-      });
-    },
-    onError: function(err) {
-      var el = document.getElementById('payment-error');
-      el.textContent = 'Payment failed — please try again.';
-      el.style.display = 'block';
-    }
-  }).render('#paypal-reg-buttons');
-}
-
-/* ── Render order/purchase buttons ───────────────────── */
-function renderOrderButtons() {
-  var container = document.getElementById('paypal-order-buttons');
-  if (!container || typeof paypal === 'undefined') return;
-  container.innerHTML = '';
-  ppOrderRendered = true;
-
-  /* Card button (primary) */
-  paypal.Buttons({
-    style: { layout:'vertical', color:'black', shape:'rect', label:'pay', height:40 },
-    fundingSource: paypal.FUNDING.CARD,
-    createOrder: function(data, actions) {
-      if (!S.orderBook) return;
-      var qty = parseInt(document.getElementById('o-qty').value) || 1;
-      var total = (S.orderBook.price * qty).toFixed(2);
-      return actions.order.create({
-        purchase_units: [{
-          amount: { value: total, currency_code: 'GBP' },
-          description: 'Qeiran Order: ' + S.orderBook.title + ' x' + qty
-        }]
-      });
-    },
-    onApprove: function(data, actions) {
-      return actions.order.capture().then(function(details) { handleOrderCapture(); });
-    },
-    onError: function(err) {
-      var statusEl = document.getElementById('order-status');
-      if(statusEl){ statusEl.textContent = 'Payment failed — please try again.'; statusEl.style.display = 'block'; statusEl.style.color = '#c0392b'; }
-    }
-  }).render('#paypal-order-buttons');
-
-  /* PayPal button (secondary) */
-  paypal.Buttons({
-    style: { layout:'vertical', color:'gold', shape:'rect', label:'paypal', height:40 },
-    fundingSource: paypal.FUNDING.PAYPAL,
-    createOrder: function(data, actions) {
-      if (!S.orderBook) return;
-      var qty = parseInt(document.getElementById('o-qty').value) || 1;
-      var total = (S.orderBook.price * qty).toFixed(2);
-      return actions.order.create({
-        purchase_units: [{
-          amount: { value: total, currency_code: 'GBP' },
-          description: 'Qeiran Order: ' + S.orderBook.title + ' x' + qty
-        }]
-      });
-    },
-    onApprove: function(data, actions) {
-      return actions.order.capture().then(function(details) { handleOrderCapture(); });
-    },
-    onError: function(err) {
-      var statusEl = document.getElementById('order-status');
-      if(statusEl){ statusEl.textContent = 'Payment failed — please try again.'; statusEl.style.display = 'block'; statusEl.style.color = '#c0392b'; }
-    }
-  }).render('#paypal-order-buttons');
-}
-
-/* ── Shared order success handler — delivers PDF ─────── */
-function handleOrderCapture() {
-  var qty   = parseInt(document.getElementById('o-qty').value) || 1;
-  var name  = document.getElementById('o-name')  ? document.getElementById('o-name').value.trim()  : '';
-  var email = document.getElementById('o-email') ? document.getElementById('o-email').value.trim() : '';
-  var total = (S.orderBook.price * qty).toFixed(2);
-  sendOrderEmail(S.orderBook, qty, name, email, total);
-  var bk = S.books.find(function(x){ return x.id === S.orderBook.id; });
-  if(bk){ bk.orders = (bk.orders||0) + 1; persist(); }
-
-  var statusEl = document.getElementById('order-status');
-  /* If PDF exists, show download button */
-  if (S.orderBook.pdfUrl) {
-    statusEl.innerHTML = '<div style="margin-bottom:8px;">✓ Payment confirmed!</div>' +
-      '<a href="' + S.orderBook.pdfUrl + '" download="' + (S.orderBook.pdfName || S.orderBook.title + '.pdf') +
-      '" style="display:inline-block;background:var(--brand);color:#fff;padding:10px 22px;border-radius:6px;font-size:12px;font-weight:700;text-decoration:none;">📥 Download Your Book</a>' +
-      '<div style="font-size:10px;color:var(--dim);margin-top:8px;">A confirmation has also been emailed.</div>';
-    statusEl.style.display = 'block';
-    toast('Payment confirmed — download your book!');
-  } else {
-    statusEl.textContent = '✓ Payment confirmed — the author will fulfil your order.';
-    statusEl.style.display = 'block';
-    toast('Order placed and paid — thank you!');
-    setTimeout(function(){ closeOrder(); }, 3000);
-  }
-}
-
-/* ── Init registration buttons when payment block shows ── */
-var _origCheckOriginal = window.checkOriginal;
-window.checkOriginal = function() {
-  if(typeof _origCheckOriginal === 'function') _origCheckOriginal();
-  else {
-    var checked = document.getElementById('orig-check').checked;
-    var btn = document.getElementById('reg-btn');
-    btn.disabled = !checked;
-    var pb = document.getElementById('paypal-fee-block');
-    if(pb) pb.style.display = checked ? 'block' : 'none';
-    if(checked) liveDupCheck();
-  }
-  /* Render PayPal buttons when block becomes visible */
-  if(document.getElementById('orig-check').checked) {
-    setTimeout(renderRegButtons, 300);
-  }
-};
-
-/* ── Hook into openOrder to render purchase buttons ────── */
-var _origOpenOrder = window.openOrder;
-window.openOrder = function(id) {
-  if(typeof _origOpenOrder === 'function') _origOpenOrder(id);
-  ppOrderRendered = false;
-  setTimeout(renderOrderButtons, 400);
-};
-
-</script>
+<div id="qeiran-bg-data" data-bg="" style="display:none;"></div>
 </body>
 </html>
