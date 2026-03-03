@@ -1132,7 +1132,7 @@ function adminCheckPW(){
       <div class="qan-wordmark">Qeiran</div>
       <h1 class="cat-h">Books</h1>
       <div class="search-wrap">
-        <input type="text" id="cat-q" placeholder="Search title, author, QAN Code, genre…" oninput="renderCat()">
+        <input type="text" id="cat-q" placeholder="Search title, author, QAN Code, genre…" oninput="renderCat()" onkeydown="if(event.key==='Enter'){this.blur();renderCat();}">
         <button onclick="renderCat()">Search</button>
       </div>
     </div>
