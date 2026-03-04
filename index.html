@@ -70,7 +70,7 @@
   --disco:  'Helvetica Neue','Arial Narrow',Arial,sans-serif;
 }
 html{scroll-behavior:smooth}
-body{font-family:var(--narrow);background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden}
+body{font-family:var(--narrow);background-color:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
 button{font-family:var(--sans);cursor:pointer;border:none;outline:none;background:none}
 input,textarea,select{font-family:var(--sans);outline:none}
@@ -144,7 +144,7 @@ body::after{
 /* ─────────────────────────────────────────────────────────
    HOME — HERO
 ───────────────────────────────────────────────────────── */
-#home-page{background:var(--bg)}
+#home-page{background-color:var(--bg)}
 #hero{
   position:relative;min-height:calc(100vh - 54px);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -5494,20 +5494,10 @@ async function adminRemoveBg() {
   if(preview) preview.style.display = 'none';
   if(fname) fname.textContent = '';
   document.getElementById('hp-bg-input').value = '';
-  var hp = document.getElementById('home-page');
-  if(hp) {
-    hp.style.backgroundImage = '';
-    hp.style.backgroundSize = '';
-    hp.style.backgroundPosition = '';
-    hp.style.backgroundAttachment = '';
-    hp.style.backgroundColor = '';
-  }
-  var hero = document.getElementById('hero');
-  if(hero) hero.style.background = '';
-  var dotGrid = document.querySelector('.hero-dot-grid');
-  if(dotGrid) dotGrid.style.opacity = '';
-  var glow = document.querySelector('.hero-glow');
-  if(glow) glow.style.opacity = '';
+  var bgDiv = document.getElementById('qeiran-bg-div');
+  if(bgDiv) bgDiv.remove();
+  var bgStyle = document.getElementById('qeiran-bg-style');
+  if(bgStyle) bgStyle.remove();
   adminBgStatus('Background removed for all visitors.', true);
 }
 
@@ -5522,21 +5512,41 @@ function adminBgStatus(msg, ok) {
 }
 
 function applyHomepageBg(url) {
-  var hp = document.getElementById('home-page');
-  if(url && hp) {
-    hp.style.backgroundImage = 'url(' + url + ')';
-    hp.style.backgroundSize = 'cover';
-    hp.style.backgroundPosition = 'center';
-    hp.style.backgroundAttachment = 'fixed';
-    hp.style.backgroundColor = 'transparent';
-    /* Make hero and its overlays semi-transparent so bg shows through */
-    var hero = document.getElementById('hero');
-    if(hero) hero.style.background = 'rgba(0,0,0,0.45)';
-    var dotGrid = document.querySelector('.hero-dot-grid');
-    if(dotGrid) dotGrid.style.opacity = '0.1';
-    var glow = document.querySelector('.hero-glow');
-    if(glow) glow.style.opacity = '0.3';
+  if (!url) return;
+  /* Remove old injected style if exists */
+  var old = document.getElementById('qeiran-bg-style');
+  if (old) old.remove();
+
+  /* Create a fixed background div behind everything */
+  var bgDiv = document.getElementById('qeiran-bg-div');
+  if (!bgDiv) {
+    bgDiv = document.createElement('div');
+    bgDiv.id = 'qeiran-bg-div';
+    document.body.insertBefore(bgDiv, document.body.firstChild);
   }
+
+  /* Inject stylesheet with !important to override all section backgrounds */
+  var style = document.createElement('style');
+  style.id = 'qeiran-bg-style';
+  style.textContent =
+    '#qeiran-bg-div{position:fixed;top:0;left:0;width:100%;height:100%;'
+    + 'background-image:url(' + url + ');background-size:cover;'
+    + 'background-position:center;background-attachment:fixed;'
+    + 'z-index:0;pointer-events:none;}'
+    + '.page{position:relative;z-index:1;}'
+    + '#home-page{background:rgba(246,241,233,0.62)!important;}'
+    + '#hero{background:rgba(246,241,233,0.45)!important;}'
+    + '.hero-dot-grid{opacity:0.05!important;}'
+    + '.hero-glow{opacity:0.1!important;}'
+    + '#features,#how,.stat-bar{background:rgba(237,232,222,0.6)!important;}'
+    + '#catalogue-page{background:rgba(246,241,233,0.62)!important;}'
+    + '.cat-head{background:rgba(246,241,233,0.65)!important;}'
+    + '.wholesale-bar{background:rgba(237,232,222,0.65)!important;}'
+    + '.cat-body{background:transparent!important;}'
+    + '.book-card{background:rgba(246,241,233,0.88)!important;}'
+    + '#register-page,#book-page{background:rgba(246,241,233,0.65)!important;}'
+    + 'footer,.footer-inner{background:rgba(26,8,0,0.85)!important;}';
+  document.head.appendChild(style);
 }
 
 /* Load homepage bg from Supabase on page load */
