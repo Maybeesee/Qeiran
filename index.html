@@ -5534,17 +5534,17 @@ function applyHomepageBg(url) {
     + 'background-position:center;background-attachment:fixed;'
     + 'z-index:0;pointer-events:none;}'
     + '.page{position:relative;z-index:1;}'
-    + '#home-page{background:rgba(246,241,233,0.62)!important;}'
-    + '#hero{background:rgba(246,241,233,0.45)!important;}'
-    + '.hero-dot-grid{opacity:0.05!important;}'
-    + '.hero-glow{opacity:0.1!important;}'
-    + '#features,#how,.stat-bar{background:rgba(237,232,222,0.6)!important;}'
-    + '#catalogue-page{background:rgba(246,241,233,0.62)!important;}'
-    + '.cat-head{background:rgba(246,241,233,0.65)!important;}'
-    + '.wholesale-bar{background:rgba(237,232,222,0.65)!important;}'
+    + '#home-page{background:rgba(246,241,233,0.5)!important;}'
+    + '#hero{background:rgba(246,241,233,0.35)!important;}'
+    + '.hero-dot-grid{opacity:0.03!important;}'
+    + '.hero-glow{opacity:0.05!important;}'
+    + '#features,#how,.stat-bar{background:rgba(237,232,222,0.5)!important;}'
+    + '#catalogue-page{background:rgba(246,241,233,0.5)!important;}'
+    + '.cat-head{background:rgba(246,241,233,0.55)!important;}'
+    + '.wholesale-bar{background:rgba(237,232,222,0.55)!important;}'
     + '.cat-body{background:transparent!important;}'
-    + '.book-card{background:rgba(246,241,233,0.88)!important;}'
-    + '#register-page,#book-page{background:rgba(246,241,233,0.65)!important;}'
+    + '.book-card{background:rgba(246,241,233,0.85)!important;}'
+    + '#register-page,#book-page{background:rgba(246,241,233,0.55)!important;}'
     + 'footer,.footer-inner{background:rgba(26,8,0,0.85)!important;}';
   document.head.appendChild(style);
 }
@@ -5552,14 +5552,31 @@ function applyHomepageBg(url) {
 /* Load homepage bg from Supabase on page load */
 document.addEventListener('DOMContentLoaded', async function(){
   if (QEIRAN_CONFIG.SUPABASE_URL === 'YOUR_SUPABASE_URL') return;
+
+  /* Try site_settings first */
   try {
     var r = await sbFetch('site_settings?key=eq.homepage_bg&select=value', { method:'GET' });
-    if (!r.ok) return;
-    var data = await r.json();
-    if (data.length > 0 && data[0].value) {
-      applyHomepageBg(data[0].value);
+    if (r.ok) {
+      var data = await r.json();
+      if (data.length > 0 && data[0].value) {
+        applyHomepageBg(data[0].value);
+        return;
+      }
     }
-  } catch(e) { /* silent */ }
+  } catch(e) {}
+
+  /* Fallback: try loading image directly from storage bucket */
+  var exts = ['jpg','jpeg','png','webp'];
+  for (var i = 0; i < exts.length; i++) {
+    var testUrl = QEIRAN_CONFIG.SUPABASE_URL + '/storage/v1/object/public/site-assets/homepage-bg.' + exts[i];
+    try {
+      var t = await fetch(testUrl, { method: 'HEAD' });
+      if (t.ok) {
+        applyHomepageBg(testUrl + '?t=' + Date.now());
+        return;
+      }
+    } catch(e) {}
+  }
 });
 
 /* Open admin panel on load if needed */
@@ -6079,3 +6096,4 @@ window.openOrder = function(id) {
 </script>
 </body>
 </html>
+          
