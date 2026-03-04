@@ -5500,7 +5500,14 @@ async function adminRemoveBg() {
     hp.style.backgroundSize = '';
     hp.style.backgroundPosition = '';
     hp.style.backgroundAttachment = '';
+    hp.style.backgroundColor = '';
   }
+  var hero = document.getElementById('hero');
+  if(hero) hero.style.background = '';
+  var dotGrid = document.querySelector('.hero-dot-grid');
+  if(dotGrid) dotGrid.style.opacity = '';
+  var glow = document.querySelector('.hero-glow');
+  if(glow) glow.style.opacity = '';
   adminBgStatus('Background removed for all visitors.', true);
 }
 
@@ -5521,6 +5528,14 @@ function applyHomepageBg(url) {
     hp.style.backgroundSize = 'cover';
     hp.style.backgroundPosition = 'center';
     hp.style.backgroundAttachment = 'fixed';
+    hp.style.backgroundColor = 'transparent';
+    /* Make hero and its overlays semi-transparent so bg shows through */
+    var hero = document.getElementById('hero');
+    if(hero) hero.style.background = 'rgba(0,0,0,0.45)';
+    var dotGrid = document.querySelector('.hero-dot-grid');
+    if(dotGrid) dotGrid.style.opacity = '0.1';
+    var glow = document.querySelector('.hero-glow');
+    if(glow) glow.style.opacity = '0.3';
   }
 }
 
