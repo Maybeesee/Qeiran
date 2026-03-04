@@ -5308,6 +5308,7 @@ function adminLoadManage() {
       + '</div>'
       + '</div>'
       + '<div style="display:flex;gap:6px;margin-left:12px;flex-shrink:0;">'
+      + '<button onclick="adminEditBook(\''+b.id+'\')" style="padding:5px 10px;background:none;border:1px solid rgba(91,168,154,.4);color:#5BA89A;border-radius:4px;font-size:10px;cursor:pointer;">Edit</button>'
       + '<button onclick="adminDeleteBook(\''+b.id+'\')" style="padding:5px 10px;background:none;border:1px solid rgba(160,40,20,.3);color:rgba(160,40,20,.7);border-radius:4px;font-size:10px;cursor:pointer;">Delete</button>'
       + '</div>'
       + '</div>';
@@ -5350,6 +5351,67 @@ async function adminDeleteBook(id) {
   toast('"' + (b.title||'Untitled') + '" deleted from catalogue and cloud.');
   adminLoadManage();
   if(typeof renderCat==='function') renderCat();
+}
+
+function adminEditBook(id) {
+  var b = S.books.find(function(x){ return x.id===id; });
+  if(!b) return;
+  var list = document.getElementById('admin-manage-list');
+  if(!list) return;
+  var fields = [
+    {key:'title', label:'Title', type:'text'},
+    {key:'subtitle', label:'Subtitle', type:'text'},
+    {key:'author', label:'Author', type:'text'},
+    {key:'email', label:'Email', type:'email'},
+    {key:'genre', label:'Genre', type:'text'},
+    {key:'price', label:'Price (£)', type:'number'},
+    {key:'pages', label:'Pages', type:'number'},
+    {key:'year', label:'Year', type:'number'},
+    {key:'country', label:'Country', type:'text'},
+    {key:'paypal', label:'PayPal Email', type:'email'}
+  ];
+  var html = '<div style="border:2px solid #5BA89A;border-radius:8px;padding:16px;margin-bottom:12px;">'
+    + '<div style="font-size:13px;font-weight:700;margin-bottom:4px;">Editing: ' + (b.title||'Untitled') + '</div>'
+    + '<div style="font-size:9px;color:#aaa;margin-bottom:12px;">QAN: ' + (b.qcode||'—') + ' (cannot be changed)</div>';
+  fields.forEach(function(f){
+    var val = b[f.key]!=null ? b[f.key] : '';
+    html += '<div style="margin-bottom:8px;">'
+      + '<label style="font-size:10px;font-weight:600;display:block;margin-bottom:3px;color:#888;">' + f.label + '</label>'
+      + '<input id="edit-'+f.key+'" type="'+f.type+'" value="'+String(val).replace(/"/g,'&quot;')+'" '
+      + (f.type==='number'?'step="0.01" ':'')
+      + 'style="width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:5px;font-size:12px;box-sizing:border-box;">'
+      + '</div>';
+  });
+  html += '<div style="margin-bottom:8px;">'
+    + '<label style="font-size:10px;font-weight:600;display:block;margin-bottom:3px;color:#888;">Synopsis</label>'
+    + '<textarea id="edit-synopsis" rows="3" style="width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:5px;font-size:12px;box-sizing:border-box;resize:vertical;">'
+    + (b.synopsis||'').replace(/</g,'&lt;') + '</textarea></div>';
+  html += '<div style="display:flex;gap:8px;margin-top:12px;">'
+    + '<button onclick="adminSaveEdit(\''+id+'\')" style="flex:1;padding:10px;background:#5BA89A;color:#fff;border:none;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;">Save Changes</button>'
+    + '<button onclick="adminLoadManage()" style="flex:1;padding:10px;background:#eee;color:#555;border:none;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;">Cancel</button>'
+    + '</div></div>';
+  list.innerHTML = html;
+}
+
+async function adminSaveEdit(id) {
+  var b = S.books.find(function(x){ return x.id===id; });
+  if(!b) return;
+  var fields = ['title','subtitle','author','email','genre','price','pages','year','country','paypal'];
+  fields.forEach(function(key){
+    var el = document.getElementById('edit-'+key);
+    if(!el) return;
+    var v = el.value.trim();
+    if(key==='price') { b.price = parseFloat(v)||0; b.qeiranCut = Math.round(b.price*0.12*100)/100; b.authorGets = Math.round((b.price-b.qeiranCut)*100)/100; }
+    else if(key==='pages'||key==='year') b[key] = parseInt(v)||null;
+    else b[key] = v;
+  });
+  var synEl = document.getElementById('edit-synopsis');
+  if(synEl) b.synopsis = synEl.value.trim();
+  persist();
+  if(typeof saveToCloud==='function') saveToCloud(b);
+  if(typeof renderCat==='function') renderCat();
+  toast('"' + (b.title||'Untitled') + '" updated.');
+  adminLoadManage();
 }
 
 /* == Stop Press — stored in localStorage == */
