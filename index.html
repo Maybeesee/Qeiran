@@ -40,7 +40,7 @@
   --bg2:    #EDE8DE;   /* parchment */
   --surface:#FDFAF5;   /* off-white */
   --border: rgba(42,36,32,.08);
-  --dim:    rgba(42,36,32,.40);
+  --dim:    rgba(42,36,32,.65);
 
   --gold:   #A07810;   /* warm gold */
   --goldf:  #C49830;   /* lighter gold */
@@ -55,6 +55,7 @@
 
   /* legacy aliases — keep so nothing breaks */
   --ink:    #2A2420;
+  --warm-brown: #8B6355;
   --ink2:   #EDE8DE;
   --paper:  #F6F1E9;
   --cream:  #FDFAF5;
@@ -163,7 +164,7 @@ body::after{
   pointer-events:none;top:50%;left:50%;transform:translate(-50%,-50%);
 }
 .eyebrow{
-  font-family:var(--mono);font-size:10px;font-weight:500;
+  font-family:var(--mono);font-size:11px;font-weight:500;
   letter-spacing:.28em;text-transform:uppercase;
   color:var(--warm-brown);margin-bottom:28px;
   display:flex;align-items:center;gap:12px;
@@ -179,7 +180,7 @@ body::after{
 }
 .hero-h .it{font-style:italic;color:var(--teal)}
 .hero-lead{
-  font-size:clamp(14px,1.8vw,17px);font-weight:400;
+  font-size:clamp(15px,2vw,18px);font-weight:400;
   color:var(--dim);max-width:500px;line-height:1.8;
   margin-bottom:48px;
 }
@@ -250,8 +251,8 @@ body::after{
 }
 .feat:hover{background:var(--paper)}
 .feat-ico{font-size:26px;margin-bottom:18px}
-.feat-t{font-size:15px;font-weight:700;margin-bottom:8px;color:var(--ink)}
-.feat-b{font-size:13px;line-height:1.8;color:var(--dim);font-weight:300}
+.feat-t{font-size:16px;font-weight:700;margin-bottom:8px;color:var(--ink)}
+.feat-b{font-size:14px;line-height:1.8;color:var(--dim);font-weight:300}
 
 /* ─────────────────────────────────────────────────────────
    HOME — HOW IT WORKS
@@ -268,8 +269,8 @@ body::after{
   font-family:var(--mono);font-size:36px;font-weight:300;
   color:rgba(232,180,34,.18);padding-top:3px;
 }
-.step-t{font-size:15px;font-weight:700;margin-bottom:6px;letter-spacing:-.01em}
-.step-b{font-size:13px;line-height:1.75;color:var(--dim)}
+.step-t{font-size:16px;font-weight:700;margin-bottom:6px;letter-spacing:-.01em}
+.step-b{font-size:14px;line-height:1.75;color:var(--dim)}
 
 /* ─────────────────────────────────────────────────────────
    HOME — Q-CODE EXPLAINER
@@ -385,8 +386,8 @@ body::after{
 .bc-qr canvas{width:38px!important;height:38px!important;display:block;border-radius:50%}
 
 .bc-info{padding:14px}
-.bc-title{font-size:13px;font-weight:700;margin-bottom:3px;color:var(--ink);line-height:1.3}
-.bc-author{font-size:11px;color:var(--dim);margin-bottom:7px}
+.bc-title{font-size:14px;font-weight:700;margin-bottom:3px;color:var(--ink);line-height:1.3}
+.bc-author{font-size:12px;color:var(--dim);margin-bottom:7px}
 .bc-qcode{
   font-family:var(--mono);font-size:8px;color:var(--brand);
   letter-spacing:.04em;margin-bottom:8px;
@@ -559,7 +560,7 @@ body::after{
 
 .b-title{font-family:var(--narrow);font-size:clamp(22px,4vw,38px);line-height:1.05;margin-bottom:6px;font-weight:300}
 .b-sub{font-size:15px;color:var(--dim);margin-bottom:10px;line-height:1.4}
-.b-author{font-size:14px;color:var(--dim);margin-bottom:14px}
+.b-author{font-size:15px;color:var(--dim);margin-bottom:14px}
 .b-qcode{
   font-family:var(--mono);font-size:11px;color:var(--brand);letter-spacing:.06em;
   padding:9px 13px;background:rgba(0,25,168,.06);border-radius:3px;
@@ -569,8 +570,8 @@ body::after{
   display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;
 }
 .bm{padding:10px 14px;background:rgba(0,25,168,.05);border-radius:4px}
-.bm-l{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:3px}
-.bm-v{font-size:13px;font-weight:600;color:var(--ink)}
+.bm-l{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:3px}
+.bm-v{font-size:14px;font-weight:600;color:var(--ink)}
 .b-price-bar{
   display:flex;align-items:center;justify-content:space-between;
   padding:18px 22px;background:var(--ink);color:var(--paper);
@@ -610,7 +611,7 @@ body::after{
   padding-bottom:7px;border-bottom:1px solid rgba(0,25,168,.1);
   margin-top:40px;
 }
-.b-synopsis{font-size:14px;line-height:1.85;color:var(--dim)}
+.b-synopsis{font-size:15px;line-height:1.85;color:var(--dim)}
 
 .qr-scan-block{
   display:flex;align-items:center;gap:28px;flex-wrap:wrap;
@@ -5762,18 +5763,10 @@ document.addEventListener('DOMContentLoaded', async function(){
     }
   } catch(e) {}
 
-  /* Fallback: try loading image directly from storage bucket */
-  var exts = ['jpg','jpeg','png','webp'];
-  for (var i = 0; i < exts.length; i++) {
-    var testUrl = QEIRAN_CONFIG.SUPABASE_URL + '/storage/v1/object/public/site-assets/homepage-bg.' + exts[i];
-    try {
-      var t = await fetch(testUrl, { method: 'HEAD' });
-      if (t.ok) {
-        applyHomepageBg(testUrl + '?t=' + Date.now());
-        return;
-      }
-    } catch(e) {}
-  }
+  /* Fallback: try loading image directly (test with an img element instead of HEAD requests) */
+  var img = new Image();
+  img.onload = function(){ applyHomepageBg(img.src); };
+  img.src = QEIRAN_CONFIG.SUPABASE_URL + '/storage/v1/object/public/site-assets/homepage-bg.jpg?t=' + Date.now();
 });
 
 /* Open admin panel on load if needed */
@@ -6092,7 +6085,21 @@ document.addEventListener('DOMContentLoaded', async function(){
 <!-- ═══════════════════════════════════════════════════════
      PAYPAL JS SDK — Card-first, PayPal secondary
 ═══════════════════════════════════════════════════════════ -->
-<script src="https://www.paypal.com/sdk/js?client-id=AWgaR0lcttqcqzsLi1eM7EskTA39MgGUph_kXACfIxngi2yM_W6fwIIR_D72EqbdK_Y6vMxXwluY-LUw&currency=GBP&enable-funding=card&disable-funding=paylater,venmo"></script>
+<script>
+/* ── PayPal SDK — deferred loading ── */
+var _ppSdkLoaded = false;
+var _ppSdkLoading = false;
+function loadPayPalSDK(callback) {
+  if (_ppSdkLoaded) { if(callback) callback(); return; }
+  if (_ppSdkLoading) { setTimeout(function(){ loadPayPalSDK(callback); }, 200); return; }
+  _ppSdkLoading = true;
+  var s = document.createElement('script');
+  s.src = 'https://www.paypal.com/sdk/js?client-id=AWgaR0lcttqcqzsLi1eM7EskTA39MgGUph_kXACfIxngi2yM_W6fwIIR_D72EqbdK_Y6vMxXwluY-LUw&currency=GBP&enable-funding=card&disable-funding=paylater,venmo';
+  s.onload = function(){ _ppSdkLoaded = true; _ppSdkLoading = false; if(callback) callback(); };
+  s.onerror = function(){ _ppSdkLoading = false; };
+  document.head.appendChild(s);
+}
+</script>
 <script>
 /* ── PayPal SDK Integration ─────────────────────────────
    Card payment primary, PayPal secondary.
@@ -6108,6 +6115,7 @@ window.regPaymentConfirmed = false;
 /* ── Render registration buttons ─────────────────────── */
 function renderRegButtons() {
   if (ppRegRendered) return;
+  if (typeof paypal === 'undefined') { loadPayPalSDK(renderRegButtons); return; }
   var container = document.getElementById('paypal-reg-buttons');
   if (!container || typeof paypal === 'undefined') return;
   ppRegRendered = true;
@@ -6184,7 +6192,8 @@ function renderRegButtons() {
 /* ── Render order/purchase buttons ───────────────────── */
 function renderOrderButtons() {
   var container = document.getElementById('paypal-order-buttons');
-  if (!container || typeof paypal === 'undefined') return;
+  if (!container) return;
+  if (typeof paypal === 'undefined') { loadPayPalSDK(renderOrderButtons); return; }
   container.innerHTML = '';
   ppOrderRendered = true;
 
