@@ -1481,6 +1481,7 @@ function adminCheckPW(){
     <p class="o-sub" id="o-bname"></p>
     <div class="field" style="margin-bottom:10px;"><label style="font-size:11px;">Your Name</label><input id="o-name" type="text" placeholder="Full name" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;background:var(--surface);color:var(--fg);"></div>
     <div class="field" style="margin-bottom:10px;"><label style="font-size:11px;">Your Email</label><input id="o-email" type="email" placeholder="your@email.com" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;background:var(--surface);color:var(--fg);"></div>
+    <div id="o-pdf-note" style="display:none;background:rgba(91,168,154,.1);border:1px solid rgba(91,168,154,.25);border-radius:6px;padding:10px 14px;margin-bottom:10px;font-size:11px;color:#2d7d6e;line-height:1.6;text-align:center;">📥 This is a digital book. After payment you'll get an instant PDF download.</div>
     <div class="qty-row">
       <span class="qty-label">Quantity:</span>
       <input type="number" class="qty-inp" id="o-qty" value="1" min="1" max="1000" oninput="updTotal()">
@@ -4387,8 +4388,8 @@ function openBook(id) {
           <div class="bm"><div class="bm-l">Country</div><div class="bm-v">${b.country}</div></div>
         </div>
         <div class="b-price-bar">
-          <div><div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:4px">Per Copy</div><div class="b-price">£${b.price.toFixed(2)}</div></div>
-          ${b.pdfUrl?`<button class="b-order-btn" onclick="openOrder('${b.id}')">Order Now</button>`:''}
+          <div><div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:4px">${b.pdfUrl?'PDF Download':'Per Copy'}</div><div class="b-price">£${b.price.toFixed(2)}</div></div>
+          ${b.pdfUrl?`<button class="b-order-btn" onclick="openOrder('${b.id}')">Buy &amp; Download PDF</button>`:`<button class="b-order-btn" onclick="openOrder('${b.id}')">Order Physical Copy</button>`}
           ${window._adminUnlocked && b.approved===false?'<button onclick="approveBook(\''+b.id+'\')" style="padding:8px 16px;background:var(--teal);color:#fff;border:none;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;margin-right:8px;">Approve &amp; Issue QAN</button>':''}
           ${window._adminUnlocked?`<button class="b-delete-btn" onclick="showDeleteConfirm('${b.id}')">Remove this book…</button>
           <div class="del-confirm" id="del-confirm-${b.id}">
@@ -4470,8 +4471,24 @@ function openOrder(id) {
   const b = S.books.find(x => x.id === id);
   if (!b) return;
   S.orderBook = b;
+  var isPdf = !!(b.pdfUrl);
   document.getElementById('o-bname').textContent = b.title + ' by ' + b.author;
   document.getElementById('o-qty').value = 1;
+
+  /* Adjust modal for PDF vs physical */
+  var qtyRow = document.querySelector('.qty-row');
+  var orderH = document.querySelector('.o-h');
+  var pdfNote = document.getElementById('o-pdf-note');
+  if (isPdf) {
+    if(qtyRow) qtyRow.style.display = 'none';
+    if(orderH) orderH.textContent = 'Buy & Download PDF';
+    if(pdfNote) pdfNote.style.display = 'block';
+  } else {
+    if(qtyRow) qtyRow.style.display = 'flex';
+    if(orderH) orderH.textContent = 'Order Physical Copy';
+    if(pdfNote) pdfNote.style.display = 'none';
+  }
+
   updTotal();
   document.getElementById('order-modal').classList.add('open');
 }
@@ -4481,6 +4498,8 @@ function closeOrder() {
   if(st){ st.style.display = 'none'; st.style.color = 'var(--teal)'; }
   var ob = document.getElementById('paypal-order-buttons');
   if(ob) ob.innerHTML = '';
+  var pn = document.getElementById('o-pdf-note');
+  if(pn) pn.style.display = 'none';
   ppOrderRendered = false;
 }
 function updTotal() {
@@ -5608,7 +5627,10 @@ function applyHomepageBg(url) {
     + '.book-card{background:rgba(246,241,233,0.85)!important;}'
     + '#register-page,#book-page{background:rgba(246,241,233,0.55)!important;}'
     + 'footer,.footer-inner{background:rgba(26,8,0,0.85)!important;}'
-    + '#caveat-bar{background:rgba(237,232,222,0.92)!important;position:relative;z-index:1;}';
+    + '#caveat-bar{background:rgba(237,232,222,0.92)!important;position:relative;z-index:1;}'
+    + '.hero-h,.hero-lead,.sec-h,.eyebrow,.feat-t,.feat-b,.step-t,.step-b,.cat-h{text-shadow:0 1px 3px rgba(255,255,255,0.8)!important;color:#1A0800!important;}'
+    + '.hero-lead,.feat-b,.step-b{color:#333!important;}'
+    + '.stat-n,.stat-l{text-shadow:0 1px 2px rgba(255,255,255,0.6)!important;}';
   document.head.appendChild(style);
 }
 
