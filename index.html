@@ -5704,6 +5704,23 @@ document.addEventListener('DOMContentLoaded', async function(){
 
     <!-- ISSUE FREE CODE TAB -->
     <div id="admin-tab-issue" style="display:none;">
+      <p style="font-size:11px;color:#888;margin-bottom:14px;">Complimentary registration. No payment. Book goes live immediately with approved status.</p>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <input id="a-name" type="text" placeholder="Author Full Name *" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:100%;box-sizing:border-box;">
+        <input id="a-email" type="email" placeholder="Author Email *" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:100%;box-sizing:border-box;">
+        <input id="a-title" type="text" placeholder="Book Title *" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:100%;box-sizing:border-box;">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <input id="a-country" type="text" placeholder="Country (GB)" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;">
+          <input id="a-year" type="number" placeholder="Year" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;">
+          <input id="a-price" type="number" placeholder="Price (£)" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;">
+        </div>
+        <input id="a-genre" type="text" placeholder="Genre" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:100%;box-sizing:border-box;">
+        <textarea id="a-synopsis" rows="3" placeholder="Synopsis" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:100%;box-sizing:border-box;resize:vertical;"></textarea>
+        <input id="a-paypal" type="email" placeholder="Author PayPal Email" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:100%;box-sizing:border-box;">
+      </div>
+      <div id="admin-result" style="display:none;margin-top:14px;background:rgba(91,168,154,.1);border:1px solid rgba(91,168,154,.35);border-radius:7px;padding:13px;font-size:12px;line-height:1.7;"></div>
+      <button onclick="adminIssueQAN()" style="margin-top:14px;width:100%;padding:13px;background:#5BA89A;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;">Issue QAN Code (Complimentary)</button>
+    </div>
 
     <!-- ADD BOOK TAB -->
     <div id="admin-tab-addbook" style="display:none;">
@@ -5742,25 +5759,6 @@ document.addEventListener('DOMContentLoaded', async function(){
 
       <div id="ab-result" style="display:none;margin-top:14px;background:rgba(91,168,154,.1);border:1px solid rgba(91,168,154,.35);border-radius:7px;padding:13px;font-size:12px;line-height:1.7;"></div>
       <button onclick="adminAddBook()" style="margin-top:14px;width:100%;padding:13px;background:var(--brand);color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;">Publish Book</button>
-    </div>
-
-    <!-- ISSUE FREE CODE (original) -->
-      <p style="font-size:11px;color:#888;margin-bottom:14px;">Complimentary registration. No payment. Book goes live immediately with approved status.</p>
-      <div style="display:flex;flex-direction:column;gap:10px;">
-        <input id="a-name" type="text" placeholder="Author Full Name *" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:100%;box-sizing:border-box;">
-        <input id="a-email" type="email" placeholder="Author Email *" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:100%;box-sizing:border-box;">
-        <input id="a-title" type="text" placeholder="Book Title *" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:100%;box-sizing:border-box;">
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
-          <input id="a-country" type="text" placeholder="Country (GB)" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;">
-          <input id="a-year" type="number" placeholder="Year" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;">
-          <input id="a-price" type="number" placeholder="Price (£)" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;">
-        </div>
-        <input id="a-genre" type="text" placeholder="Genre" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:100%;box-sizing:border-box;">
-        <textarea id="a-synopsis" rows="3" placeholder="Synopsis" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:100%;box-sizing:border-box;resize:vertical;"></textarea>
-        <input id="a-paypal" type="email" placeholder="Author PayPal Email" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:100%;box-sizing:border-box;">
-      </div>
-      <div id="admin-result" style="display:none;margin-top:14px;background:rgba(91,168,154,.1);border:1px solid rgba(91,168,154,.35);border-radius:7px;padding:13px;font-size:12px;line-height:1.7;"></div>
-      <button onclick="adminIssueQAN()" style="margin-top:14px;width:100%;padding:13px;background:#5BA89A;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;">Issue QAN Code (Complimentary)</button>
     </div>
 
     <!-- SETTINGS TAB -->
