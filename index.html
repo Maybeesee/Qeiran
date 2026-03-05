@@ -1171,7 +1171,6 @@ function adminCheckPW(){
       <button class="fb" onclick="setFilter('Fiction',this)">Fiction</button>
       <button class="fb" onclick="setFilter('Non-Fiction',this)">Non-Fiction</button>
       <button class="fb" onclick="setFilter('Poetry',this)">Poetry</button>
-      <button class="fb" onclick="setFilter('Health',this)">Health</button>
       <button class="fb" onclick="setFilter('Art',this)">Art</button>
       <button class="fb" onclick="setFilter('Science',this)">Science</button>
       <button class="fb" onclick="setFilter('Philosophy',this)">Philosophy</button>
@@ -4631,23 +4630,27 @@ function doOrder() {
 
 async function sendOrderEmail(book, qty, buyerName, buyerEmail, total) {
   if (QEIRAN_CONFIG.FORMSPREE_ORDER === 'YOUR_ORDER_FORM_ID') return;
+  var isPdf = !!(book.pdfUrl);
   try {
     await fetch('https://formspree.io/f/' + QEIRAN_CONFIG.FORMSPREE_ORDER, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify({
-        _subject: 'New Order — ' + book.title + ' × ' + qty,
+        _subject: (isPdf ? 'PDF Sale' : 'New Order') + ' — ' + book.title + (isPdf ? '' : ' × ' + qty),
         _replyto: buyerEmail || QEIRAN_CONFIG.PLATFORM_EMAIL,
         book_title:   book.title,
         book_author:  book.author,
         qan_code:     book.qcode,
-        quantity:     qty,
+        quantity:     isPdf ? '1 (PDF download)' : qty,
         total:        '£' + total,
         buyer_name:   buyerName  || 'Not provided',
         buyer_email:  buyerEmail || 'Not provided',
         author_email: book.email,
         paypal:       book.paypal || 'N/A',
-        message: 'A buyer has placed an order through Qeiran. Please fulfil and confirm payment via PayPal.',
+        type:         isPdf ? 'PDF download — delivered automatically' : 'Physical copy — author to arrange delivery',
+        message:      isPdf
+          ? 'A buyer has purchased and downloaded the PDF of your book through Qeiran.'
+          : 'A buyer has placed an order for a physical copy through Qeiran. Please arrange delivery and confirm payment via PayPal.',
       }),
     });
   } catch(e) {}
@@ -4775,13 +4778,13 @@ async function init() {
   /* Check deep link against local/cached data first (instant) */
   var deepLinked = checkDeepLink();
 
-  /* Load live catalogue from cloud */
-  var cloudLoaded = await loadFromCloud();
+  /* Render catalogue immediately from cache */
+  if (S.books.length > 0 && typeof renderCat === 'function') renderCat();
 
-  /* If cloud loaded fresh data and deep link did not match local, retry */
-  if (!deepLinked && cloudLoaded) {
-    deepLinked = checkDeepLink();
-  }
+  /* Load live catalogue from cloud IN BACKGROUND — don't block page */
+  loadFromCloud().then(function(cloudLoaded) {
+    if (!deepLinked && cloudLoaded) checkDeepLink();
+  });
 
   /* Demo books so the catalogue is not empty on first load */
   if (S.books.length === 0) {
@@ -5594,7 +5597,10 @@ function adminUploadBg(input) {
 }
 
 async function adminLoadBgPreview() {
-  /* Fetch current bg URL from Supabase site_settings */
+  /* Preview is now set by the DOMContentLoaded loader — just check if it's already there */
+  var img = document.getElementById('hp-bg-img');
+  if(img && img.src) return;
+  /* If not loaded yet, fetch once */
   if (QEIRAN_CONFIG.SUPABASE_URL === 'YOUR_SUPABASE_URL') return;
   try {
     var r = await sbFetch('site_settings?key=eq.homepage_bg&select=value', { method:'GET' });
@@ -5602,11 +5608,10 @@ async function adminLoadBgPreview() {
     var data = await r.json();
     if (data.length > 0 && data[0].value) {
       var preview = document.getElementById('hp-bg-preview');
-      var img = document.getElementById('hp-bg-img');
       if(img) img.src = data[0].value;
       if(preview) preview.style.display = 'block';
     }
-  } catch(e) { /* silent */ }
+  } catch(e) {}
 }
 
 async function adminSaveBg() {
@@ -5751,20 +5756,22 @@ function applyHomepageBg(url) {
 /* Load homepage bg from Supabase on page load */
 document.addEventListener('DOMContentLoaded', async function(){
   if (QEIRAN_CONFIG.SUPABASE_URL === 'YOUR_SUPABASE_URL') return;
-
-  /* Try site_settings first */
   try {
     var r = await sbFetch('site_settings?key=eq.homepage_bg&select=value', { method:'GET' });
     if (r.ok) {
       var data = await r.json();
       if (data.length > 0 && data[0].value) {
         applyHomepageBg(data[0].value);
+        /* Also set admin preview if panel exists */
+        var img = document.getElementById('hp-bg-img');
+        var preview = document.getElementById('hp-bg-preview');
+        if(img) img.src = data[0].value;
+        if(preview) preview.style.display = 'block';
         return;
       }
     }
   } catch(e) {}
-
-  /* Fallback: try loading image directly (test with an img element instead of HEAD requests) */
+  /* Fallback: try loading image directly */
   var img = new Image();
   img.onload = function(){ applyHomepageBg(img.src); };
   img.src = QEIRAN_CONFIG.SUPABASE_URL + '/storage/v1/object/public/site-assets/homepage-bg.jpg?t=' + Date.now();
@@ -6258,19 +6265,20 @@ function handleOrderCapture() {
   if(bk){ bk.orders = (bk.orders||0) + 1; persist(); }
 
   var statusEl = document.getElementById('order-status');
-  /* If PDF exists, show download button */
   if (S.orderBook.pdfUrl) {
-    statusEl.innerHTML = '<div style="margin-bottom:8px;">✓ Payment confirmed!</div>' +
-      '<a href="' + S.orderBook.pdfUrl + '" download="' + (S.orderBook.pdfName || S.orderBook.title + '.pdf') +
-      '" style="display:inline-block;background:var(--brand);color:#fff;padding:10px 22px;border-radius:6px;font-size:12px;font-weight:700;text-decoration:none;">📥 Download Your Book</a>' +
-      '<div style="font-size:10px;color:var(--dim);margin-top:8px;">A confirmation has also been emailed.</div>';
+    statusEl.innerHTML = '<div style="margin-bottom:10px;font-size:14px;">✓ Payment confirmed!</div>'
+      + '<a href="' + S.orderBook.pdfUrl + '" download="' + (S.orderBook.pdfName || S.orderBook.title + '.pdf')
+      + '" style="display:inline-block;background:var(--brand);color:#fff;padding:12px 26px;border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;">📥 Download Your Book</a>'
+      + '<div style="font-size:10px;color:var(--dim);margin-top:8px;">A confirmation has been emailed to you.</div>'
+      + '<button onclick="closeOrder();go(\'home\')" style="margin-top:14px;padding:10px 22px;background:var(--bg2);color:var(--fg);border:1px solid var(--border);border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;">← Back to Homepage</button>';
     statusEl.style.display = 'block';
     toast('Payment confirmed — download your book!');
   } else {
-    statusEl.textContent = '✓ Payment confirmed — the author will fulfil your order.';
+    statusEl.innerHTML = '<div style="margin-bottom:6px;font-size:14px;">✓ Payment confirmed!</div>'
+      + '<div style="font-size:12px;color:var(--dim);line-height:1.6;">The author has been notified and will arrange delivery. A confirmation has been emailed to you.</div>'
+      + '<button onclick="closeOrder();go(\'home\')" style="margin-top:14px;padding:10px 22px;background:var(--bg2);color:var(--fg);border:1px solid var(--border);border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;">← Back to Homepage</button>';
     statusEl.style.display = 'block';
     toast('Order placed and paid — thank you!');
-    setTimeout(function(){ closeOrder(); }, 3000);
   }
 }
 
