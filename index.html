@@ -42,7 +42,7 @@
   --border: rgba(42,36,32,.08);
   --dim:    rgba(42,36,32,.65);
 
-  --gold:   #110804;   /* near-black brown */
+  --gold:   #3A2210;   /* dark chocolate brown — visible */
   --goldf:  #C49830;   /* lighter gold */
   --teal:   #5BA89A;   /* soft turquoise-green — primary */
   --teal-l: #4A9488;
@@ -568,13 +568,13 @@ body::after{
 .b-author{font-size:16px;color:var(--dim);margin-bottom:14px}
 .b-qcode{
   font-family:var(--mono);font-size:11px;color:var(--brand);letter-spacing:.06em;
-  padding:9px 13px;background:rgba(0,25,168,.06);border-radius:3px;
+  padding:9px 13px;background:rgba(58,34,16,.06);border-radius:3px;
   display:inline-block;margin-bottom:18px;
 }
 .b-meta{
   display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;
 }
-.bm{padding:10px 14px;background:rgba(0,25,168,.05);border-radius:4px}
+.bm{padding:10px 14px;background:rgba(58,34,16,.05);border-radius:4px}
 .bm-l{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:3px}
 .bm-v{font-size:14px;font-weight:600;color:var(--ink)}
 .b-price-bar{
@@ -613,7 +613,7 @@ body::after{
 .b-sec-label{
   font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
   color:var(--brand);margin-bottom:14px;
-  padding-bottom:7px;border-bottom:1px solid rgba(0,25,168,.1);
+  padding-bottom:7px;border-bottom:1px solid rgba(58,34,16,.1);
   margin-top:40px;
 }
 .b-synopsis{font-size:16px;line-height:1.85;color:var(--dim)}
@@ -778,7 +778,7 @@ body::after{
 }
 .o-total{
   display:flex;justify-content:space-between;align-items:center;
-  padding:15px;background:rgba(0,25,168,.06);border-radius:5px;margin-bottom:22px;
+  padding:15px;background:rgba(58,34,16,.06);border-radius:5px;margin-bottom:22px;
 }
 .o-total-l{font-size:12px;color:var(--dim)}
 .o-total-v{font-family:var(--narrow);font-size:22px;color:var(--brand);font-weight:300}
@@ -787,7 +787,7 @@ body::after{
   padding:13px;border-radius:5px;border:1.5px solid rgba(0,0,0,.1);
   background:var(--surface);cursor:pointer;text-align:center;transition:all .18s;
 }
-.pm.on{border-color:var(--brand);background:rgba(0,25,168,.05)}
+.pm.on{border-color:var(--brand);background:rgba(58,34,16,.05)}
 .pm-ico{font-size:20px;display:block;margin-bottom:5px}
 .pm-l{font-size:11px;font-weight:600;color:var(--dim)}
 .o-place{
@@ -1003,27 +1003,35 @@ body::after{
 <body>
 <!-- ── Q Loading Overlay ──────────────────────────────────── -->
 <div id="q-loader" style="position:fixed;inset:0;z-index:99999;background:#EDE8DE;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:opacity .6s ease;">
-  <svg viewBox="-2 -4 40 46" xmlns="http://www.w3.org/2000/svg" style="width:120px;height:120px;">
-    <text x="0" y="32" font-family="NovaSolid" font-size="42" fill="#110804">Q</text>
-  </svg>
-  <div style="margin-top:24px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:rgba(17,8,4,.35);">Loading catalogue</div>
+  <div id="q-loader-icon" style="width:120px;height:120px;">
+    <svg viewBox="-2 -4 40 46" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+      <text x="0" y="32" font-family="NovaSolid" font-size="42" fill="#3A2210">Q</text>
+    </svg>
+  </div>
+  <div style="margin-top:24px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:rgba(58,34,16,.3);">Loading catalogue</div>
 </div>
 <style>
-@keyframes qPulseRotate{
-  0%{opacity:.3;transform:scale(.92) rotate(0deg)}
-  50%{opacity:1;transform:scale(1.08) rotate(180deg)}
-  100%{opacity:.3;transform:scale(.92) rotate(360deg)}
+@keyframes qSpin{
+  from{transform:rotate(0deg)}
+  to{transform:rotate(360deg)}
 }
-#q-loader svg{animation:qPulseRotate 2s ease-in-out infinite;transform-origin:center center}
+@keyframes qBreath{
+  0%,100%{opacity:.35}
+  50%{opacity:1}
+}
+#q-loader-icon{
+  animation:qSpin 2.5s linear infinite, qBreath 2.5s ease-in-out infinite;
+  will-change:transform,opacity;
+}
 #q-loader.q-done{opacity:0;pointer-events:none}
 </style>
 <div id="admin-pw-modal" onclick="if(event.target===this){this.style.display='none';}" style="display:none;position:fixed;inset:0;background:#0a0604;z-index:10000;align-items:center;justify-content:center;">
   <div style="text-align:center;">
-    <svg viewBox="-1 -2 34 38" xmlns="http://www.w3.org/2000/svg" style="width:80px;height:80px;margin-bottom:30px;"><text x="1" y="29" font-family="NovaSolid" font-size="36" fill="#110804">Q</text></svg>
+    <svg viewBox="-1 -2 34 38" xmlns="http://www.w3.org/2000/svg" style="width:80px;height:80px;margin-bottom:30px;"><text x="1" y="29" font-family="NovaSolid" font-size="36" fill="#3A2210">Q</text></svg>
     <div>
       <input id="admin-pw-input" type="password" autocomplete="off"
         onkeydown="if(event.key==='Enter')adminCheckPW()"
-        style="width:200px;padding:12px 16px;border:none;border-radius:0;font-size:15px;background:transparent;color:#110804;text-align:center;outline:none;border-bottom:1px solid rgba(160,120,16,.2);letter-spacing:3px;box-sizing:border-box;">
+        style="width:200px;padding:12px 16px;border:none;border-radius:0;font-size:15px;background:transparent;color:#3A2210;text-align:center;outline:none;border-bottom:1px solid rgba(58,34,16,.25);letter-spacing:3px;box-sizing:border-box;">
       <div id="admin-pw-error" style="display:none;height:2px;background:#c0392b;margin-top:-1px;width:200px;"></div>
     </div>
   </div>
@@ -1064,7 +1072,7 @@ function adminCheckPW(){
 <!-- ═══ NAV ═══════════════════════════════════════════════ -->
 <nav id="nav">
   <div class="brand" onclick="go('catalogue')">
-    <span class="brand-b"><svg class="brand-q-mark" viewBox="-2 -4 40 46" xmlns="http://www.w3.org/2000/svg"><text x="0" y="32" font-family="NovaSolid" font-size="42" fill="#110804">Q</text></svg><span style="font-weight:200;color:#2A2420;letter-spacing:.04em;">eiran</span><span style="font-size:10px;font-weight:400;color:#888;vertical-align:super;margin-left:2px;">™</span></span>
+    <span class="brand-b"><svg class="brand-q-mark" viewBox="-2 -4 40 46" xmlns="http://www.w3.org/2000/svg"><text x="0" y="32" font-family="NovaSolid" font-size="42" fill="#3A2210">Q</text></svg><span style="font-weight:200;color:#2A2420;letter-spacing:.04em;">eiran</span><span style="font-size:10px;font-weight:400;color:#888;vertical-align:super;margin-left:2px;">™</span></span>
   </div>
   <!-- brand sub removed from nav, shown in page header instead -->
   <div class="nav-mid">
@@ -1417,7 +1425,7 @@ function adminCheckPW(){
         <button class="dup-view-btn" onclick="viewDuplicate()">View existing listing →</button>
       </div>
     </div>
-    <div id="paypal-fee-block" style="display:none;background:rgba(0,25,168,.04);border:1px solid rgba(0,25,168,.15);border-radius:8px;padding:16px 18px;margin-bottom:14px;text-align:center;">
+    <div id="paypal-fee-block" style="display:none;background:rgba(58,34,16,.04);border:1px solid rgba(58,34,16,.15);border-radius:8px;padding:16px 18px;margin-bottom:14px;text-align:center;">
       <div style="font-size:12px;font-weight:700;color:var(--fg);margin-bottom:6px;">Step 1 &mdash; Pay the &pound;<span id="fee-display">29</span> Registration Fee</div>
       <div style="font-size:11px;color:var(--dim);margin-bottom:12px;line-height:1.6;">Pay securely by card or PayPal. Your registration will be submitted automatically after payment.</div>
       <div id="paypal-reg-buttons" style="max-width:340px;margin:0 auto;"></div>
@@ -3713,7 +3721,7 @@ function drawQR(canvas, matrix, size, canvasPx) {
   // No special cases for finder patterns, timing strips, or alignment.
   // They are ALL just circles. Same colour. Same size.
   // This is what makes the field look uniform.
-  const NAVY = '#0019A8';
+  const NAVY = '#110804';
   const RED  = '#CC1100';
 
   for (let r = 0; r < size; r++) {
@@ -3752,7 +3760,7 @@ function makeQR(containerId, text, px) {
     c2.width = c2.height = px || 200;
     const ctx = c2.getContext('2d');
     ctx.fillStyle = '#F9F7F3'; ctx.fillRect(0,0,c2.width,c2.height);
-    ctx.fillStyle = '#0019A8'; ctx.font = '11px monospace'; ctx.fillText('QR', 10, 20);
+    ctx.fillStyle = '#110804'; ctx.font = '11px monospace'; ctx.fillText('QR', 10, 20);
     el.appendChild(c2);
     return c2;
   }
@@ -4168,7 +4176,7 @@ function openSuccess(book) {
   const qparts = book.qcode.split('-');
   // Style: Q in gold, separators dim, data segments in warm ink
   document.getElementById('s-qcode-text').innerHTML =
-    '<span style="color:#110804;font-weight:800">Q</span>' +
+    '<span style="color:#3A2210;font-weight:800">Q</span>' +
     '<span style="color:var(--dim)">-</span>' +
     qparts.slice(1).join('<span style="color:var(--dim)">-</span>');
 
@@ -4274,7 +4282,7 @@ function drawQSeal(matrix, size, version, displayPx) {
   /* Shift left (0.32) and up (0.42) to position for eastern dot circle */
   const qx = (px - tw) * 0.32;
   const qy = (px - th) * 0.42 + asc;
-  ctx.fillStyle = '#110804';  /* gold — matching header logo and qeiran.com brand */
+  ctx.fillStyle = '#3A2210';  /* dark chocolate brown — visible, matching header logo */
   ctx.fillText('Q', qx, qy);
 
   /* ── Step 2: Determine Q body circle geometry ── */
@@ -4312,7 +4320,7 @@ function drawQSeal(matrix, size, version, displayPx) {
   const cr = mod * 0.38;  /* smaller dots — cleaner scan at 1-inch print */
 
   /* Dot colours */
-  const dotC = 'rgb(0,25,168)';    /* #0019A8 navy blue */
+  const dotC = 'rgb(17,8,4)';    /* #110804 near-black brown */
   const redC = 'rgb(204,17,0)';    /* #CC1100 red accent */
 
   /* Density for dummy dots */
@@ -4483,7 +4491,7 @@ function renderCat() {
       </div>
     </div>`).join('');
 
-  // Render badge QRs — stagger to avoid blocking main thread
+  // Render badge QRs — stagger one per frame
   var qi = 0;
   function renderNextBadge() {
     if (qi >= books.length) return;
@@ -4740,7 +4748,7 @@ async function loadFromCloud() {
       }));
       persist(); // cache locally too
       document.getElementById('stat-count').textContent = S.books.length;
-      /* Fade grid out, re-render, fade back in — eliminates stale-image flash */
+      /* Fade grid out, re-render, fade back in */
       var grid = document.getElementById('booksGrid');
       if (grid) {
         grid.style.opacity = '0';
@@ -4844,6 +4852,7 @@ async function init() {
 
   if (!deepLinked) go("catalogue");
 
+  /* Safety net: dismiss loader after 6s no matter what */
   setTimeout(function(){
     var ql = document.getElementById('q-loader');
     if (ql) { ql.classList.add('q-done'); setTimeout(function(){ if(ql.parentNode) ql.remove(); }, 700); }
@@ -6088,7 +6097,7 @@ document.addEventListener('DOMContentLoaded', async function(){
         <div style="font-size:11px;font-weight:700;margin-bottom:6px;">Change Admin Password</div>
         <div style="display:flex;gap:8px;align-items:center;">
           <input id="set-pw" type="password" placeholder="New password" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:180px;box-sizing:border-box;">
-          <button onclick="adminSavePW()" style="padding:9px 14px;background:#110804;color:#fff;border:none;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;">Change</button>
+          <button onclick="adminSavePW()" style="padding:9px 14px;background:#3A2210;color:#fff;border:none;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;">Change</button>
         </div>
         <div style="font-size:10px;color:#aaa;margin-top:4px;">Saved to browser. Re-enter next visit.</div>
       </div>
@@ -6358,291 +6367,5 @@ window.openOrder = function(id) {
 };
 
 </script>
-
-<!-- ── MAGNIFYING GLASS — QEIRAN READING LENS ───────────── -->
-<style>
-/* ── Magnifier Container ── */
-#q-mag{
-  position:fixed;width:340px;height:340px;
-  pointer-events:none;z-index:99990;display:none;
-  will-change:transform;
-  filter:drop-shadow(4px 8px 16px rgba(0,0,0,.35));
-}
-/* ── Viewport — circular clip ── */
-#q-mag-vp{
-  position:absolute;top:50px;left:50px;
-  width:240px;height:240px;border-radius:50%;
-  overflow:hidden;background:var(--bg,#EDE8DE);
-  z-index:1;
-}
-/* ── Content — scaled page clone ── */
-#q-mag-ct{
-  position:absolute;transform-origin:0 0;
-  will-change:transform,left,top;
-}
-#q-mag-ct *{animation:none!important;transition:none!important}
-/* Body-level styles for the clone wrapper */
-.q-mag-clone{
-  font-family:var(--narrow,'Helvetica Neue',Arial,sans-serif);
-  background-color:var(--bg,#EDE8DE);
-  color:var(--fg,#1A0800);
-  position:absolute;top:0;left:0;overflow:visible;
-}
-/* ── Glass effects ── */
-#q-mag-fx{
-  position:absolute;top:50px;left:50px;
-  width:240px;height:240px;border-radius:50%;
-  background:radial-gradient(circle,
-    rgba(255,252,245,.04) 0%,
-    transparent 35%,
-    rgba(200,180,140,.06) 65%,
-    rgba(80,60,30,.18) 90%,
-    rgba(40,30,10,.28) 100%
-  );
-  z-index:4;pointer-events:none;
-}
-/* ── Center dot (subtle aiming point) ── */
-#q-mag-dot{
-  position:absolute;top:168px;left:168px;
-  width:4px;height:4px;border-radius:50%;
-  background:rgba(17,8,4,.2);
-  z-index:6;pointer-events:none;
-}
-/* ── SVG rim container ── */
-#q-mag-rim{position:absolute;inset:0;z-index:5;pointer-events:none;overflow:visible}
-#q-mag-rim svg{width:100%;height:100%;overflow:visible}
-/* ── Toggle button ── */
-#q-mag-btn{
-  position:fixed;bottom:24px;right:24px;z-index:99980;
-  width:52px;height:52px;border-radius:50%;
-  background:rgba(26,8,0,.88);color:#EDE8DE;
-  border:2px solid rgba(237,232,222,.15);
-  cursor:pointer!important;pointer-events:auto!important;
-  box-shadow:0 4px 16px rgba(0,0,0,.3);
-  transition:transform .2s,background .2s,border-color .2s;
-  display:flex;align-items:center;justify-content:center;
-}
-#q-mag-btn:hover{transform:scale(1.1);background:#110804;border-color:rgba(237,232,222,.35)}
-#q-mag-btn.active{background:#110804;border-color:rgba(237,232,222,.5)}
-#q-mag-btn svg{pointer-events:none}
-@media(pointer:coarse){#q-mag-btn{display:none}}
-</style>
-
-<script>
-/* ── Magnifying Glass — QEIRAN Reading Lens ───────────────────
-   Realistic brass-rimmed magnifier with wooden handle.
-   Clones page content into a circular viewport at 1.7× scale.
-   Toggle: click button (bottom-right) or press M / Escape.
-──────────────────────────────────────────────────────────────── */
-(function(){
-  /* Skip on touch-only devices */
-  if(!window.matchMedia('(pointer:fine)').matches) return;
-
-  var SCALE=1.7, GLASS_R=120, CTR=170;
-  var active=false, raf=null;
-
-  /* ── Build container ── */
-  var mag=document.createElement('div');
-  mag.id='q-mag';
-
-  /* Viewport (circular clip) */
-  var vp=document.createElement('div');
-  vp.id='q-mag-vp';
-  mag.appendChild(vp);
-
-  /* Content holder (scaled clone goes here) */
-  var ct=document.createElement('div');
-  ct.id='q-mag-ct';
-  vp.appendChild(ct);
-
-  /* Glass effects overlay */
-  var fx=document.createElement('div');
-  fx.id='q-mag-fx';
-  mag.appendChild(fx);
-
-  /* Center aiming dot */
-  var dot=document.createElement('div');
-  dot.id='q-mag-dot';
-  mag.appendChild(dot);
-
-  /* SVG rim + handle */
-  var rimDiv=document.createElement('div');
-  rimDiv.id='q-mag-rim';
-  rimDiv.innerHTML=
-    '<svg viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg">'
-    +'<defs>'
-    /* Gold rim gradient — diagonal to simulate 3D metallic bevel */
-    +'<linearGradient id="qmrg" x1="0" y1="0" x2="1" y2="1">'
-    +'<stop offset="0%" stop-color="#E8C84A"/>'
-    +'<stop offset="18%" stop-color="#D4AA30"/>'
-    +'<stop offset="42%" stop-color="#8B6914"/>'
-    +'<stop offset="58%" stop-color="#C49830"/>'
-    +'<stop offset="78%" stop-color="#D4AA30"/>'
-    +'<stop offset="100%" stop-color="#E8C84A"/>'
-    +'</linearGradient>'
-    /* Wood handle gradient — dark walnut */
-    +'<linearGradient id="qmwg" x1="0" y1="0" x2="0" y2="1">'
-    +'<stop offset="0%" stop-color="#4A3218"/>'
-    +'<stop offset="25%" stop-color="#1A0C04"/>'
-    +'<stop offset="50%" stop-color="#3A2510"/>'
-    +'<stop offset="75%" stop-color="#1A0C04"/>'
-    +'<stop offset="100%" stop-color="#4A3218"/>'
-    +'</linearGradient>'
-    +'</defs>'
-
-    /* Handle group — rotated 45° from center, drawn behind rim */
-    +'<g transform="rotate(45,170,170)">'
-    /* Brass ferrule (connector collar) */
-    +'<rect x="282" y="159" width="18" height="22" rx="3" fill="#9E8530"/>'
-    +'<rect x="282" y="164" width="18" height="3" rx="1" fill="rgba(255,255,200,.15)"/>'
-    +'<rect x="282" y="174" width="18" height="2" rx="1" fill="rgba(0,0,0,.12)"/>'
-    /* Wood shaft */
-    +'<rect x="298" y="156" width="58" height="28" rx="9" fill="url(#qmwg)"/>'
-    /* Wood sheen highlight */
-    +'<rect x="302" y="166" width="50" height="3" rx="1" fill="rgba(255,255,255,.06)"/>'
-    /* End cap */
-    +'<rect x="350" y="158" width="8" height="24" rx="4" fill="#2A1808"/>'
-    +'</g>'
-
-    /* Outer rim edge — thin dark line */
-    +'<circle cx="170" cy="170" r="131" fill="none" stroke="#5A4810" stroke-width="1.5"/>'
-    /* Main gold rim — thick metallic band */
-    +'<circle cx="170" cy="170" r="126" fill="none" stroke="url(#qmrg)" stroke-width="12"/>'
-    /* Rim inner bevel highlight */
-    +'<circle cx="170" cy="170" r="119.5" fill="none" stroke="rgba(255,255,200,.08)" stroke-width="1"/>'
-    /* Inner rim edge */
-    +'<circle cx="170" cy="170" r="119" fill="none" stroke="#6B5515" stroke-width="1.5"/>'
-
-    /* Glass reflection — bright arc top-left */
-    +'<path d="M94,134 A88,88 0 0,1 134,94" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="7" stroke-linecap="round"/>'
-    /* Secondary softer reflection */
-    +'<path d="M88,150 A95,95 0 0,1 108,105" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="4" stroke-linecap="round"/>'
-
-    +'</svg>';
-  mag.appendChild(rimDiv);
-
-  document.body.appendChild(mag);
-
-  /* ── Toggle button ── */
-  var btn=document.createElement('button');
-  btn.id='q-mag-btn';
-  btn.title='Reading lens  (press M)';
-  btn.innerHTML='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="7"/><line x1="15.5" y1="15.5" x2="22" y2="22"/></svg>';
-  btn.addEventListener('click',function(e){ e.stopPropagation(); toggle(); });
-  document.body.appendChild(btn);
-
-  /* ── Clone the visible page into the lens ── */
-  function refreshClone(){
-    try{
-      /* Clone body and strip non-visual elements */
-      var bodyClone=document.body.cloneNode(true);
-      ['q-mag','q-mag-btn','q-loader','admin-pw-modal','customiser'].forEach(function(id){
-        var el=bodyClone.querySelector('#'+id);
-        if(el) el.remove();
-      });
-      bodyClone.querySelectorAll('script').forEach(function(s){s.remove();});
-
-      /* Wrap cloned children in a styled div (body CSS rules don't apply to cloned body) */
-      var wrapper=document.createElement('div');
-      wrapper.className='q-mag-clone';
-      while(bodyClone.firstChild) wrapper.appendChild(bodyClone.firstChild);
-
-      /* Copy any inline background style from the real body */
-      if(document.body.style.cssText) wrapper.style.cssText+=document.body.style.cssText;
-
-      wrapper.style.width=document.documentElement.scrollWidth+'px';
-      wrapper.style.minHeight=document.documentElement.scrollHeight+'px';
-
-      ct.innerHTML='';
-      ct.appendChild(wrapper);
-
-      /* Copy the injected background stylesheet if present */
-      var bgStyle=document.getElementById('qeiran-bg-style');
-      if(bgStyle){
-        var clonedStyle=bgStyle.cloneNode(true);
-        clonedStyle.id='q-mag-bg-style';
-        ct.appendChild(clonedStyle);
-      }
-    }catch(e){console.warn('Magnifier clone error:',e);}
-  }
-
-  /* ── Toggle on/off ── */
-  function toggle(){
-    active=!active;
-    if(active){
-      refreshClone();
-      mag.style.display='block';
-      btn.classList.add('active');
-    }else{
-      mag.style.display='none';
-      btn.classList.remove('active');
-      ct.innerHTML='';
-    }
-  }
-
-  /* ── Keyboard shortcuts ── */
-  document.addEventListener('keydown',function(e){
-    if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.tagName==='SELECT') return;
-    if(e.key==='m'||e.key==='M') toggle();
-    if(e.key==='Escape'&&active) toggle();
-  });
-
-  /* ── Mouse tracking — position lens and content ── */
-  var lastCX=0, lastCY=0;
-  document.addEventListener('mousemove',function(e){
-    lastCX=e.clientX; lastCY=e.clientY;
-    if(!active) return;
-    if(raf) return;
-    raf=requestAnimationFrame(function(){
-      var cx=lastCX, cy=lastCY;
-      var docX=cx+window.scrollX, docY=cy+window.scrollY;
-
-      /* Position the entire magnifier so glass center sits at cursor */
-      mag.style.transform='translate3d('+(cx-CTR)+'px,'+(cy-CTR)+'px,0)';
-
-      /* Position the scaled content so the cursor point is centered in the viewport */
-      ct.style.transform='scale('+SCALE+')';
-      ct.style.left=(GLASS_R-docX*SCALE)+'px';
-      ct.style.top=(GLASS_R-docY*SCALE)+'px';
-
-      raf=null;
-    });
-  });
-
-  /* ── Update on scroll ── */
-  var scrollRaf=null;
-  window.addEventListener('scroll',function(){
-    if(!active) return;
-    if(scrollRaf) return;
-    scrollRaf=requestAnimationFrame(function(){
-      var docX=lastCX+window.scrollX, docY=lastCY+window.scrollY;
-      ct.style.left=(GLASS_R-docX*SCALE)+'px';
-      ct.style.top=(GLASS_R-docY*SCALE)+'px';
-      scrollRaf=null;
-    });
-  },{ passive:true });
-
-  /* ── Hide/show when cursor leaves/enters window ── */
-  document.addEventListener('mouseleave',function(){ if(active) mag.style.opacity='0'; });
-  document.addEventListener('mouseenter',function(){ if(active) mag.style.opacity='1'; });
-
-  /* ── Re-clone when catalogue or page changes ── */
-  function debouncedRefresh(){ if(active) setTimeout(refreshClone,180); }
-
-  var _origRC=window.renderCat;
-  if(typeof _origRC==='function'){
-    window.renderCat=function(){ _origRC.apply(this,arguments); debouncedRefresh(); };
-  }
-  var _origGo=window.go;
-  if(typeof _origGo==='function'){
-    window.go=function(){ _origGo.apply(this,arguments); debouncedRefresh(); };
-  }
-  var _origOB=window.openBook;
-  if(typeof _origOB==='function'){
-    window.openBook=function(){ _origOB.apply(this,arguments); debouncedRefresh(); };
-  }
-})();
-</script>
-
 </body>
 </html>
