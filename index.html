@@ -251,8 +251,8 @@ body::after{
 }
 .feat:hover{background:var(--paper)}
 .feat-ico{font-size:26px;margin-bottom:18px}
-.feat-t{font-size:16px;font-weight:700;margin-bottom:8px;color:var(--ink)}
-.feat-b{font-size:14px;line-height:1.8;color:var(--dim);font-weight:300}
+.feat-t{font-size:17px;font-weight:700;margin-bottom:8px;color:var(--ink)}
+.feat-b{font-size:15px;line-height:1.8;color:var(--dim);font-weight:300}
 
 /* ─────────────────────────────────────────────────────────
    HOME — HOW IT WORKS
@@ -269,8 +269,8 @@ body::after{
   font-family:var(--mono);font-size:36px;font-weight:300;
   color:rgba(232,180,34,.18);padding-top:3px;
 }
-.step-t{font-size:16px;font-weight:700;margin-bottom:6px;letter-spacing:-.01em}
-.step-b{font-size:14px;line-height:1.75;color:var(--dim)}
+.step-t{font-size:17px;font-weight:700;margin-bottom:6px;letter-spacing:-.01em}
+.step-b{font-size:15px;line-height:1.75;color:var(--dim)}
 
 /* ─────────────────────────────────────────────────────────
    HOME — Q-CODE EXPLAINER
@@ -388,15 +388,15 @@ body::after{
 }
 .bc-qr canvas{width:38px!important;height:38px!important;display:block;border-radius:50%}
 
-.bc-info{padding:14px}
-.bc-title{font-size:14px;font-weight:700;margin-bottom:3px;color:var(--ink);line-height:1.3}
-.bc-author{font-size:12px;color:var(--dim);margin-bottom:7px}
+.bc-info{padding:16px}
+.bc-title{font-size:16px;font-weight:700;margin-bottom:3px;color:var(--ink);line-height:1.3}
+.bc-author{font-size:14px;color:var(--dim);margin-bottom:7px}
 .bc-qcode{
-  font-family:var(--mono);font-size:8px;color:var(--brand);
+  font-family:var(--mono);font-size:10px;color:var(--brand);
   letter-spacing:.04em;margin-bottom:8px;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
-.bc-price{font-size:14px;font-weight:700;color:var(--brand)}
+.bc-price{font-size:16px;font-weight:700;color:var(--brand)}
 
 .cat-empty{
   text-align:center;padding:72px 0;color:var(--dim);font-size:14px;
@@ -566,8 +566,8 @@ body::after{
 .b-cover .qr-stamp canvas{border-radius:50%}
 
 .b-title{font-family:var(--narrow);font-size:clamp(22px,4vw,38px);line-height:1.05;margin-bottom:6px;font-weight:300}
-.b-sub{font-size:15px;color:var(--dim);margin-bottom:10px;line-height:1.4}
-.b-author{font-size:15px;color:var(--dim);margin-bottom:14px}
+.b-sub{font-size:16px;color:var(--dim);margin-bottom:10px;line-height:1.4}
+.b-author{font-size:16px;color:var(--dim);margin-bottom:14px}
 .b-qcode{
   font-family:var(--mono);font-size:11px;color:var(--brand);letter-spacing:.06em;
   padding:9px 13px;background:rgba(0,25,168,.06);border-radius:3px;
@@ -618,7 +618,7 @@ body::after{
   padding-bottom:7px;border-bottom:1px solid rgba(0,25,168,.1);
   margin-top:40px;
 }
-.b-synopsis{font-size:15px;line-height:1.85;color:var(--dim)}
+.b-synopsis{font-size:16px;line-height:1.85;color:var(--dim)}
 
 .qr-scan-block{
   display:flex;align-items:center;gap:28px;flex-wrap:wrap;
@@ -6363,5 +6363,184 @@ window.openOrder = function(id) {
 };
 
 </script>
+
+<!-- ── MAGNIFYING GLASS ─────────────────────────────────────── -->
+<style>
+/* ── Magnifier Lens ── */
+#q-mag{
+  position:fixed;width:220px;height:220px;border-radius:50%;
+  overflow:hidden;pointer-events:none;z-index:99990;display:none;
+  box-shadow:
+    inset 0 0 30px rgba(255,255,255,.08),
+    0 0 0 4px #1a0800,
+    0 0 0 7px rgba(26,8,0,.25),
+    0 16px 48px rgba(0,0,0,.35);
+  will-change:transform;
+}
+/* Glass reflection — top-left highlight */
+#q-mag::before{
+  content:'';position:absolute;top:8%;left:12%;
+  width:40%;height:22%;
+  background:radial-gradient(ellipse,rgba(255,255,255,.22) 0%,transparent 70%);
+  border-radius:50%;transform:rotate(-25deg);
+  z-index:10;pointer-events:none;
+}
+/* Fisheye edge tint — darkens rim for depth */
+#q-mag::after{
+  content:'';position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle,transparent 45%,rgba(237,232,222,.12) 65%,rgba(180,170,150,.22) 85%,rgba(100,90,70,.30) 100%);
+  z-index:10;pointer-events:none;
+}
+/* Handle — extends bottom-right at 45° */
+#q-mag-handle{
+  position:absolute;bottom:-5px;right:-5px;z-index:9;pointer-events:none;
+}
+#q-mag-handle svg{width:90px;height:90px;filter:drop-shadow(0 3px 6px rgba(0,0,0,.35))}
+/* Cloned content viewport */
+#q-mag-vp{
+  position:absolute;top:0;left:0;
+  pointer-events:none;
+  transform-origin:0 0;
+  will-change:transform;
+}
+/* Kill animations and transitions inside the clone to avoid jank */
+#q-mag-vp *{animation:none!important;transition:none!important}
+/* Toggle button */
+#q-mag-btn{
+  position:fixed;bottom:24px;right:24px;z-index:99980;
+  width:48px;height:48px;border-radius:50%;
+  background:rgba(26,8,0,.85);color:#EDE8DE;
+  border:2px solid rgba(237,232,222,.2);
+  font-size:20px;cursor:pointer;
+  box-shadow:0 4px 16px rgba(0,0,0,.25);
+  transition:transform .2s,background .2s;
+  display:flex;align-items:center;justify-content:center;
+}
+#q-mag-btn:hover{transform:scale(1.1);background:rgba(26,8,0,1)}
+#q-mag-btn.active{background:#110804;border-color:rgba(237,232,222,.5)}
+/* Hide on touch devices */
+@media(pointer:coarse){#q-mag-btn{display:none}}
+</style>
+
+<script>
+/* ── Magnifying Glass — QEIRAN Reading Lens ──────────────── */
+(function(){
+  if('ontouchstart' in window && !window.matchMedia('(pointer:fine)').matches) return;
+
+  var DIAMETER=220, RADIUS=DIAMETER/2, SCALE=1.7;
+  var active=false, magRAF=null;
+
+  /* ── Build DOM ── */
+  var glass=document.createElement('div');
+  glass.id='q-mag';
+
+  var vp=document.createElement('div');
+  vp.id='q-mag-vp';
+  glass.appendChild(vp);
+
+  /* Handle — SVG for a realistic wooden handle */
+  var handleWrap=document.createElement('div');
+  handleWrap.id='q-mag-handle';
+  handleWrap.innerHTML='<svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">'
+    +'<defs><linearGradient id="qmhg" x1="0" y1="0" x2="0" y2="1">'
+    +'<stop offset="0%" stop-color="#3a2a18"/>'
+    +'<stop offset="40%" stop-color="#1a0c04"/>'
+    +'<stop offset="100%" stop-color="#2a1a10"/>'
+    +'</linearGradient></defs>'
+    +'<rect x="22" y="22" width="62" height="16" rx="5" ry="5" fill="url(#qmhg)" transform="rotate(45 22 22)"/>'
+    +'<rect x="22" y="28" width="62" height="3" rx="1" fill="rgba(255,255,255,.06)" transform="rotate(45 22 28)"/>'
+    +'</svg>';
+  glass.appendChild(handleWrap);
+
+  document.body.appendChild(glass);
+
+  /* Toggle button */
+  var btn=document.createElement('button');
+  btn.id='q-mag-btn';
+  btn.title='Toggle magnifying glass (press M)';
+  btn.innerHTML='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="7"/><line x1="15.5" y1="15.5" x2="22" y2="22"/></svg>';
+  btn.onclick=toggleMag;
+  document.body.appendChild(btn);
+
+  /* ── Clone body into lens ── */
+  function refreshClone(){
+    var clone=document.body.cloneNode(true);
+    ['q-mag','q-mag-btn','q-loader','admin-pw-modal','customiser','q-mag-handle'].forEach(function(id){
+      var el=clone.querySelector('#'+id);
+      if(el) el.remove();
+    });
+    clone.querySelectorAll('script,style#qeiran-bg-style').forEach(function(s){s.remove();});
+    /* Copy computed background onto clone so it renders inside lens */
+    clone.style.cssText='margin:0;padding:0;pointer-events:none;position:absolute;top:0;left:0;'
+      +'width:'+document.documentElement.scrollWidth+'px;'
+      +'min-height:'+document.documentElement.scrollHeight+'px;'
+      +'overflow:visible;';
+    vp.innerHTML='';
+    vp.appendChild(clone);
+    vp.style.transform='scale('+SCALE+')';
+    vp.style.width=document.documentElement.scrollWidth+'px';
+    vp.style.height=document.documentElement.scrollHeight+'px';
+  }
+
+  /* ── Toggle ── */
+  function toggleMag(){
+    active=!active;
+    if(active){
+      refreshClone();
+      glass.style.display='block';
+      document.body.style.cursor='none';
+      btn.classList.add('active');
+    } else {
+      glass.style.display='none';
+      document.body.style.cursor='';
+      btn.classList.remove('active');
+      vp.innerHTML='';
+    }
+  }
+
+  /* Keyboard shortcut — M key */
+  document.addEventListener('keydown',function(e){
+    if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.tagName==='SELECT') return;
+    if(e.key==='m'||e.key==='M') toggleMag();
+  });
+
+  /* ── Mouse tracking ── */
+  document.addEventListener('mousemove',function(e){
+    if(!active) return;
+    if(magRAF) return;
+    magRAF=requestAnimationFrame(function(){
+      var cx=e.clientX, cy=e.clientY;
+      var docX=cx+window.scrollX, docY=cy+window.scrollY;
+      glass.style.transform='translate3d('+(cx-RADIUS)+'px,'+(cy-RADIUS)+'px,0)';
+      vp.style.left=(RADIUS-docX*SCALE)+'px';
+      vp.style.top=(RADIUS-docY*SCALE)+'px';
+      magRAF=null;
+    });
+  });
+
+  /* Hide/show lens when cursor leaves/enters window */
+  document.addEventListener('mouseleave',function(){ if(active) glass.style.display='none'; });
+  document.addEventListener('mouseenter',function(){ if(active) glass.style.display='block'; });
+
+  /* ── Re-clone when catalogue updates ── */
+  var _origRC=window.renderCat;
+  if(_origRC){
+    window.renderCat=function(){
+      _origRC.apply(this,arguments);
+      if(active) setTimeout(refreshClone,150);
+    };
+  }
+
+  /* Also refresh when navigating pages */
+  var _origGo=window.go;
+  if(_origGo){
+    window.go=function(){
+      _origGo.apply(this,arguments);
+      if(active) setTimeout(refreshClone,200);
+    };
+  }
+})();
+</script>
+
 </body>
 </html>
