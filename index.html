@@ -362,14 +362,17 @@ body::after{
 .book-card{
   background:var(--surface);border-radius:6px;overflow:hidden;
   box-shadow:0 2px 10px rgba(0,0,0,.07);
-  cursor:pointer;transition:transform .2s,box-shadow .2s;
+  cursor:pointer;transition:transform .2s,box-shadow .2s,filter .4s;
+  animation:qCardIn .4s ease both;
 }
+@keyframes qCardIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 .book-card:hover{transform:translateY(-4px);box-shadow:0 14px 36px rgba(0,0,0,.13)}
 .bc-cover{
   aspect-ratio:3/4;background:var(--ink);
   position:relative;overflow:hidden;
 }
-.bc-cover img{width:100%;height:100%;object-fit:cover}
+.bc-cover img{width:100%;height:100%;object-fit:cover;filter:sepia(40%) saturate(35%) brightness(95%) contrast(1.05);transition:filter .5s ease}
+.book-card:hover .bc-cover img{filter:sepia(0%) saturate(100%) brightness(100%) contrast(1)}
 .bc-placeholder{
   width:100%;height:100%;
   display:flex;align-items:center;justify-content:center;
@@ -378,6 +381,8 @@ body::after{
   color:var(--dim);text-align:center;
   background:linear-gradient(140deg,var(--bg2),var(--mint));
 }
+@keyframes qShimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.bc-cover img[src=""]{background:linear-gradient(90deg,var(--bg2) 25%,var(--mint) 50%,var(--bg2) 75%);background-size:200% 100%;animation:qShimmer 1.5s infinite}
 /* QR badge on card */
 .bc-qr{
   position:absolute;bottom:7px;left:7px;
@@ -398,6 +403,8 @@ body::after{
 .cat-empty{
   text-align:center;padding:72px 0;color:var(--dim);font-size:14px;
   grid-column:1/-1;
+}
+#booksGrid{transition:opacity .3s ease}
 }
 
 /* ─────────────────────────────────────────────────────────
@@ -4229,7 +4236,7 @@ function getSuppressed(sz) {
    applied (getSuppressed) — scanner unaffected.
 ────────────────────────────────────────────────────────────── */
 function drawQSeal(matrix, size, version, displayPx) {
-  const px = 900;  /* 300dpi × 3 inches = 900px — crisp at 1-inch print */
+  const px = (displayPx && displayPx <= 80) ? displayPx * 4 : 900;  /* small badges use 4× display; full stamps use 900px print quality */
   const cv = document.createElement('canvas');
   cv.width = cv.height = px;
   const ctx = cv.getContext('2d');
@@ -4447,8 +4454,8 @@ function renderCat() {
     grid.innerHTML = `<div class="cat-empty">No books found. <a href="#" onclick="go('register');return false" style="color:var(--brand)">Register one →</a></div>`;
     return;
   }
-  grid.innerHTML = books.map(b => `
-    <div class="book-card" onclick="openBook('${b.id}')">
+  grid.innerHTML = books.map((b,i) => `
+    <div class="book-card" onclick="openBook('${b.id}')" style="animation-delay:${Math.min(i*60,600)}ms">
       <div class="bc-cover">
         ${b.coverUrl ? `<img src="${b.coverUrl}" alt="" loading="lazy">` :
           `<div class="bc-placeholder">${esc(b.title)}</div>`}
@@ -4462,10 +4469,15 @@ function renderCat() {
       </div>
     </div>`).join('');
 
-  // Render badge QRs
-  books.forEach(b => {
-    setTimeout(() => generateQSeal('cqr-' + b.id, pageUrl(b.qcode), 38), 60);
-  });
+  // Render badge QRs — stagger to avoid blocking main thread
+  var qi = 0;
+  function renderNextBadge() {
+    if (qi >= books.length) return;
+    var b = books[qi++];
+    generateQSeal('cqr-' + b.id, pageUrl(b.qcode), 38);
+    if (qi < books.length) requestAnimationFrame(renderNextBadge);
+  }
+  requestAnimationFrame(renderNextBadge);
 }
 
 /* ── Book detail ─────────────────────────────────────────── */
@@ -4714,8 +4726,19 @@ async function loadFromCloud() {
       }));
       persist(); // cache locally too
       document.getElementById('stat-count').textContent = S.books.length;
-      if (typeof renderCat === 'function') renderCat();
-      if (typeof adminLoadPending === 'function') adminLoadPending();
+      /* Fade grid out, re-render, fade back in — eliminates stale-image flash */
+      var grid = document.getElementById('booksGrid');
+      if (grid) {
+        grid.style.opacity = '0';
+        setTimeout(function(){
+          if (typeof renderCat === 'function') renderCat();
+          if (typeof adminLoadPending === 'function') adminLoadPending();
+          grid.style.opacity = '1';
+        }, 300);
+      } else {
+        if (typeof renderCat === 'function') renderCat();
+        if (typeof adminLoadPending === 'function') adminLoadPending();
+      }
       return true;
     }
   } catch(e) { console.warn('Cloud load failed, using local:', e); }
@@ -5774,7 +5797,7 @@ document.addEventListener('DOMContentLoaded', async function(){
   /* Fallback: try loading image directly */
   var img = new Image();
   img.onload = function(){ applyHomepageBg(img.src); };
-  img.src = QEIRAN_CONFIG.SUPABASE_URL + '/storage/v1/object/public/site-assets/homepage-bg.jpg?t=' + Date.now();
+  img.src = QEIRAN_CONFIG.SUPABASE_URL + '/storage/v1/object/public/site-assets/homepage-bg.jpg';
 });
 
 /* Open admin panel on load if needed */
