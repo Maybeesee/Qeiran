@@ -403,8 +403,6 @@ body::after{
   grid-column:1/-1;
 }
 #booksGrid{transition:opacity .3s ease}
-@keyframes qShimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-.bc-cover img[src=""]{background:linear-gradient(90deg,var(--bg2) 25%,var(--mint) 50%,var(--bg2) 75%);background-size:200% 100%;animation:qShimmer 1.5s infinite}
 }
 
 /* ─────────────────────────────────────────────────────────
@@ -1006,7 +1004,7 @@ body::after{
 <!-- ── Q Loading Overlay ──────────────────────────────────── -->
 <div id="q-loader" style="position:fixed;inset:0;z-index:99999;background:#EDE8DE;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:opacity .6s ease;">
   <svg viewBox="-2 -4 40 46" xmlns="http://www.w3.org/2000/svg" style="width:120px;height:120px;">
-    <text x="0" y="32" font-family="NovaSolid" font-size="42" fill="#110804" class="q-spin">Q</text>
+    <text x="0" y="32" font-family="NovaSolid" font-size="42" fill="#110804">Q</text>
   </svg>
   <div style="margin-top:24px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:rgba(17,8,4,.35);">Loading catalogue</div>
 </div>
@@ -1025,7 +1023,7 @@ body::after{
     <div>
       <input id="admin-pw-input" type="password" autocomplete="off"
         onkeydown="if(event.key==='Enter')adminCheckPW()"
-        style="width:200px;padding:12px 16px;border:none;border-radius:0;font-size:15px;background:transparent;color:#110804;text-align:center;outline:none;border-bottom:1px solid rgba(17,8,4,.2);letter-spacing:3px;box-sizing:border-box;">
+        style="width:200px;padding:12px 16px;border:none;border-radius:0;font-size:15px;background:transparent;color:#110804;text-align:center;outline:none;border-bottom:1px solid rgba(160,120,16,.2);letter-spacing:3px;box-sizing:border-box;">
       <div id="admin-pw-error" style="display:none;height:2px;background:#c0392b;margin-top:-1px;width:200px;"></div>
     </div>
   </div>
@@ -4252,7 +4250,7 @@ function getSuppressed(sz) {
    applied (getSuppressed) — scanner unaffected.
 ────────────────────────────────────────────────────────────── */
 function drawQSeal(matrix, size, version, displayPx) {
-  const px = (displayPx && displayPx <= 80) ? displayPx * 4 : 900;  /* small badges use 4× display; full stamps use 900px print quality */
+  const px = (displayPx && displayPx <= 80) ? displayPx * 4 : 900;
   const cv = document.createElement('canvas');
   cv.width = cv.height = px;
   const ctx = cv.getContext('2d');
@@ -4276,7 +4274,7 @@ function drawQSeal(matrix, size, version, displayPx) {
   /* Shift left (0.32) and up (0.42) to position for eastern dot circle */
   const qx = (px - tw) * 0.32;
   const qy = (px - th) * 0.42 + asc;
-  ctx.fillStyle = '#110804';  /* near-black brown — matching header logo */
+  ctx.fillStyle = '#110804';  /* gold — matching header logo and qeiran.com brand */
   ctx.fillText('Q', qx, qy);
 
   /* ── Step 2: Determine Q body circle geometry ── */
@@ -4750,7 +4748,6 @@ async function loadFromCloud() {
           if (typeof renderCat === 'function') renderCat();
           if (typeof adminLoadPending === 'function') adminLoadPending();
           grid.style.opacity = '1';
-          /* Dismiss loading overlay now that live data is rendered */
           var ql = document.getElementById('q-loader');
           if (ql) { ql.classList.add('q-done'); setTimeout(function(){ ql.remove(); }, 700); }
         }, 320);
@@ -4826,7 +4823,6 @@ async function init() {
   /* Load live catalogue from cloud IN BACKGROUND — don't block page */
   loadFromCloud().then(function(cloudLoaded) {
     if (!deepLinked && cloudLoaded) checkDeepLink();
-    /* If cloud didn't load (failed, empty, or already dismissed inside loadFromCloud), dismiss loader here */
     var ql = document.getElementById('q-loader');
     if (ql && !ql.classList.contains('q-done')) {
       ql.classList.add('q-done');
@@ -4848,7 +4844,6 @@ async function init() {
 
   if (!deepLinked) go("catalogue");
 
-  /* Safety net: dismiss loader after 6s no matter what */
   setTimeout(function(){
     var ql = document.getElementById('q-loader');
     if (ql) { ql.classList.add('q-done'); setTimeout(function(){ if(ql.parentNode) ql.remove(); }, 700); }
@@ -6364,180 +6359,287 @@ window.openOrder = function(id) {
 
 </script>
 
-<!-- ── MAGNIFYING GLASS ─────────────────────────────────────── -->
+<!-- ── MAGNIFYING GLASS — QEIRAN READING LENS ───────────── -->
 <style>
-/* ── Magnifier Lens ── */
+/* ── Magnifier Container ── */
 #q-mag{
-  position:fixed;width:220px;height:220px;border-radius:50%;
-  overflow:hidden;pointer-events:none;z-index:99990;display:none;
-  box-shadow:
-    inset 0 0 30px rgba(255,255,255,.08),
-    0 0 0 4px #1a0800,
-    0 0 0 7px rgba(26,8,0,.25),
-    0 16px 48px rgba(0,0,0,.35);
+  position:fixed;width:340px;height:340px;
+  pointer-events:none;z-index:99990;display:none;
   will-change:transform;
+  filter:drop-shadow(4px 8px 16px rgba(0,0,0,.35));
 }
-/* Glass reflection — top-left highlight */
-#q-mag::before{
-  content:'';position:absolute;top:8%;left:12%;
-  width:40%;height:22%;
-  background:radial-gradient(ellipse,rgba(255,255,255,.22) 0%,transparent 70%);
-  border-radius:50%;transform:rotate(-25deg);
-  z-index:10;pointer-events:none;
-}
-/* Fisheye edge tint — darkens rim for depth */
-#q-mag::after{
-  content:'';position:absolute;inset:0;border-radius:50%;
-  background:radial-gradient(circle,transparent 45%,rgba(237,232,222,.12) 65%,rgba(180,170,150,.22) 85%,rgba(100,90,70,.30) 100%);
-  z-index:10;pointer-events:none;
-}
-/* Handle — extends bottom-right at 45° */
-#q-mag-handle{
-  position:absolute;bottom:-5px;right:-5px;z-index:9;pointer-events:none;
-}
-#q-mag-handle svg{width:90px;height:90px;filter:drop-shadow(0 3px 6px rgba(0,0,0,.35))}
-/* Cloned content viewport */
+/* ── Viewport — circular clip ── */
 #q-mag-vp{
-  position:absolute;top:0;left:0;
-  pointer-events:none;
-  transform-origin:0 0;
-  will-change:transform;
+  position:absolute;top:50px;left:50px;
+  width:240px;height:240px;border-radius:50%;
+  overflow:hidden;background:var(--bg,#EDE8DE);
+  z-index:1;
 }
-/* Kill animations and transitions inside the clone to avoid jank */
-#q-mag-vp *{animation:none!important;transition:none!important}
-/* Toggle button */
+/* ── Content — scaled page clone ── */
+#q-mag-ct{
+  position:absolute;transform-origin:0 0;
+  will-change:transform,left,top;
+}
+#q-mag-ct *{animation:none!important;transition:none!important}
+/* Body-level styles for the clone wrapper */
+.q-mag-clone{
+  font-family:var(--narrow,'Helvetica Neue',Arial,sans-serif);
+  background-color:var(--bg,#EDE8DE);
+  color:var(--fg,#1A0800);
+  position:absolute;top:0;left:0;overflow:visible;
+}
+/* ── Glass effects ── */
+#q-mag-fx{
+  position:absolute;top:50px;left:50px;
+  width:240px;height:240px;border-radius:50%;
+  background:radial-gradient(circle,
+    rgba(255,252,245,.04) 0%,
+    transparent 35%,
+    rgba(200,180,140,.06) 65%,
+    rgba(80,60,30,.18) 90%,
+    rgba(40,30,10,.28) 100%
+  );
+  z-index:4;pointer-events:none;
+}
+/* ── Center dot (subtle aiming point) ── */
+#q-mag-dot{
+  position:absolute;top:168px;left:168px;
+  width:4px;height:4px;border-radius:50%;
+  background:rgba(17,8,4,.2);
+  z-index:6;pointer-events:none;
+}
+/* ── SVG rim container ── */
+#q-mag-rim{position:absolute;inset:0;z-index:5;pointer-events:none;overflow:visible}
+#q-mag-rim svg{width:100%;height:100%;overflow:visible}
+/* ── Toggle button ── */
 #q-mag-btn{
   position:fixed;bottom:24px;right:24px;z-index:99980;
-  width:48px;height:48px;border-radius:50%;
-  background:rgba(26,8,0,.85);color:#EDE8DE;
-  border:2px solid rgba(237,232,222,.2);
-  font-size:20px;cursor:pointer;
-  box-shadow:0 4px 16px rgba(0,0,0,.25);
-  transition:transform .2s,background .2s;
+  width:52px;height:52px;border-radius:50%;
+  background:rgba(26,8,0,.88);color:#EDE8DE;
+  border:2px solid rgba(237,232,222,.15);
+  cursor:pointer!important;pointer-events:auto!important;
+  box-shadow:0 4px 16px rgba(0,0,0,.3);
+  transition:transform .2s,background .2s,border-color .2s;
   display:flex;align-items:center;justify-content:center;
 }
-#q-mag-btn:hover{transform:scale(1.1);background:rgba(26,8,0,1)}
+#q-mag-btn:hover{transform:scale(1.1);background:#110804;border-color:rgba(237,232,222,.35)}
 #q-mag-btn.active{background:#110804;border-color:rgba(237,232,222,.5)}
-/* Hide on touch devices */
+#q-mag-btn svg{pointer-events:none}
 @media(pointer:coarse){#q-mag-btn{display:none}}
 </style>
 
 <script>
-/* ── Magnifying Glass — QEIRAN Reading Lens ──────────────── */
+/* ── Magnifying Glass — QEIRAN Reading Lens ───────────────────
+   Realistic brass-rimmed magnifier with wooden handle.
+   Clones page content into a circular viewport at 1.7× scale.
+   Toggle: click button (bottom-right) or press M / Escape.
+──────────────────────────────────────────────────────────────── */
 (function(){
-  if('ontouchstart' in window && !window.matchMedia('(pointer:fine)').matches) return;
+  /* Skip on touch-only devices */
+  if(!window.matchMedia('(pointer:fine)').matches) return;
 
-  var DIAMETER=220, RADIUS=DIAMETER/2, SCALE=1.7;
-  var active=false, magRAF=null;
+  var SCALE=1.7, GLASS_R=120, CTR=170;
+  var active=false, raf=null;
 
-  /* ── Build DOM ── */
-  var glass=document.createElement('div');
-  glass.id='q-mag';
+  /* ── Build container ── */
+  var mag=document.createElement('div');
+  mag.id='q-mag';
 
+  /* Viewport (circular clip) */
   var vp=document.createElement('div');
   vp.id='q-mag-vp';
-  glass.appendChild(vp);
+  mag.appendChild(vp);
 
-  /* Handle — SVG for a realistic wooden handle */
-  var handleWrap=document.createElement('div');
-  handleWrap.id='q-mag-handle';
-  handleWrap.innerHTML='<svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">'
-    +'<defs><linearGradient id="qmhg" x1="0" y1="0" x2="0" y2="1">'
-    +'<stop offset="0%" stop-color="#3a2a18"/>'
-    +'<stop offset="40%" stop-color="#1a0c04"/>'
-    +'<stop offset="100%" stop-color="#2a1a10"/>'
-    +'</linearGradient></defs>'
-    +'<rect x="22" y="22" width="62" height="16" rx="5" ry="5" fill="url(#qmhg)" transform="rotate(45 22 22)"/>'
-    +'<rect x="22" y="28" width="62" height="3" rx="1" fill="rgba(255,255,255,.06)" transform="rotate(45 22 28)"/>'
+  /* Content holder (scaled clone goes here) */
+  var ct=document.createElement('div');
+  ct.id='q-mag-ct';
+  vp.appendChild(ct);
+
+  /* Glass effects overlay */
+  var fx=document.createElement('div');
+  fx.id='q-mag-fx';
+  mag.appendChild(fx);
+
+  /* Center aiming dot */
+  var dot=document.createElement('div');
+  dot.id='q-mag-dot';
+  mag.appendChild(dot);
+
+  /* SVG rim + handle */
+  var rimDiv=document.createElement('div');
+  rimDiv.id='q-mag-rim';
+  rimDiv.innerHTML=
+    '<svg viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg">'
+    +'<defs>'
+    /* Gold rim gradient — diagonal to simulate 3D metallic bevel */
+    +'<linearGradient id="qmrg" x1="0" y1="0" x2="1" y2="1">'
+    +'<stop offset="0%" stop-color="#E8C84A"/>'
+    +'<stop offset="18%" stop-color="#D4AA30"/>'
+    +'<stop offset="42%" stop-color="#8B6914"/>'
+    +'<stop offset="58%" stop-color="#C49830"/>'
+    +'<stop offset="78%" stop-color="#D4AA30"/>'
+    +'<stop offset="100%" stop-color="#E8C84A"/>'
+    +'</linearGradient>'
+    /* Wood handle gradient — dark walnut */
+    +'<linearGradient id="qmwg" x1="0" y1="0" x2="0" y2="1">'
+    +'<stop offset="0%" stop-color="#4A3218"/>'
+    +'<stop offset="25%" stop-color="#1A0C04"/>'
+    +'<stop offset="50%" stop-color="#3A2510"/>'
+    +'<stop offset="75%" stop-color="#1A0C04"/>'
+    +'<stop offset="100%" stop-color="#4A3218"/>'
+    +'</linearGradient>'
+    +'</defs>'
+
+    /* Handle group — rotated 45° from center, drawn behind rim */
+    +'<g transform="rotate(45,170,170)">'
+    /* Brass ferrule (connector collar) */
+    +'<rect x="282" y="159" width="18" height="22" rx="3" fill="#9E8530"/>'
+    +'<rect x="282" y="164" width="18" height="3" rx="1" fill="rgba(255,255,200,.15)"/>'
+    +'<rect x="282" y="174" width="18" height="2" rx="1" fill="rgba(0,0,0,.12)"/>'
+    /* Wood shaft */
+    +'<rect x="298" y="156" width="58" height="28" rx="9" fill="url(#qmwg)"/>'
+    /* Wood sheen highlight */
+    +'<rect x="302" y="166" width="50" height="3" rx="1" fill="rgba(255,255,255,.06)"/>'
+    /* End cap */
+    +'<rect x="350" y="158" width="8" height="24" rx="4" fill="#2A1808"/>'
+    +'</g>'
+
+    /* Outer rim edge — thin dark line */
+    +'<circle cx="170" cy="170" r="131" fill="none" stroke="#5A4810" stroke-width="1.5"/>'
+    /* Main gold rim — thick metallic band */
+    +'<circle cx="170" cy="170" r="126" fill="none" stroke="url(#qmrg)" stroke-width="12"/>'
+    /* Rim inner bevel highlight */
+    +'<circle cx="170" cy="170" r="119.5" fill="none" stroke="rgba(255,255,200,.08)" stroke-width="1"/>'
+    /* Inner rim edge */
+    +'<circle cx="170" cy="170" r="119" fill="none" stroke="#6B5515" stroke-width="1.5"/>'
+
+    /* Glass reflection — bright arc top-left */
+    +'<path d="M94,134 A88,88 0 0,1 134,94" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="7" stroke-linecap="round"/>'
+    /* Secondary softer reflection */
+    +'<path d="M88,150 A95,95 0 0,1 108,105" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="4" stroke-linecap="round"/>'
+
     +'</svg>';
-  glass.appendChild(handleWrap);
+  mag.appendChild(rimDiv);
 
-  document.body.appendChild(glass);
+  document.body.appendChild(mag);
 
-  /* Toggle button */
+  /* ── Toggle button ── */
   var btn=document.createElement('button');
   btn.id='q-mag-btn';
-  btn.title='Toggle magnifying glass (press M)';
+  btn.title='Reading lens  (press M)';
   btn.innerHTML='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="7"/><line x1="15.5" y1="15.5" x2="22" y2="22"/></svg>';
-  btn.onclick=toggleMag;
+  btn.addEventListener('click',function(e){ e.stopPropagation(); toggle(); });
   document.body.appendChild(btn);
 
-  /* ── Clone body into lens ── */
+  /* ── Clone the visible page into the lens ── */
   function refreshClone(){
-    var clone=document.body.cloneNode(true);
-    ['q-mag','q-mag-btn','q-loader','admin-pw-modal','customiser','q-mag-handle'].forEach(function(id){
-      var el=clone.querySelector('#'+id);
-      if(el) el.remove();
-    });
-    clone.querySelectorAll('script,style#qeiran-bg-style').forEach(function(s){s.remove();});
-    /* Copy computed background onto clone so it renders inside lens */
-    clone.style.cssText='margin:0;padding:0;pointer-events:none;position:absolute;top:0;left:0;'
-      +'width:'+document.documentElement.scrollWidth+'px;'
-      +'min-height:'+document.documentElement.scrollHeight+'px;'
-      +'overflow:visible;';
-    vp.innerHTML='';
-    vp.appendChild(clone);
-    vp.style.transform='scale('+SCALE+')';
-    vp.style.width=document.documentElement.scrollWidth+'px';
-    vp.style.height=document.documentElement.scrollHeight+'px';
+    try{
+      /* Clone body and strip non-visual elements */
+      var bodyClone=document.body.cloneNode(true);
+      ['q-mag','q-mag-btn','q-loader','admin-pw-modal','customiser'].forEach(function(id){
+        var el=bodyClone.querySelector('#'+id);
+        if(el) el.remove();
+      });
+      bodyClone.querySelectorAll('script').forEach(function(s){s.remove();});
+
+      /* Wrap cloned children in a styled div (body CSS rules don't apply to cloned body) */
+      var wrapper=document.createElement('div');
+      wrapper.className='q-mag-clone';
+      while(bodyClone.firstChild) wrapper.appendChild(bodyClone.firstChild);
+
+      /* Copy any inline background style from the real body */
+      if(document.body.style.cssText) wrapper.style.cssText+=document.body.style.cssText;
+
+      wrapper.style.width=document.documentElement.scrollWidth+'px';
+      wrapper.style.minHeight=document.documentElement.scrollHeight+'px';
+
+      ct.innerHTML='';
+      ct.appendChild(wrapper);
+
+      /* Copy the injected background stylesheet if present */
+      var bgStyle=document.getElementById('qeiran-bg-style');
+      if(bgStyle){
+        var clonedStyle=bgStyle.cloneNode(true);
+        clonedStyle.id='q-mag-bg-style';
+        ct.appendChild(clonedStyle);
+      }
+    }catch(e){console.warn('Magnifier clone error:',e);}
   }
 
-  /* ── Toggle ── */
-  function toggleMag(){
+  /* ── Toggle on/off ── */
+  function toggle(){
     active=!active;
     if(active){
       refreshClone();
-      glass.style.display='block';
-      document.body.style.cursor='none';
+      mag.style.display='block';
       btn.classList.add('active');
-    } else {
-      glass.style.display='none';
-      document.body.style.cursor='';
+    }else{
+      mag.style.display='none';
       btn.classList.remove('active');
-      vp.innerHTML='';
+      ct.innerHTML='';
     }
   }
 
-  /* Keyboard shortcut — M key */
+  /* ── Keyboard shortcuts ── */
   document.addEventListener('keydown',function(e){
     if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.tagName==='SELECT') return;
-    if(e.key==='m'||e.key==='M') toggleMag();
+    if(e.key==='m'||e.key==='M') toggle();
+    if(e.key==='Escape'&&active) toggle();
   });
 
-  /* ── Mouse tracking ── */
+  /* ── Mouse tracking — position lens and content ── */
+  var lastCX=0, lastCY=0;
   document.addEventListener('mousemove',function(e){
+    lastCX=e.clientX; lastCY=e.clientY;
     if(!active) return;
-    if(magRAF) return;
-    magRAF=requestAnimationFrame(function(){
-      var cx=e.clientX, cy=e.clientY;
+    if(raf) return;
+    raf=requestAnimationFrame(function(){
+      var cx=lastCX, cy=lastCY;
       var docX=cx+window.scrollX, docY=cy+window.scrollY;
-      glass.style.transform='translate3d('+(cx-RADIUS)+'px,'+(cy-RADIUS)+'px,0)';
-      vp.style.left=(RADIUS-docX*SCALE)+'px';
-      vp.style.top=(RADIUS-docY*SCALE)+'px';
-      magRAF=null;
+
+      /* Position the entire magnifier so glass center sits at cursor */
+      mag.style.transform='translate3d('+(cx-CTR)+'px,'+(cy-CTR)+'px,0)';
+
+      /* Position the scaled content so the cursor point is centered in the viewport */
+      ct.style.transform='scale('+SCALE+')';
+      ct.style.left=(GLASS_R-docX*SCALE)+'px';
+      ct.style.top=(GLASS_R-docY*SCALE)+'px';
+
+      raf=null;
     });
   });
 
-  /* Hide/show lens when cursor leaves/enters window */
-  document.addEventListener('mouseleave',function(){ if(active) glass.style.display='none'; });
-  document.addEventListener('mouseenter',function(){ if(active) glass.style.display='block'; });
+  /* ── Update on scroll ── */
+  var scrollRaf=null;
+  window.addEventListener('scroll',function(){
+    if(!active) return;
+    if(scrollRaf) return;
+    scrollRaf=requestAnimationFrame(function(){
+      var docX=lastCX+window.scrollX, docY=lastCY+window.scrollY;
+      ct.style.left=(GLASS_R-docX*SCALE)+'px';
+      ct.style.top=(GLASS_R-docY*SCALE)+'px';
+      scrollRaf=null;
+    });
+  },{ passive:true });
 
-  /* ── Re-clone when catalogue updates ── */
+  /* ── Hide/show when cursor leaves/enters window ── */
+  document.addEventListener('mouseleave',function(){ if(active) mag.style.opacity='0'; });
+  document.addEventListener('mouseenter',function(){ if(active) mag.style.opacity='1'; });
+
+  /* ── Re-clone when catalogue or page changes ── */
+  function debouncedRefresh(){ if(active) setTimeout(refreshClone,180); }
+
   var _origRC=window.renderCat;
-  if(_origRC){
-    window.renderCat=function(){
-      _origRC.apply(this,arguments);
-      if(active) setTimeout(refreshClone,150);
-    };
+  if(typeof _origRC==='function'){
+    window.renderCat=function(){ _origRC.apply(this,arguments); debouncedRefresh(); };
   }
-
-  /* Also refresh when navigating pages */
   var _origGo=window.go;
-  if(_origGo){
-    window.go=function(){
-      _origGo.apply(this,arguments);
-      if(active) setTimeout(refreshClone,200);
-    };
+  if(typeof _origGo==='function'){
+    window.go=function(){ _origGo.apply(this,arguments); debouncedRefresh(); };
+  }
+  var _origOB=window.openBook;
+  if(typeof _origOB==='function'){
+    window.openBook=function(){ _origOB.apply(this,arguments); debouncedRefresh(); };
   }
 })();
 </script>
