@@ -42,7 +42,7 @@
   --border: rgba(42,36,32,.08);
   --dim:    rgba(42,36,32,.65);
 
-  --gold:   #A07810;   /* warm gold */
+  --gold:   #110804;   /* near-black brown */
   --goldf:  #C49830;   /* lighter gold */
   --teal:   #5BA89A;   /* soft turquoise-green — primary */
   --teal-l: #4A9488;
@@ -381,8 +381,6 @@ body::after{
   color:var(--dim);text-align:center;
   background:linear-gradient(140deg,var(--bg2),var(--mint));
 }
-@keyframes qShimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-.bc-cover img[src=""]{background:linear-gradient(90deg,var(--bg2) 25%,var(--mint) 50%,var(--bg2) 75%);background-size:200% 100%;animation:qShimmer 1.5s infinite}
 /* QR badge on card */
 .bc-qr{
   position:absolute;bottom:7px;left:7px;
@@ -405,6 +403,8 @@ body::after{
   grid-column:1/-1;
 }
 #booksGrid{transition:opacity .3s ease}
+@keyframes qShimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.bc-cover img[src=""]{background:linear-gradient(90deg,var(--bg2) 25%,var(--mint) 50%,var(--bg2) 75%);background-size:200% 100%;animation:qShimmer 1.5s infinite}
 }
 
 /* ─────────────────────────────────────────────────────────
@@ -552,7 +552,7 @@ body::after{
   box-shadow:0 16px 52px rgba(0,0,0,.18);
   aspect-ratio:3/4;background:var(--ink);position:relative;
 }
-.b-cover img{width:100%;height:100%;object-fit:cover}
+.b-cover img{width:100%;height:100%;object-fit:cover;filter:sepia(40%) saturate(35%) brightness(95%) contrast(1.05)}
 .b-cover-ph{
   width:100%;height:100%;display:flex;align-items:center;justify-content:center;
   font-family:var(--narrow);font-style:italic;font-size:13px;
@@ -1003,13 +1003,29 @@ body::after{
 </style>
 </head>
 <body>
+<!-- ── Q Loading Overlay ──────────────────────────────────── -->
+<div id="q-loader" style="position:fixed;inset:0;z-index:99999;background:#EDE8DE;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:opacity .6s ease;">
+  <svg viewBox="-2 -4 40 46" xmlns="http://www.w3.org/2000/svg" style="width:120px;height:120px;">
+    <text x="0" y="32" font-family="NovaSolid" font-size="42" fill="#110804" class="q-spin">Q</text>
+  </svg>
+  <div style="margin-top:24px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:rgba(17,8,4,.35);">Loading catalogue</div>
+</div>
+<style>
+@keyframes qPulseRotate{
+  0%{opacity:.3;transform:scale(.92) rotate(0deg)}
+  50%{opacity:1;transform:scale(1.08) rotate(180deg)}
+  100%{opacity:.3;transform:scale(.92) rotate(360deg)}
+}
+#q-loader svg{animation:qPulseRotate 2s ease-in-out infinite;transform-origin:center center}
+#q-loader.q-done{opacity:0;pointer-events:none}
+</style>
 <div id="admin-pw-modal" onclick="if(event.target===this){this.style.display='none';}" style="display:none;position:fixed;inset:0;background:#0a0604;z-index:10000;align-items:center;justify-content:center;">
   <div style="text-align:center;">
-    <svg viewBox="-1 -2 34 38" xmlns="http://www.w3.org/2000/svg" style="width:80px;height:80px;margin-bottom:30px;"><text x="1" y="29" font-family="NovaSolid" font-size="36" fill="#A07810">Q</text></svg>
+    <svg viewBox="-1 -2 34 38" xmlns="http://www.w3.org/2000/svg" style="width:80px;height:80px;margin-bottom:30px;"><text x="1" y="29" font-family="NovaSolid" font-size="36" fill="#110804">Q</text></svg>
     <div>
       <input id="admin-pw-input" type="password" autocomplete="off"
         onkeydown="if(event.key==='Enter')adminCheckPW()"
-        style="width:200px;padding:12px 16px;border:none;border-radius:0;font-size:15px;background:transparent;color:#A07810;text-align:center;outline:none;border-bottom:1px solid rgba(160,120,16,.2);letter-spacing:3px;box-sizing:border-box;">
+        style="width:200px;padding:12px 16px;border:none;border-radius:0;font-size:15px;background:transparent;color:#110804;text-align:center;outline:none;border-bottom:1px solid rgba(17,8,4,.2);letter-spacing:3px;box-sizing:border-box;">
       <div id="admin-pw-error" style="display:none;height:2px;background:#c0392b;margin-top:-1px;width:200px;"></div>
     </div>
   </div>
@@ -1050,7 +1066,7 @@ function adminCheckPW(){
 <!-- ═══ NAV ═══════════════════════════════════════════════ -->
 <nav id="nav">
   <div class="brand" onclick="go('catalogue')">
-    <span class="brand-b"><svg class="brand-q-mark" viewBox="-2 -4 40 46" xmlns="http://www.w3.org/2000/svg"><text x="0" y="32" font-family="NovaSolid" font-size="42" fill="#A07810">Q</text></svg><span style="font-weight:200;color:#2A2420;letter-spacing:.04em;">eiran</span><span style="font-size:10px;font-weight:400;color:#888;vertical-align:super;margin-left:2px;">™</span></span>
+    <span class="brand-b"><svg class="brand-q-mark" viewBox="-2 -4 40 46" xmlns="http://www.w3.org/2000/svg"><text x="0" y="32" font-family="NovaSolid" font-size="42" fill="#110804">Q</text></svg><span style="font-weight:200;color:#2A2420;letter-spacing:.04em;">eiran</span><span style="font-size:10px;font-weight:400;color:#888;vertical-align:super;margin-left:2px;">™</span></span>
   </div>
   <!-- brand sub removed from nav, shown in page header instead -->
   <div class="nav-mid">
@@ -4154,7 +4170,7 @@ function openSuccess(book) {
   const qparts = book.qcode.split('-');
   // Style: Q in gold, separators dim, data segments in warm ink
   document.getElementById('s-qcode-text').innerHTML =
-    '<span style="color:#A07810;font-weight:800">Q</span>' +
+    '<span style="color:#110804;font-weight:800">Q</span>' +
     '<span style="color:var(--dim)">-</span>' +
     qparts.slice(1).join('<span style="color:var(--dim)">-</span>');
 
@@ -4260,7 +4276,7 @@ function drawQSeal(matrix, size, version, displayPx) {
   /* Shift left (0.32) and up (0.42) to position for eastern dot circle */
   const qx = (px - tw) * 0.32;
   const qy = (px - th) * 0.42 + asc;
-  ctx.fillStyle = '#A07810';  /* gold — matching header logo and qeiran.com brand */
+  ctx.fillStyle = '#110804';  /* near-black brown — matching header logo */
   ctx.fillText('Q', qx, qy);
 
   /* ── Step 2: Determine Q body circle geometry ── */
@@ -4734,7 +4750,10 @@ async function loadFromCloud() {
           if (typeof renderCat === 'function') renderCat();
           if (typeof adminLoadPending === 'function') adminLoadPending();
           grid.style.opacity = '1';
-        }, 300);
+          /* Dismiss loading overlay now that live data is rendered */
+          var ql = document.getElementById('q-loader');
+          if (ql) { ql.classList.add('q-done'); setTimeout(function(){ ql.remove(); }, 700); }
+        }, 320);
       } else {
         if (typeof renderCat === 'function') renderCat();
         if (typeof adminLoadPending === 'function') adminLoadPending();
@@ -4807,6 +4826,12 @@ async function init() {
   /* Load live catalogue from cloud IN BACKGROUND — don't block page */
   loadFromCloud().then(function(cloudLoaded) {
     if (!deepLinked && cloudLoaded) checkDeepLink();
+    /* If cloud didn't load (failed, empty, or already dismissed inside loadFromCloud), dismiss loader here */
+    var ql = document.getElementById('q-loader');
+    if (ql && !ql.classList.contains('q-done')) {
+      ql.classList.add('q-done');
+      setTimeout(function(){ if(ql.parentNode) ql.remove(); }, 700);
+    }
   });
 
   /* Demo books so the catalogue is not empty on first load */
@@ -4822,6 +4847,12 @@ async function init() {
   }
 
   if (!deepLinked) go("catalogue");
+
+  /* Safety net: dismiss loader after 6s no matter what */
+  setTimeout(function(){
+    var ql = document.getElementById('q-loader');
+    if (ql) { ql.classList.add('q-done'); setTimeout(function(){ if(ql.parentNode) ql.remove(); }, 700); }
+  }, 6000);
 }
 
 init();
@@ -6062,7 +6093,7 @@ document.addEventListener('DOMContentLoaded', async function(){
         <div style="font-size:11px;font-weight:700;margin-bottom:6px;">Change Admin Password</div>
         <div style="display:flex;gap:8px;align-items:center;">
           <input id="set-pw" type="password" placeholder="New password" style="padding:9px 11px;border:1px solid #ccc;border-radius:5px;font-size:13px;width:180px;box-sizing:border-box;">
-          <button onclick="adminSavePW()" style="padding:9px 14px;background:#A07810;color:#fff;border:none;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;">Change</button>
+          <button onclick="adminSavePW()" style="padding:9px 14px;background:#110804;color:#fff;border:none;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;">Change</button>
         </div>
         <div style="font-size:10px;color:#aaa;margin-top:4px;">Saved to browser. Re-enter next visit.</div>
       </div>
